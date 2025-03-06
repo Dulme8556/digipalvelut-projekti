@@ -1,46 +1,34 @@
-<script>
-  // this is a test file for charts
-  import { onMount } from 'svelte';
-  import { Chart } from 'chart.js';
+<!-- <script>
 
-  let chart;
+  causing errors
 
-  onMount(() => {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May'],
-        datasets: [{
-          label: 'My First Dataset',
-          data: [65, 59, 80, 81, 56],
-          borderColor: 'rgb(75, 192, 192)',
-          fill: false
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Month'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Value'
-            }
-          }
-        }
-      }
-    });
+	import chartjs from 'chart.js';
+	let chartData;
+	import { onMount } from 'svelte';
+  import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-    return () => {
-      chart.destroy();
-    };
-  });
+	let chartValues = [20, 10, 5, 2, 20, 30, 45];
+	let chartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+	let ctx;
+	let chartCanvas;
+
+	onMount(async (promise) => {
+		  ctx = chartCanvas.getContext('2d');
+			var chart = new chartjs(ctx, {
+				type: 'line',
+				data: {
+						labels: chartLabels,
+						datasets: [{
+								label: 'Revenue',
+								backgroundColor: 'rgb(255, 99, 132)',
+								borderColor: 'rgb(255, 99, 132)',
+								data: chartValues
+						}]
+				}
+		});
+
+	});
+
 </script>
 
-<canvas id="myChart" width="400" height="200"></canvas>
+<canvas bind:this={chartCanvas} id="myChart"></canvas> -->

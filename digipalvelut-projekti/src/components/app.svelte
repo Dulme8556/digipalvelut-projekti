@@ -16,7 +16,8 @@
 <div>
     <AddNew />
     <Lines />
-    <Charts />
+    <!-- charts.svelte isn't working and causing errors so commented -->
+    <!-- <Charts /> -->
 </div>
 
 <AddNewSpinBox />
