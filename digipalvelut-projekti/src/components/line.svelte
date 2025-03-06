@@ -1,5 +1,5 @@
 <script>
-    let { index: indicator, value1, value2 } = $props();
+    let { indicator, value1, value2 } = $props();
 </script>
 
 <div class="line">

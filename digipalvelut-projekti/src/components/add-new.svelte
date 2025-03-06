@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    let { index, value1, value2 } = $props();
+    let { indicator, value1, value2 } = $props();
 
     let lists = getContext('list');
 
