@@ -1,14 +1,14 @@
 <script>
+  // this is a test file for charts
   import { onMount } from 'svelte';
   import { Chart } from 'chart.js';
 
   let chart;
 
   onMount(() => {
-    // Alustetaan kaavio vain selaimessa
     const ctx = document.getElementById('myChart').getContext('2d');
     chart = new Chart(ctx, {
-      type: 'line', // Kaaviotyyppi
+      type: 'line',
       data: {
         labels: ['January', 'February', 'March', 'April', 'May'],
         datasets: [{
@@ -38,7 +38,7 @@
     });
 
     return () => {
-      chart.destroy(); // Siivotaan kaavio, kun komponentti tuhoutuu
+      chart.destroy();
     };
   });
 </script>
