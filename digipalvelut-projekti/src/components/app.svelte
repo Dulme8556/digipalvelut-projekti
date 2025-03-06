@@ -4,6 +4,7 @@
     import AddNew from "./add-new.svelte";
     import Lines from "./lines.svelte";
     import Charts from "./charts.svelte";
+    import AddNewSpinBox from "./add-new-spin_box.svelte";
 
     let lists = $state({
         list: [],
@@ -17,3 +18,5 @@
     <Lines />
     <Charts />
 </div>
+
+<AddNewSpinBox />
