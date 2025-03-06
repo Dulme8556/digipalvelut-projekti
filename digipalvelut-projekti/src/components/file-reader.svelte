@@ -18,19 +18,28 @@
 
         let information = jsonData;
 
-        // temporary to see previewStore
+        // temporary to see useful info
         console.log(previewStore)
         console.log("Information:")
         console.log(information)
+        console.log(information[0].Name)
+        console.log(information[1].End)
     }
 
     function handleFileInput(event) {
         const file = event.target.files[0];
-        if (file) handleFileChange(file);
+        if (file) {
+            handleFileChange(file);
+        } 
     }
 
     function fileFound() {
-        fileGiven = true;
+        if (fileGiven) {
+            information = [];
+            previewStore.set('');
+            clickEvent = '';
+        }
+        fileGiven = !fileGiven;
     }
 </script>
 
@@ -40,8 +49,8 @@
     }
 </style>
 <div>
-    <input type="file" accept=".xlsx" bind:this={clickEvent} on:change={handleFileInput}>
-    <button on:click={clickEvent.click(), fileFound}>Open file</button>
+    <input type="file" accept=".xlsx" bind:this={clickEvent} onchange={handleFileInput}>
+    <button onclick={clickEvent.click(), fileFound}>Open file</button>
     
     {#if fileGiven}
         <h2>Stuff inside the file</h2>
