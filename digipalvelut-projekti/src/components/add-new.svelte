@@ -12,15 +12,20 @@
     let newUnit = $state("");
 
     function addNew(event) {
-        lists.list = [
-            ...lists.list,
-            { name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
-        ];
-        newName = "";
-        newtarget = "";
-        newStart = "";
-        newEnd = "";
-        newUnit = "";
+        if (newName === "" && newtarget === "" && newStart === "" && newEnd === "" && newUnit === "") {
+            alert("Can't add empty")
+        }
+        else {
+            lists.list = [
+                ...lists.list,
+                { name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
+            ];
+            newName = "";
+            newtarget = "";
+            newStart = "";
+            newEnd = "";
+            newUnit = "";
+        }
     }
 </script>
 
@@ -31,11 +36,11 @@
         <FileReader />
     </div>
     <div class="input__container">
-        <input class="input" type="text" accept="string" placeholder="Name" bind:value={newName} />
-        <input class="input input__number" type="number" accept="" placeholder="Target value" bind:value={newtarget} />
-        <input class="input input__number" type="number" accept="" placeholder="Start value" bind:value={newStart} />
-        <input class="input input__number" type="number" accept="" placeholder="End value" bind:value={newEnd} />
-        <input class="input" type="text" accept="" placeholder="Unit" bind:value={newUnit} />
+        <input class="input" type="text" placeholder="Name" bind:value={newName} />
+        <input class="input input__number" type="number" placeholder="Target value" bind:value={newtarget} />
+        <input class="input input__number" type="number" placeholder="Start value" bind:value={newStart} />
+        <input class="input input__number" type="number" placeholder="End value" bind:value={newEnd} />
+        <input class="input" type="text" placeholder="Unit" bind:value={newUnit} />
     </div>
 </div>
 
