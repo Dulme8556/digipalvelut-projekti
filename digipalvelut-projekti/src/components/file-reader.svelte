@@ -7,7 +7,7 @@
     let list = [];
 
     let fileGiven = false;
-    let clickEvent;
+    let fileInput;
     const previewStore = writable('');
 
     async function handleFileChange(file) {
@@ -18,11 +18,6 @@
         previewStore.set(JSON.stringify(jsonData, null, 2));
 
         list = jsonData
-        
-        // temporary to see useful info
-        console.log("Information:")
-        console.log(lists.list)
-        console.log(list)
 
         list.forEach(element => {        
             lists.list = [
@@ -39,10 +34,17 @@
         } 
     }
 
+    function fileDialog() {
+        if (fileInput) {
+            fileInput.value = "";
+            fileInput.click();
+        }
+    }
+
     function fileFound() {
         if (fileGiven) {
             previewStore.set('');
-            clickEvent = null;
+            fileInput = null;
         }
         fileGiven = !fileGiven;
     }
@@ -54,6 +56,6 @@
     }
 </style>
 <div>
-    <input type="file" accept=".xlsx" bind:this={clickEvent} onchange={handleFileInput}>
-    <button onclick={clickEvent.click(), fileFound}>Open file</button>
+    <input type="file" accept=".xlsx" bind:this={fileInput} onchange={handleFileInput}>
+    <button onclick={fileDialog}>Open file</button>
 </div>
