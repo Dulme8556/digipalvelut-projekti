@@ -1,19 +1,34 @@
 <script>
-    let { indicator, value1, value2 } = $props();
+    let { name, target, start, end, unit } = $props();
+
+    let rawValue = end/target*100;
+    let percent = rawValue.toFixed(1);
 </script>
 
 <div class="line">
     <div class="component">
         <h2>indicator:</h2>
-        <div>{indicator}</div>
+        <div>{name}</div>
     </div>
     <div class="component">
-        <h2>value1:</h2>
-        <div>{value1}</div>
+        <h2>target:</h2>
+        <div>{target}</div>
     </div>
     <div class="component">
-        <h2>value2:</h2>
-        <div>{value2}</div>
+        <h2>start:</h2>
+        <div>{start}</div>
+    </div>
+    <div class="component">
+        <h2>end:</h2>
+        <div>{end}</div>
+    </div>
+    <div class="component">
+        <h2>percent:</h2>
+        <div>{percent}%</div>
+    </div>
+    <div class="component">
+        <h2>unit:</h2>
+        <div>{unit}</div>
     </div>
 </div>
 
