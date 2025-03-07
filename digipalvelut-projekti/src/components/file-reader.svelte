@@ -27,7 +27,7 @@
         list.forEach(element => {        
             lists.list = [
                 ...lists.list,
-                { name: element.Name, target: element.Target, start: element.Start, end: element.End, unit: element.Unit },
+                { name: element.Title, target: element.Target, start: element.Start, end: element.End, unit: element.Unit },
             ];
         });
     }
@@ -41,9 +41,8 @@
 
     function fileFound() {
         if (fileGiven) {
-            lists.list = [];
             previewStore.set('');
-            clickEvent = '';
+            clickEvent = null;
         }
         fileGiven = !fileGiven;
     }
@@ -57,11 +56,4 @@
 <div>
     <input type="file" accept=".xlsx" bind:this={clickEvent} onchange={handleFileInput}>
     <button onclick={clickEvent.click(), fileFound}>Open file</button>
-    
-    <!-- {#if fileGiven}
-        <h2>Stuff inside the file</h2>
-        <pre>
-            {$previewStore}
-        </pre>
-    {/if} -->
 </div>

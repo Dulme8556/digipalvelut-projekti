@@ -24,7 +24,7 @@
 </script>
 
 <div>
-    <h1>Add new</h1>
+    <h1 class="title">Add new</h1>
     <div>
         <input type="text" placeholder="Name" bind:value={newName} />
         <input type="text" placeholder="Target value" bind:value={newtarget} />
@@ -34,3 +34,9 @@
     </div>
     <button onclick={addNew}>Add</button>
 </div>
+
+<style>
+    .title {
+        text-transform: uppercase;
+    }
+</style>
