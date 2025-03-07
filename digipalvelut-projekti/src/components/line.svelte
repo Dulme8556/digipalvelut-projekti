@@ -1,8 +1,12 @@
 <script>
     let { name, target, start, end, unit } = $props();
 
-    let rawValue = end/target*100;
-    let percent = rawValue.toFixed(1);
+    let percent = "placeholder";
+
+    if (end != '' && target != '') {
+        let rawValue = end/target*100;
+        percent = rawValue.toFixed(1);
+    }
 </script>
 
 <div class="line">
@@ -24,7 +28,9 @@
     </div>
     <div class="component">
         <h2>percent:</h2>
-        <div>{percent}%</div>
+        {#if percent !== "placeholder"}
+            <div>{percent}%</div>
+        {/if}
     </div>
     <div class="component">
         <h2>unit:</h2>
