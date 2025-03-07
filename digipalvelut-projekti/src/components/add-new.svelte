@@ -4,29 +4,39 @@
 
     let lists = getContext('list');
 
-    let newIndicator = $state("");
-    let newValue1 = $state("");
-    let newValue2 = $state("");
+    let newName = $state("");
+    let newtarget = $state("");
+    let newStart = $state("");
+    let newEnd = $state("");
+    let newUnit = $state("");
 
     function addNew(event) {
         lists.list = [
             ...lists.list,
-            { indicator: newIndicator, value1: newValue1, value2: newValue2 },
+            { name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
         ];
-        newIndicator = "";
-        newValue1 = "";
-        newValue2 = "";
-        console.log("add-new.svelte")
-        console.log({lists})
+        newName = "";
+        newtarget = "";
+        newStart = "";
+        newEnd = "";
+        newUnit = "";
     }
 </script>
 
 <div>
-    <h1>Add new</h1>
+    <h1 class="title">Add new</h1>
     <div>
-        <input type="text" placeholder="Name" bind:value={newIndicator} />
-        <input type="text" placeholder="Value1" bind:value={newValue1} />
-        <input type="text" placeholder="Value2" bind:value={newValue2} />
+        <input type="text" placeholder="Name" bind:value={newName} />
+        <input type="text" placeholder="Target value" bind:value={newtarget} />
+        <input type="text" placeholder="Start value" bind:value={newStart} />
+        <input type="text" placeholder="End value" bind:value={newEnd} />
+        <input type="text" placeholder="Unit" bind:value={newUnit} />
     </div>
     <button onclick={addNew}>Add</button>
 </div>
+
+<style>
+    .title {
+        text-transform: uppercase;
+    }
+</style>
