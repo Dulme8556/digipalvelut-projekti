@@ -1,13 +1,14 @@
 <script>
+    import { getContext } from "svelte";
     import { writable } from "svelte/store";
     import * as XLSX from "xlsx";
+
+    let lists = getContext('list');
+    let list = [];
 
     let fileGiven = false;
     let clickEvent;
     const previewStore = writable('');
-
-    // temporary will be replaced with widely used list
-    let information = [];
 
     async function handleFileChange(file) {
         const data = await file.arrayBuffer();
@@ -16,14 +17,19 @@
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
         previewStore.set(JSON.stringify(jsonData, null, 2));
 
-        let information = jsonData;
-
+        list = jsonData
+        
         // temporary to see useful info
-        console.log(previewStore)
         console.log("Information:")
-        console.log(information)
-        console.log(information[0].Name)
-        console.log(information[1].End)
+        console.log(lists.list)
+        console.log(list)
+
+        list.forEach(element => {        
+            lists.list = [
+                ...lists.list,
+                { name: element.Name, target: element.Target, start: element.Start, end: element.End, unit: element.Unit },
+            ];
+        });
     }
 
     function handleFileInput(event) {
@@ -35,7 +41,7 @@
 
     function fileFound() {
         if (fileGiven) {
-            information = [];
+            lists.list = [];
             previewStore.set('');
             clickEvent = '';
         }
@@ -52,10 +58,10 @@
     <input type="file" accept=".xlsx" bind:this={clickEvent} onchange={handleFileInput}>
     <button onclick={clickEvent.click(), fileFound}>Open file</button>
     
-    {#if fileGiven}
+    <!-- {#if fileGiven}
         <h2>Stuff inside the file</h2>
         <pre>
             {$previewStore}
         </pre>
-    {/if}
+    {/if} -->
 </div>
