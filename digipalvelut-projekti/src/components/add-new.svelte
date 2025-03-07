@@ -60,16 +60,16 @@
         border-radius: 5px;
         font-size: 17px;
         padding: 3px 0;
-        background-color: #757575;
+        /* background-color: #757575; */
         color: black;
     }
 
     .input::placeholder {
-        color: #B3B3AF;
+        /* color: #B3B3AF; */
     }
 
     .input:focus {
-        background-color: #8F8F8F;
+        /* background-color: #8F8F8F; */
     }
 
     input::-webkit-outer-spin-button,
