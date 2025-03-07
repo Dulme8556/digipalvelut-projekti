@@ -54,6 +54,11 @@
     input {
         display: none;
     }
+
+    button {
+        padding: 5px 20px;
+        margin-bottom: 10px;
+    }
 </style>
 <div>
     <input type="file" accept=".xlsx" bind:this={fileInput} onchange={handleFileInput}>

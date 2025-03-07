@@ -5,49 +5,61 @@
 
     if (end != '' && target != '') {
         let rawValue = end/target*100;
-        percent = rawValue.toFixed(1);
+        percent = rawValue.toFixed(0);
     }
 </script>
 
 <div class="line">
-    <div class="component">
-        <h2>indicator:</h2>
+    <div class="component long">
+        <h3>indicator:</h3>
         <div>{name}</div>
     </div>
     <div class="component">
-        <h2>target:</h2>
+        <h3>target:</h3>
         <div>{target}</div>
     </div>
     <div class="component">
-        <h2>start:</h2>
+        <h3>start:</h3>
         <div>{start}</div>
     </div>
     <div class="component">
-        <h2>end:</h2>
+        <h3>end:</h3>
         <div>{end}</div>
     </div>
     <div class="component">
-        <h2>percent:</h2>
+        <h3>percent:</h3>
         {#if percent !== "placeholder"}
             <div>{percent}%</div>
         {/if}
     </div>
-    <div class="component">
-        <h2>unit:</h2>
+    <div class="component long">
+        <h3>unit:</h3>
         <div>{unit}</div>
     </div>
 </div>
 
 <style>
+    h3 {
+        padding-right: 10px;
+    }
+
     .line {
         display: flex;
         flex-direction: row;
+        max-width: 1400px;
+        margin: 0 10px;
+        font-size: 15px;
     }
 
     .component {
         display: flex;
         flex-direction: row;
         align-items: center;
-        padding: 0 20px;
+        flex: 1;
+    }
+
+    .long {
+        display: flex;
+        flex: 2;
     }
 </style>
