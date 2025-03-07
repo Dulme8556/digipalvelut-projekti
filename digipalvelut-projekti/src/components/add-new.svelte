@@ -25,12 +25,12 @@
 
 <div>
     <h1 class="title">Add new</h1>
-    <div>
-        <input type="text" placeholder="Name" bind:value={newName} />
-        <input type="text" placeholder="Target value" bind:value={newtarget} />
-        <input type="text" placeholder="Start value" bind:value={newStart} />
-        <input type="text" placeholder="End value" bind:value={newEnd} />
-        <input type="text" placeholder="Unit" bind:value={newUnit} />
+    <div class="input__container">
+        <input class="input" type="text" accept="string" placeholder="Name" bind:value={newName} />
+        <input class="input input__number" type="number" accept="" placeholder="Target value" bind:value={newtarget} />
+        <input class="input input__number" type="number" accept="" placeholder="Start value" bind:value={newStart} />
+        <input class="input input__number" type="number" accept="" placeholder="End value" bind:value={newEnd} />
+        <input class="input" type="text" accept="" placeholder="Unit" bind:value={newUnit} />
     </div>
     <button onclick={addNew}>Add</button>
 </div>
@@ -38,5 +38,23 @@
 <style>
     .title {
         text-transform: uppercase;
+    }
+
+    .input {
+        border: gray solid 2px;
+        border-radius: 5px;
+        font-size: 17px;
+        padding: 3px 0;
+        background-color: #424242;
+        color: #B3B3AF;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    
+    .input::placeholder {
+        color: #B3B3AF;
     }
 </style>
