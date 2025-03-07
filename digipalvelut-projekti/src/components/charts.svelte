@@ -1,23 +1,36 @@
-<!-- <script>
-    import Test from "./test.svelte";
+<div class="chartContainer">
+    <canvas id="myChart" bind:this={chartCanvas}></canvas>
+</div>
+<script>
+	import chartjs from 'chart.js/auto';
+	import { onMount } from 'svelte';
 
-    const chartData = {
-        labels: ["Red", "Blue", "Yellow"],
-        datasets: [
-            {
-                label: "Test",
-                data: [12, 19, 3],
-                backgroundColor: [
-                    "rgb(255, 99, 132)",
-                    "rgb(54, 162, 235",
-                    "rgb(255, 205, 86)",
-                ],
-                hoverOffset: 4,
-            },
-        ],
-    };
+	let chartCanvas;
+	let chartValues = [20, 10, 5, 2, 20, 30, 45];
+	let chartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-    const chartOptions = { responsive: true };
+	onMount(() => {
+		if (chartCanvas) {
+			let ctx = chartCanvas.getContext('2d');
+			new chartjs(ctx, {
+				type: 'line',
+				data: {
+					labels: chartLabels,
+					datasets: [{
+						label: 'Revenue',
+						backgroundColor: 'rgb(255, 99, 132)',
+						borderColor: 'rgb(255, 99, 132)',
+						data: chartValues
+					}]
+				}
+			});
+		}
+	});
 </script>
 
-<Test {data} {chartOptions} /> -->
+<style>
+    .chartContainer{
+        width: 400px;
+        height: 200px;
+    }
+</style>
