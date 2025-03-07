@@ -24,4 +24,5 @@
      <FileReader/>
 </div>
 
+<!-- font is added in here -->
 <GlobalStyles />
