@@ -10,7 +10,7 @@
     let lists = $state({
         list: [],
     });
-
+    
     setContext('list', lists);
 </script>
 
