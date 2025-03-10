@@ -10,7 +10,7 @@
     let newStart = $state("");
     let newEnd = $state("");
     let newUnit = $state("");
-
+    
     let id = 0;
 
     function addNew(event) {
@@ -70,12 +70,6 @@
         font-size: 17px;
         padding: 3px 0;
         color: black;
-    }
-
-    .input::placeholder {
-    }
-
-    .input:focus {
     }
 
     input::-webkit-outer-spin-button,
