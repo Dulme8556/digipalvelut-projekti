@@ -1,11 +1,36 @@
 <script>
-    let { name, target, start, end, unit } = $props();
+    import { createEventDispatcher, getContext } from "svelte";
 
+    let { id, name, target, start, end, unit } = $props();
+
+    let lists = getContext('list')
+
+    // calculate percents
     let percent = "placeholder";
 
     if (end != '' && target != '') {
         let rawValue = end/target*100;
         percent = rawValue.toFixed(0);
+    }
+
+    // let array = [];
+
+    // function deleteThis(tämä) {
+    //     // lists.list.forEach(element => {
+    //     //     if (element.id === id) {
+    //             lists.list = lists.list.filter((t) => t.id !== tämä.id);
+    //         // }
+    //         // else {
+    //         //     console.log("different id")
+    //         // }
+    //     // });
+    //     console.log(array)
+    // }
+
+    const dispatch = createEventDispatcher();
+
+    function onRemove() {
+        dispatch("remove", line);
     }
 </script>
 
@@ -36,6 +61,7 @@
         <h3>unit:</h3>
         <div>{unit}</div>
     </div>
+    <button class="delete" onclick={onRemove}><img src="./images/delete-icon.svg" class="image" alt=""></button>
 </div>
 
 <style>
@@ -61,5 +87,19 @@
     .long {
         display: flex;
         flex: 2;
+    }
+
+    .delete {
+        display: flex;
+        align-items: center;
+        align-self: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+    }
+
+    .image {
+        width: 20px;
+        height: 20px;
     }
 </style>

@@ -11,14 +11,18 @@
     let newEnd = $state("");
     let newUnit = $state("");
 
+    let id = 0;
+
     function addNew(event) {
         if (newName === "" && newtarget === "" && newStart === "" && newEnd === "" && newUnit === "") {
             alert("Can't add empty")
         }
         else {
+            id += 1;
+
             lists.list = [
                 ...lists.list,
-                { name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
+                { id:{id}, name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
             ];
             newName = "";
             newtarget = "";
