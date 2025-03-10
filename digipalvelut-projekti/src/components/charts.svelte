@@ -1,36 +1,67 @@
-<div class="chartContainer">
-    <canvas id="myChart" bind:this={chartCanvas}></canvas>
-</div>
 <script>
-	import chartjs from 'chart.js/auto';
-	import { onMount } from 'svelte';
+  import { onMount } from "svelte";
+  import { Chart, registerables } from "chart.js";
+  import * as XLSX from "xlsx";
 
-	let chartCanvas;
-	let chartValues = [20, 10, 5, 2, 20, 30, 45];
-	let chartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  Chart.register(...registerables);
 
-	onMount(() => {
-		if (chartCanvas) {
-			let ctx = chartCanvas.getContext('2d');
-			new chartjs(ctx, {
-				type: 'line',
-				data: {
-					labels: chartLabels,
-					datasets: [{
-						label: 'Revenue',
-						backgroundColor: 'rgb(255, 99, 132)',
-						borderColor: 'rgb(255, 99, 132)',
-						data: chartValues
-					}]
-				}
-			});
-		}
-	});
+  let canvas;
+  let chartInstance = null;
+
+  onMount(async () => {
+    await loadExcelData();
+  });
+
+  async function loadExcelData() {
+    try {
+      const response = await fetch("/test.xlsx");
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      const labels = jsonData[0];
+      const datasetData = jsonData.slice(1).map(row => row[1]);
+
+      createChart(labels, datasetData);
+    } catch (error) {
+      console.error("Error loading Excel file:", error);
+    }
+  }
+
+  function createChart(labels, data) {
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Excel Data",
+            data: data,
+            backgroundColor: "rgba(75, 192, 192, 0.6)",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+      },
+    });
+  }
 </script>
 
 <style>
-    .chartContainer{
-        width: 400px;
-        height: 200px;
-    }
+	.chartContainer{
+	width: 400px;
+	height: 200px;
+	}
 </style>
+
+<div class="chartContainer">
+	<canvas bind:this={canvas}></canvas>
+</div>
