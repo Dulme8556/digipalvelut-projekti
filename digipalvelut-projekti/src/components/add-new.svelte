@@ -32,13 +32,13 @@
     }
 </script>
 
-<div style='max-width:400px;'>
-    <h1 class="title">Add an existing graph</h1>
+<div style='width:400px;'>
+    <h1 class="title">Add an existing chart</h1>
     <div class="import-button">
         <FileReader />
     </div>
-    <div class='create-graph'>
-        <h2 class='create-graph__title'>CREATE A NEW GRAPH</h2>
+    <div class='create-dataset'>
+        <h2 class='create-dataset__title'>CREATE A NEW DATASET</h2>
         <div class="input__container">
             <input class="input" type="text" placeholder="Name" bind:value={newName} />
             <input class="input input__number" type="number" placeholder="Target value" bind:value={newtarget} />
@@ -47,19 +47,19 @@
             <input class="input" type="text" placeholder="Unit" bind:value={newUnit} />
         </div>
         <div class='add-button'>
-            <button class="add-button__button" onclick={addNew}>Create graph</button>
+            <button class="add-button__button" onclick={addNew}>Create dataset</button>
         </div>
     </div>
 </div>
 
 <style>
 
-    .create-graph{
+    .create-dataset{
         background-color: rgba(128, 128, 128, 0.289);
         border-radius: 12px;
     }
 
-    .create-graph__title{
+    .create-dataset__title{
         display:flex;
         justify-content: center;
         padding-top:15px;
@@ -83,7 +83,7 @@
     }
 
     .add-button__button {
-        padding: 5px 20px;
+        padding: 5px 10px;
         margin-bottom: 10px;
         margin-right: 10px;
         background: var(--schemes-primary, #639fc4);
@@ -107,6 +107,10 @@
     .input__container{
         display:flex;
         flex-direction: column;
+    }
+
+    .input::placeholder{
+        padding-left:2px;
     }
 
     .input {

@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount } from "svelte";
+    import { getContext, onMount, setContext } from "svelte";
 
     let { id, name, target, start, end, unit } = $props();
 
@@ -9,6 +9,13 @@
     let editing = $state(false);
 
     let deleted = $state(false);
+
+    let checkboxChecked = false;
+
+    function checkboxClick(event) {
+        checkboxChecked = !checkboxChecked;
+        setTimeout(() => event.target.checked = checked, 0);
+    }
 
     onMount(() => {
         percentCalculation();
@@ -71,6 +78,11 @@
         <!-- editing off -->
     {:else}
         <div class="line">
+            <input type=checkbox checked={checkboxChecked} onclick={checkboxClick} style='width:20px; margin: 0 8px;'>
+            <div class="component">
+                <h3>indicator:</h3>
+                <div>{id}</div>
+            </div>
             <div class="component long">
                 <h3>indicator:</h3>
                 <div>{name}</div>
