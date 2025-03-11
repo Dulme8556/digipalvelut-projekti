@@ -6,6 +6,7 @@
     import Charts from "./charts.svelte";
     import GlobalStyles from "./global-styles.svelte";
     import DownloadFile from "./download-file.svelte";
+    import Search from "./search.svelte";
 
     let lists = $state({
         list: [],
@@ -17,23 +18,32 @@
 <style>
     .website {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
     }
-    .add__new {
+
+    .header {
+        display: flex;
+    }
+
+    .body {
         display: flex;
         flex-direction: column;
     }
 </style>
 
 <div class="website">
-    <div class="add__new">
+    <div class="header">
+        <Search />
+        <DownloadFile />
+    </div>
+    <div class="body">
         <AddNew />
         <Lines />
         <Charts />
     </div>
-    <DownloadFile />
 </div>
+
 
 <!-- font is added in here -->
 <GlobalStyles />

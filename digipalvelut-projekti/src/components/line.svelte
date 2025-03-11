@@ -41,11 +41,7 @@
         <div class="line">
             <div class="component long">
                 <h3>indicator:</h3>
-                <input
-                    class="input input__long"
-                    type="text"
-                    bind:value={name}
-                />
+                <input class="input input__long"type="text"bind:value={name}/>
             </div>
             <div class="component">
                 <h3>target:</h3>
@@ -75,10 +71,6 @@
         <!-- editing off -->
     {:else}
         <div class="line">
-            <div class="component">
-                <h3>indicator:</h3>
-                <div>{id}</div>
-            </div>
             <div class="component long">
                 <h3>indicator:</h3>
                 <div>{name}</div>
