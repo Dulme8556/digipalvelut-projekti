@@ -6,10 +6,9 @@
     let lists = getContext("list");
 
     let percent = $state("placeholder");
+
     let editing = $state(false);
-
     let deleted = $state(false);
-
     let checkboxChecked = false;
 
     function checkboxClick(event) {
@@ -38,6 +37,8 @@
 
     function onSave(event) {
         editing = !editing;
+
+        lists.list = lists.list
         percentCalculation();
     }
 </script>
