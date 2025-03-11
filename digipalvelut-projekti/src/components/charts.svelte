@@ -7,6 +7,7 @@
 
   let canvas;
   let chartInstance = null;
+  let jsonData = [];
 
   onMount(async () => {
     await loadExcelData();
@@ -20,18 +21,21 @@
 
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-      const labels = jsonData[0];
-      const datasetData = jsonData.slice(1).map(row => row[1]);
-
-      createChart(labels, datasetData);
+      jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
     } catch (error) {
       console.error("Error loading Excel file:", error);
     }
   }
 
-  function createChart(labels, data) {
+  function createChart() {
+    if (!jsonData.length) {
+      console.error("No data loaded");
+      return;
+    }
+
+    const labels = jsonData[0];
+    const datasetData = jsonData.slice(1).map(row => row[1]);
+
     if (chartInstance) {
       chartInstance.destroy();
     }
@@ -43,7 +47,7 @@
         datasets: [
           {
             label: "Excel Data",
-            data: data,
+            data: datasetData,
             backgroundColor: "rgba(75, 192, 192, 0.6)",
           },
         ],
@@ -56,11 +60,21 @@
 </script>
 
 <style>
-	.chartContainer{
-	width: 400px;
-	height: 200px;
-	}
+  .chartContainer {
+    width: 400px;
+    height: 200px;
+  }
+
+  .chartButton {
+    width: auto;
+    height: auto;
+    margin-top: 10px;
+  }
 </style>
+
+<div class="chartButton">
+  <button on:click={createChart}>Create a chart</button>
+</div>
 
 <div class="chartContainer">
 	<canvas bind:this={canvas}></canvas>

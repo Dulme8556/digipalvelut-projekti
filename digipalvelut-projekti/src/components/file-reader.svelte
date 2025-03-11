@@ -59,6 +59,22 @@
     button {
         padding: 5px 20px;
         margin-bottom: 10px;
+        background-color: #639fc4;
+        color:white;
+        border-radius: 100px;
+        border-style: solid;
+        border-color: #000000;
+        border-width: 1px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 180px;   
+        height: 50px;
+        position: relative;
+        overflow: hidden;
     }
 </style>
 <div>
