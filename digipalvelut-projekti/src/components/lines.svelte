@@ -13,7 +13,7 @@
 </script>
 
 <div class="active-lines">
-    <h2>Active datasets</h2>
+    <h2>Active indicators</h2>
     <input
         id="searchbar"
         bind:value={searchQuery}
