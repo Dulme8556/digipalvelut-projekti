@@ -3,10 +3,6 @@
     import Line from "./line.svelte";
 
     let lists = getContext('list')
-
-    function removeLine(line) {
-        lists.list = lists.list.filter((t) => t.id === line.id)
-    }
 </script>
 <ul>
     {#each lists.list as line}

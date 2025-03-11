@@ -10,19 +10,18 @@
     let newStart = $state("");
     let newEnd = $state("");
     let newUnit = $state("");
+    let newId = $state("");
     
-    let id = 0;
-
     function addNew(event) {
+        newId = lists.list.length ? Math.max(...lists.list.map((t) => t.id)) + 1 : 1;
+
         if (newName === "" && newtarget === "" && newStart === "" && newEnd === "" && newUnit === "") {
             alert("Can't add empty")
         }
         else {
-            id += 1;
-
             lists.list = [
                 ...lists.list,
-                { id:{id}, name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
+                { id: newId, name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
             ];
             newName = "";
             newtarget = "";

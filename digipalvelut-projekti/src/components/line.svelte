@@ -21,17 +21,8 @@
         }
     }
 
-    // deleting temporarily works by hiding the line not by deleting it
-
     function deleteThis() {
-        // this.id breaks this by only deleting the first item from the list
-        let itemIdx = lists.list.filter(x => x.id === this.id);
-        lists.list.splice(itemIdx, 1);
-        lists.list = lists.list;
-
-        lists.list.forEach(element => {
-            console.log(element.id)
-        });
+        lists.list = lists.list.filter(item => item.id !== id)
     }
 
     function editThis() {
@@ -44,91 +35,89 @@
     }
 </script>
 
-{#if deleted}
-    <div></div>
-{:else}
-    <div>
-        <!-- editing on -->
-        {#if editing}
-            <div class="line">
-                <div class="component long">
-                    <h3>indicator:</h3>
-                    <input
-                        class="input input__long"
-                        type="text"
-                        bind:value={name}
-                    />
-                </div>
-                <div class="component">
-                    <h3>target:</h3>
-                    <input class="input" type="text" bind:value={target} />
-                </div>
-                <div class="component">
-                    <h3>start:</h3>
-                    <input class="input" type="text" bind:value={start} />
-                </div>
-                <div class="component">
-                    <h3>end:</h3>
-                    <input class="input" type="text" bind:value={end} />
-                </div>
-                <div class="component">
-                    <h3>percent:</h3>
-                </div>
-                <div class="component long">
-                    <h3>unit:</h3>
-                    <input
-                        class="input input__long"
-                        type="text"
-                        bind:value={unit}
-                    />
-                </div>
-                <button class="button button__save" onclick={onSave}
-                    >Save</button
-                >
+<div>
+    <!-- editing on -->
+    {#if editing}
+        <div class="line">
+            <div class="component long">
+                <h3>indicator:</h3>
+                <input
+                    class="input input__long"
+                    type="text"
+                    bind:value={name}
+                />
             </div>
-            <!-- editing off -->
-        {:else}
-            <div class="line">
-                <div class="component long">
-                    <h3>indicator:</h3>
-                    <div>{name}</div>
-                </div>
-                <div class="component">
-                    <h3>target:</h3>
-                    <div>{target}</div>
-                </div>
-                <div class="component">
-                    <h3>start:</h3>
-                    <div>{start}</div>
-                </div>
-                <div class="component">
-                    <h3>end:</h3>
-                    <div>{end}</div>
-                </div>
-                <div class="component">
-                    <h3>percent:</h3>
-                    {#if percent !== "placeholder"}
-                        <div>{percent}%</div>
-                    {/if}
-                </div>
-                <div class="component long">
-                    <h3>unit:</h3>
-                    <div>{unit}</div>
-                </div>
-                <button class="button button__edit" onclick={editThis}>
-                    <img
-                        src="./images/edit-icon.svg"
-                        class="image image__edit"
-                        alt=""
-                    />
-                </button>
-                <button class="button" onclick={deleteThis}>
-                    <img src="./images/delete-icon.svg" class="image" alt="" />
-                </button>
+            <div class="component">
+                <h3>target:</h3>
+                <input class="input" type="text" bind:value={target} />
             </div>
-        {/if}
-    </div>
-{/if}
+            <div class="component">
+                <h3>start:</h3>
+                <input class="input" type="text" bind:value={start} />
+            </div>
+            <div class="component">
+                <h3>end:</h3>
+                <input class="input" type="text" bind:value={end} />
+            </div>
+            <div class="component">
+                <h3>percent:</h3>
+            </div>
+            <div class="component long">
+                <h3>unit:</h3>
+                <input
+                    class="input input__long"
+                    type="text"
+                    bind:value={unit}
+                />
+            </div>
+            <button class="button button__save" onclick={onSave}>Save</button>
+        </div>
+        <!-- editing off -->
+    {:else}
+        <div class="line">
+            <div class="component">
+                <h3>indicator:</h3>
+                <div>{id}</div>
+            </div>
+            <div class="component long">
+                <h3>indicator:</h3>
+                <div>{name}</div>
+            </div>
+            <div class="component">
+                <h3>target:</h3>
+                <div>{target}</div>
+            </div>
+            <div class="component">
+                <h3>start:</h3>
+                <div>{start}</div>
+            </div>
+            <div class="component">
+                <h3>end:</h3>
+                <div>{end}</div>
+            </div>
+            <div class="component">
+                <h3>percent:</h3>
+                {#if percent !== "placeholder"}
+                    <div>{percent}%</div>
+                {/if}
+            </div>
+            <div class="component long">
+                <h3>unit:</h3>
+                <div>{unit}</div>
+            </div>
+            <button class="button button__edit" onclick={editThis}>
+                <img
+                    src="./images/edit-icon.svg"
+                    class="image image__edit"
+                    alt=""
+                />
+            </button>
+            <button class="button" onclick={deleteThis}>
+                <img src="./images/delete-icon.svg" class="image" alt="" />
+            </button>
+        </div>
+    {/if}
+</div>
 
 <style>
     h3 {
