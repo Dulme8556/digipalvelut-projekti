@@ -79,10 +79,6 @@
     {:else}
         <div class="line">
             <input type=checkbox checked={checkboxChecked} onclick={checkboxClick} style='width:20px; margin: 0 8px;'>
-            <div class="component">
-                <h3>indicator:</h3>
-                <div>{id}</div>
-            </div>
             <div class="component long">
                 <h3>indicator:</h3>
                 <div>{name}</div>
