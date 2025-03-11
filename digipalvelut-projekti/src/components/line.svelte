@@ -180,7 +180,7 @@
         border: #575757 solid 1px;
         border-radius: 5px;
         font-size: 14px;
-        padding: 3px 0;
+        padding: 3px 5px;
         color: black;
         width: 50px;
     }

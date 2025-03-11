@@ -21,18 +21,8 @@
         flex-direction: column;
         justify-content: space-between;
     }
-
-    .header {
-        display: flex;
-    }
-
-    .body {
-        display: flex;
-        flex-direction: column;
-    }
 </style>
 
-<Search />
 <div class="website">
     <div class="add__new">
         <div style='display:flex;'>
