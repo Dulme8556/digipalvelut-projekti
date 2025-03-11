@@ -4,6 +4,7 @@
 
     let lists = getContext('list')
 </script>
+
 <div class='s'>
     <h2>Active graphs</h2>
     <ul>
