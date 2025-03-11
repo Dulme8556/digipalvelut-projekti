@@ -105,19 +105,16 @@
                 <h3>unit:</h3>
                 <div>{unit}</div>
             </div>
-
-            <div class='line__buttons'>
-                <button class="button" onclick={deleteThis}>
-                    <img src="./images/delete-icon.svg" class="image" alt="" />
-                </button>
-                <button class="button button__edit" onclick={editThis}>
-                    <img
-                        src="./images/edit-icon.svg"
-                        class="image image__edit"
-                        alt=""
-                    />
-                </button>
-            </div>
+            <button class="button button__edit" onclick={editThis}>
+                <img
+                    src="./images/edit-icon.svg"
+                    class="image image__edit"
+                    alt=""
+                />
+            </button>
+            <button class="button" onclick={deleteThis}>
+                <img src="./images/delete-icon.svg" class="image" alt="" />
+            </button>
         </div>
     {/if}
 </div>
@@ -125,15 +122,13 @@
 <style>
     h3 {
         padding-right: 10px;
-        font-size:17px;
-        margin:0 0;
     }
 
     .line {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         max-width: 1400px;
-        margin: 20px 5px;
+        margin: 0 10px;
         font-size: 15px;
     }
 
@@ -149,14 +144,10 @@
         flex: 2;
     }
 
-    .line__buttons{
-        display:flex;
-    }
-    
-
     .button {
         display: flex;
         align-items: center;
+        align-self: center;
         justify-content: center;
         width: 30px;
         height: 30px;
@@ -170,8 +161,8 @@
         border: 1px gray solid;
     }
 
-    .button__edit{
-        margin-left:10px;
+    .button__save {
+        width: 40px;
     }
 
     .image {
