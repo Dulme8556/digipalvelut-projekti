@@ -41,7 +41,7 @@
     }
 
     chartInstance = new Chart(canvas, {
-      type: "bar",
+      type: "line",
       data: {
         labels: labels,
         datasets: [

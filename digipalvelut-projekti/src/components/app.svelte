@@ -33,13 +33,11 @@
 </style>
 
 <div class="website">
-    <div class="header">
-        <Search />
-        <DownloadFile />
-    </div>
-    <div class="body">
-        <AddNew />
-        <Lines />
+    <div class="add__new">
+        <div style='display:flex;'>
+            <AddNew />
+            <Lines />
+        </div>
         <Charts />
     </div>
 </div>
