@@ -6,7 +6,6 @@
     import Charts from "./charts.svelte";
     import GlobalStyles from "./global-styles.svelte";
     import DownloadFile from "./download-file.svelte";
-    import Search from "./search.svelte";
 
     let lists = $state({
         list: [],
