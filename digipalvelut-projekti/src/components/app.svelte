@@ -26,10 +26,13 @@
     <div class="add__new">
         <div style='display:flex;'>
             <AddNew />
-            <Lines />
+            {#key lists.list.length}
+                <Lines />
+            {/key}
         </div>
         <Charts />
     </div>
+    <DownloadFile />
 </div>
 
 
