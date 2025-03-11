@@ -1,15 +1,23 @@
 <script>
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import Line from "./line.svelte";
 
     let lists = getContext("list");
 
     let searchQuery = "";
-    let filteredIndicators = lists.list;
+
+    onMount(() => {
+        updateList();
+    })
+
+    function updateList() {
+        let filteredIndicators = lists.list;
+    }
+
 
     $: filteredIndicators = lists.list.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+);
 </script>
 
 <div class="active-lines">
