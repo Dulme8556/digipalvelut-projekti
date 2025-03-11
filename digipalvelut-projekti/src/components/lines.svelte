@@ -4,8 +4,8 @@
 
     let lists = getContext('list')
 </script>
-<div class='s'>
-    <h2>Active graphs</h2>
+<div class='active-lines'>
+    <h2>Active datasets</h2>
     <ul>
         {#each lists.list as line}
         <li>
@@ -29,7 +29,7 @@
         padding: 0;
 
     }
-    .s{
+    .active-lines{
         margin-top:160px;
         margin-left:50px;
     }
