@@ -136,6 +136,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        margin-right: 10px;
         flex: 1;
     }
 

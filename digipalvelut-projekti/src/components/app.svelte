@@ -28,8 +28,10 @@
 
 <div class="website">
     <div class="add__new">
-        <AddNew />
-        <Lines />
+        <div style='display:flex;'>
+            <AddNew />
+            <Lines />
+        </div>
         <Charts />
     </div>
     <DownloadFile />
