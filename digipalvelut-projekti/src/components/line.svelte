@@ -121,8 +121,8 @@
                     alt=""
                 />
             </button>
-            <button class="button" onclick={deleteThis}>
-                <img src="./images/delete-icon.svg" class="image" alt="" />
+            <button class="button button__delete" onclick={deleteThis}>
+                <img src="./images/delete-icon.svg" class="image image__delete" alt="" />
             </button>
         </div>
     {/if}
@@ -171,18 +171,26 @@
         border: 1px gray solid;
     }
 
+    .button__delete:hover {
+        background-color: #E74433;
+    }
+
     .button__save {
         width: 40px;
     }
 
     .image {
-        width: 20px;
-        height: 20px;
+        /* width: 100%;
+        height: 100%; */
     }
 
     .image__edit {
         filter: brightness(0) saturate(100%) invert(17%) sepia(8%) saturate(21%)
             hue-rotate(359deg) brightness(100%) contrast(83%);
+    }
+
+    .image__delete:hover {
+        filter: brightness(0) saturate(100%) invert(73%) sepia(100%) saturate(4%) hue-rotate(8deg) brightness(92%) contrast(87%);
     }
 
     .input {
