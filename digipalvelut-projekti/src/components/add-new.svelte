@@ -15,6 +15,10 @@
     function addNew(event) {
         newId = lists.list.length ? Math.max(...lists.list.map((t) => t.id)) + 1 : 1;
 
+        if (newStart === "") {
+            newStart = 0;
+        }
+
         if (newName === "" && newtarget === "" && newStart === "" && newEnd === "" && newUnit === "") {
             alert("Can't add empty")
         }
