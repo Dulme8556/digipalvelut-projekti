@@ -9,7 +9,7 @@
 
     let editing = $state(false);
     let deleted = $state(false);
-    let checkboxChecked = false;
+    let checkboxChecked = $state(false);
 
     function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;

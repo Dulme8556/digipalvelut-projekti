@@ -32,13 +32,13 @@
     }
 </script>
 
-<div style='width:400px;'>
+<div style='min-width:400px; max-width:400px;'>
     <h1 class="title">Add an existing chart</h1>
     <div class="import-button">
         <FileReader />
     </div>
     <div class='create-dataset'>
-        <h2 class='create-dataset__title'>CREATE A NEW DATASET</h2>
+        <h2 class='create-dataset__title'>CREATE A NEW INDICATOR</h2>
         <div class="input__container">
             <input class="input" type="text" placeholder="Name" bind:value={newName} />
             <input class="input input__number" type="number" placeholder="Target value" bind:value={newtarget} />
@@ -47,7 +47,7 @@
             <input class="input" type="text" placeholder="Unit" bind:value={newUnit} />
         </div>
         <div class='add-button'>
-            <button class="add-button__button" onclick={addNew}>Create dataset</button>
+            <button class="add-button__button" onclick={addNew}>Create indicator</button>
         </div>
     </div>
 </div>
