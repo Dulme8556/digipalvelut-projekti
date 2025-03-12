@@ -5,10 +5,17 @@
     let lists = getContext("list");
 
     let searchQuery = "";
+    let test = [];
 
     onMount(() => {
         updateList();
     })
+
+    function selectAll() {
+        test.forEach(element => {
+            element.checkboxClick()
+        });
+    }
 
     function updateList() {
         let filteredIndicators = lists.list;
@@ -22,6 +29,7 @@
 
 <div class="active-lines">
     <h2>Active indicators</h2>
+    <button onclick={selectAll}>Select all</button>
     <input
         id="searchbar"
         bind:value={searchQuery}
@@ -29,9 +37,9 @@
         type="text"
     />
     <ul>
-        {#each filteredIndicators as line}
+        {#each filteredIndicators as line, i}
             <li>
-                <Line
+                <Line bind:this={test[i]}
                     {line}
                     id={line.id}
                     name={line.name}

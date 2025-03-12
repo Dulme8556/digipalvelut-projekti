@@ -6,12 +6,12 @@
     let lists = getContext("list");
 
     let percent = $state("placeholder");
-    
+
     let editing = $state(false);
     let deleted = $state(false);
     let checkboxChecked = $state(false);
 
-    function checkboxClick(event) {
+    export function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;
         setTimeout(() => event.target.checked = checked, 0);
     }
