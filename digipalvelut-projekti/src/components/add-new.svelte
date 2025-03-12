@@ -108,6 +108,10 @@
         overflow: hidden;
     }
 
+    .add-button__button:hover {
+        cursor: pointer;
+    }
+
     .input__container{
         display:flex;
         flex-direction: column;

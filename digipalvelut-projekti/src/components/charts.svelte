@@ -98,6 +98,10 @@
     margin-top: 10px;
   }
 
+  .chartButton__button:hover {
+    cursor: pointer;
+  }
+
   .pdf-download__image {
     display:flex;
     width: 28px;
@@ -113,7 +117,7 @@
 </style>
 
 <div class="chartButton">
-  <button onclick={createChart}>Create a chart</button>
+  <button class="chartButton__button" onclick={createChart}>Create a chart</button>
 </div>
 
 <div class="chartContainer">
@@ -126,5 +130,3 @@
     <canvas bind:this={canvas}></canvas>
   </div>
 </div>
-
-

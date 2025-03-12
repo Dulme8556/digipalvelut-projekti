@@ -87,7 +87,7 @@
         <!-- editing off -->
     {:else}
         <div class="line">
-            <input type=checkbox checked={checkboxChecked} onclick={checkboxClick} style='width:20px; margin: 0 8px;'>
+            <input class="checkbox" type=checkbox checked={checkboxChecked} onclick={checkboxClick}>
             <div class="component long">
                 <h3>indicator:</h3>
                 <div>{name}</div>
@@ -154,6 +154,14 @@
         flex: 2;
     }
 
+    .checkbox {
+        cursor: pointer;
+        width: 20px; 
+        height: 20px;
+        margin: 0 8px;
+        margin-top: 20px;
+    }
+
     .button {
         display: flex;
         align-items: center;
@@ -169,6 +177,7 @@
     .button:hover {
         background-color: #e3e3e3;
         border: 1px gray solid;
+        cursor: pointer;
     }
 
     .button__delete:hover {
@@ -177,11 +186,6 @@
 
     .button__save {
         width: 40px;
-    }
-
-    .image {
-        /* width: 100%;
-        height: 100%; */
     }
 
     .image__edit {

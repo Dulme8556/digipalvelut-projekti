@@ -29,9 +29,10 @@
 
 <div class="active-lines">
     <h2>Active indicators</h2>
-    <button onclick={selectAll}>Select all</button>
+    <button class="select-all__button" onclick={selectAll}>Select all</button>
     <input
         id="searchbar"
+        class="searchbar"
         bind:value={searchQuery}
         placeholder="Search indicators..."
         type="text"
@@ -60,8 +61,20 @@
         margin: 0;
         padding: 0;
     }
+
     .active-lines {
         margin-top: 160px;
         margin-left: 50px;
+    }
+
+    .select-all__button {
+        cursor: pointer;
+        padding: 5px 3px;
+        font-size: 15px;
+    }
+
+    .searchbar {
+        padding: 5px 3px;
+        font-size: 15px;
     }
 </style>

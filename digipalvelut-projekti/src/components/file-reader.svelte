@@ -76,6 +76,10 @@
         position: relative;
         overflow: hidden;
     }
+
+    button:hover {
+        cursor: pointer;
+    }
 </style>
 <div>
     <input type="file" accept=".xlsx" bind:this={fileInput} onchange={handleFileInput}>

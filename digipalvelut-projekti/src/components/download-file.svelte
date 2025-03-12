@@ -1,7 +1,8 @@
 <script>
 </script>
 
-<div>
+<div class="container">
+    <h3>Excel template:</h3>
     <div class="link__container">
         <a href="impact_tool.xlsx">
             <img class="download" src="./images/download-icon.svg" alt="" />
@@ -10,13 +11,19 @@
 </div>
 
 <style>
-    .link__container {
-        border: #3B3B3B solid 2px;
-        border-radius: 5px;
-        background-color: #757575;
+    .container {
         position: absolute;
         top: 20px;
         right: 20px;
+    }
+
+    .link__container {
+        display: flex;
+        justify-self: center;
+        border: #3B3B3B solid 2px;
+        border-radius: 5px;
+        background-color: #757575;
+        width: 45px;
     }
 
     .link__container:hover {
