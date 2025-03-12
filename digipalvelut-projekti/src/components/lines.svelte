@@ -6,41 +6,62 @@
 
     let searchQuery = "";
     let test = [];
+    let allChecked = false;
 
     onMount(() => {
         updateList();
-    })
+    });
 
     function selectAll() {
-        test.forEach(element => {
-            element.checkboxClick()
+        test.forEach((element) => {
+            element.checkAll();
         });
+        allChecked = true;
+    }
+
+    function unSelectAll() {
+        test.forEach((element) => {
+            element.unCheckAll();
+        });
+        allChecked = false;
     }
 
     function updateList() {
         let filteredIndicators = lists.list;
     }
 
-
     $: filteredIndicators = lists.list.filter((item) =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-);
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
 </script>
 
 <div class="active-lines">
     <h2>Active indicators</h2>
-    <button class="select-all__button" onclick={selectAll}>Select all</button>
-    <input
-        id="searchbar"
-        class="searchbar"
-        bind:value={searchQuery}
-        placeholder="Search indicators..."
-        type="text"
-    />
+    <div class="actions-bar">
+        <div class="button-group">
+            {#if allChecked}
+                <button class="select__button" onclick={unSelectAll}
+                    >Unselect all</button
+                >
+            {:else}
+                <button class="select__button" onclick={selectAll}
+                    >Select all</button
+                >
+            {/if}
+        </div>
+        <input
+            id="searchbar"
+            class="searchbar"
+            bind:value={searchQuery}
+            placeholder="Search indicators..."
+            type="text"
+        />
+    </div>
     <ul>
         {#each filteredIndicators as line, i}
             <li>
-                <Line bind:this={test[i]}
+                <Line
+                    bind:this={test[i]}
                     {line}
                     id={line.id}
                     name={line.name}
@@ -67,7 +88,18 @@
         margin-left: 50px;
     }
 
-    .select-all__button {
+    .actions-bar {
+        display: flex;
+        flex-direction: row;
+        width: 500px;
+    }
+
+    .button-group {
+        display: flex;
+        flex: 1;
+    }
+
+    .select__button {
         cursor: pointer;
         padding: 5px 3px;
         font-size: 15px;
@@ -76,5 +108,8 @@
     .searchbar {
         padding: 5px 3px;
         font-size: 15px;
+        margin-left: 20px;
+        display: flex;
+        flex: 4;
     }
 </style>

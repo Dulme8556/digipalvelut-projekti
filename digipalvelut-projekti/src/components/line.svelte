@@ -11,9 +11,17 @@
     let deleted = $state(false);
     let checkboxChecked = $state(false);
 
-    export function checkboxClick(event) {
+    function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;
         setTimeout(() => event.target.checked = checked, 0);
+    }
+
+    export function checkAll(event) {
+        checkboxChecked = true;
+    }
+
+    export function unCheckAll(event) {
+        checkboxChecked = false;
     }
 
     onMount(() => {
