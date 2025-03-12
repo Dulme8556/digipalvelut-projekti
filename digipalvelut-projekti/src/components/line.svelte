@@ -9,12 +9,7 @@
 
     let editing = $state(false);
     let deleted = $state(false);
-<<<<<<< HEAD
-
     let checkboxChecked = $state(false);
-=======
-    let checkboxChecked = false;
->>>>>>> abfe032c192c76110fe2af40c41ecf93e0ba3e17
 
     function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;
