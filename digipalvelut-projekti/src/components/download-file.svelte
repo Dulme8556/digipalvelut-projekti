@@ -19,6 +19,10 @@
         right: 20px;
     }
 
+    .link__container:hover {
+        background-color: #919191;
+    }
+
     .download {
         width: 45px;
         height: 40px;
