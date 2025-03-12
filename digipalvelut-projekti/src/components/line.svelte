@@ -6,11 +6,15 @@
     let lists = getContext("list");
 
     let percent = $state("placeholder");
-    let editing = $state(false);
 
+    let editing = $state(false);
     let deleted = $state(false);
+<<<<<<< HEAD
 
     let checkboxChecked = $state(false);
+=======
+    let checkboxChecked = false;
+>>>>>>> abfe032c192c76110fe2af40c41ecf93e0ba3e17
 
     function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;
@@ -32,12 +36,23 @@
         lists.list = lists.list.filter(item => item.id !== id)
     }
 
+    // Edited values show in the UI but don't update the list
     function editThis() {
         editing = !editing;
     }
 
     function onSave(event) {
         editing = !editing;
+
+        lists.list.forEach(element => {
+            if (element.id === id) {
+                element.name = name
+                element.target = target
+                element.start = start
+                element.end = end
+                element.unit = unit
+            }
+        });
         percentCalculation();
     }
 </script>
