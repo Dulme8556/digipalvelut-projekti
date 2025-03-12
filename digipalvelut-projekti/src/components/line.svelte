@@ -31,6 +31,7 @@
         lists.list = lists.list.filter(item => item.id !== id)
     }
 
+    // Edited values show in the UI but don't update the list
     function editThis() {
         editing = !editing;
     }
@@ -38,7 +39,15 @@
     function onSave(event) {
         editing = !editing;
 
-        lists.list = lists.list
+        lists.list.forEach(element => {
+            if (element.id === id) {
+                element.name = name
+                element.target = target
+                element.start = start
+                element.end = end
+                element.unit = unit
+            }
+        });
         percentCalculation();
     }
 </script>
