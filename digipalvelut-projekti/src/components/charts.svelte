@@ -2,6 +2,18 @@
   import { onMount } from "svelte";
   import { Chart, registerables } from "chart.js";
   import * as XLSX from "xlsx";
+  import {jsPDF} from 'jspdf';
+
+
+  function downloadPDF(){
+    const doc = new jsPDF('p', 'pt', 'a4');
+    doc.html(document.getElementById('content'), {
+      callback: function (doc) {
+        doc.save("chart.pdf")
+      },
+    });
+  }
+
 
   Chart.register(...registerables);
 
@@ -40,6 +52,10 @@
       chartInstance.destroy();
     }
 
+    
+    document.getElementById('pdf-download__button').setAttribute('style', 'display: flex; background-color:grey; height:30px; width:30px; justify-self:flex-end; border: 1px solid black; border-radius: 3px; padding:0;' );
+    // ^^ pdf download button css
+
     chartInstance = new Chart(canvas, {
       type: "line",
       data: {
@@ -70,12 +86,33 @@
     height: auto;
     margin-top: 10px;
   }
+
+  .pdf-download__image {
+    display:flex;
+    width: 28px;
+    height: 27px;
+    filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(7%)
+            hue-rotate(314deg) brightness(89%) contrast(93%);
+    }
+
+    .pdf-download{
+      margin-right:13px;
+    }
 </style>
 
 <div class="chartButton">
-  <button on:click={createChart}>Create a chart</button>
+  <button onclick={createChart}>Create a chart</button>
 </div>
 
 <div class="chartContainer">
-	<canvas bind:this={canvas}></canvas>
+  <div class='pdf-download' style='margin-right: 13px;'>
+  <button id='pdf-download__button' onclick={downloadPDF} style='display:none;'>
+    <img class="pdf-download__image" src="./images/download-icon.svg" alt="" />
+  </button>
+  </div>
+	<div id='content'>
+    <canvas bind:this={canvas}></canvas>
+  </div>
 </div>
+
+
