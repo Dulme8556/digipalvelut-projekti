@@ -6,7 +6,7 @@
     let lists = getContext("list");
 
     let percent = $state("placeholder");
-
+    
     let editing = $state(false);
     let deleted = $state(false);
     let checkboxChecked = $state(false);
@@ -31,7 +31,6 @@
         lists.list = lists.list.filter(item => item.id !== id)
     }
 
-    // Edited values show in the UI but don't update the list
     function editThis() {
         editing = !editing;
     }
