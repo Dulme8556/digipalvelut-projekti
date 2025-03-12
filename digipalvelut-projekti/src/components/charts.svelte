@@ -53,7 +53,18 @@
     }
 
     
-    document.getElementById('pdf-download__button').setAttribute('style', 'display: flex; background-color:grey; height:30px; width:30px; justify-self:flex-end; border: 1px solid black; border-radius: 3px; padding:0;' );
+    const button = document.getElementById('pdf-download__button');
+
+    button.setAttribute('style', 'display: flex; background-color:grey; height:30px; width:30px; justify-self:flex-end; border: 1px solid black; border-radius: 3px; padding:0;');
+
+    button.onmouseover = function() {
+        button.style.backgroundColor = 'darkgrey';
+        button.style.cursor = 'pointer'
+    };
+
+    button.onmouseout = function() {
+        button.style.backgroundColor = 'grey';
+    };
     // ^^ pdf download button css
 
     chartInstance = new Chart(canvas, {
@@ -98,6 +109,7 @@
     .pdf-download{
       margin-right:13px;
     }
+
 </style>
 
 <div class="chartButton">
