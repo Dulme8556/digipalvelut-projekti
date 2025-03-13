@@ -1,7 +1,7 @@
 <script>
     import { getContext, onMount, setContext } from "svelte";
 
-    let { id, name, target, start, end, unit } = $props();
+    let { f: parentFuncion, id, name, target, start, end, unit } = $props();
 
     let lists = getContext("list");
 
@@ -13,7 +13,8 @@
 
     function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;
-        setTimeout(() => event.target.checked = checked, 0);
+        setTimeout(() => (event.target.checked = checked), 0);
+        functionFromAdult();
     }
 
     export function checkAll() {
@@ -28,6 +29,10 @@
         return checkboxChecked;
     }
 
+    function functionFromAdult() {
+        parentFuncion();
+    }
+
     onMount(() => {
         percentCalculation();
     });
@@ -37,16 +42,15 @@
             let rawValue = (end / target) * 100;
             if (rawValue % 1 !== 0) {
                 percent = rawValue.toFixed(0);
-                percent = "~" + percent
-            }
-            else {
-                percent = rawValue
+                percent = "~" + percent;
+            } else {
+                percent = rawValue;
             }
         }
     }
 
     function deleteThis() {
-        lists.list = lists.list.filter(item => item.id !== id)
+        lists.list = lists.list.filter((item) => item.id !== id);
     }
 
     function editThis() {
@@ -56,13 +60,13 @@
     function onSave(event) {
         editing = !editing;
 
-        lists.list.forEach(element => {
+        lists.list.forEach((element) => {
             if (element.id === id) {
-                element.name = name
-                element.target = target
-                element.start = start
-                element.end = end
-                element.unit = unit
+                element.name = name;
+                element.target = target;
+                element.start = start;
+                element.end = end;
+                element.unit = unit;
             }
         });
         percentCalculation();
@@ -75,7 +79,11 @@
         <div class="line">
             <div class="component long">
                 <h3>indicator:</h3>
-                <input class="input input__long"type="text"bind:value={name}/>
+                <input
+                    class="input input__long"
+                    type="text"
+                    bind:value={name}
+                />
             </div>
             <div class="component">
                 <h3>target:</h3>
@@ -106,7 +114,12 @@
     {:else}
         <div class="line">
             <div class="data__container">
-                <input class="checkbox" type=checkbox checked={checkboxChecked} onclick={checkboxClick}>
+                <input
+                    class="checkbox"
+                    type="checkbox"
+                    checked={checkboxChecked}
+                    onclick={checkboxClick}
+                />
                 <div class="component long">
                     <h3>indicator:</h3>
                     <div>{name}</div>
@@ -126,7 +139,7 @@
                 <div class="component">
                     <h3>percent:</h3>
                     {#if percent !== "placeholder"}
-                    <div>{percent}%</div>
+                        <div>{percent}%</div>
                     {/if}
                 </div>
                 <div class="component long">
@@ -137,13 +150,17 @@
             <div class="button__container">
                 <button class="button button__edit" onclick={editThis}>
                     <img
-                    src="./images/edit-icon.svg"
-                    class="image image__edit"
-                    alt=""
+                        src="./images/edit-icon.svg"
+                        class="image image__edit"
+                        alt=""
                     />
                 </button>
                 <button class="button button__delete" onclick={deleteThis}>
-                    <img src="./images/delete-icon.svg" class="image image__delete" alt="" />
+                    <img
+                        src="./images/delete-icon.svg"
+                        class="image image__delete"
+                        alt=""
+                    />
                 </button>
             </div>
         </div>
@@ -188,7 +205,7 @@
 
     .checkbox {
         cursor: pointer;
-        width: 20px; 
+        width: 20px;
         height: 20px;
         margin: 0 8px;
         margin-top: 20px;
@@ -211,19 +228,20 @@
         border: 1px gray solid;
         cursor: pointer;
     }
-    
+
     .image {
         padding: 3px;
     }
 
     .button__delete:hover {
-        background-color: #E74433;
+        background-color: #e74433;
     }
 
     .image__delete:hover {
-        filter: brightness(0) saturate(100%) invert(73%) sepia(100%) saturate(4%) hue-rotate(8deg) brightness(92%) contrast(87%);
+        filter: brightness(0) saturate(100%) invert(73%) sepia(100%)
+            saturate(4%) hue-rotate(8deg) brightness(92%) contrast(87%);
     }
-    
+
     .image__edit {
         filter: brightness(0) saturate(100%) invert(17%) sepia(8%) saturate(21%)
             hue-rotate(359deg) brightness(100%) contrast(83%);

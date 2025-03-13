@@ -38,7 +38,6 @@
 </script>
 
 <div style='min-width:350px; max-width:350px;'>
-    <!-- <h1 class="title">Add an existing chart</h1> -->
     <h1 class="title">Read existing data</h1>
     <div class="import-button">
         <FileReader />

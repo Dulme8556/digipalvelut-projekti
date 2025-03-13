@@ -6,7 +6,7 @@
 
     let searchQuery = "";
     let lines = [];
-    let allChecked = false;
+    let allChecked = true;
 
     onMount(() => {
         updateList();
@@ -17,7 +17,6 @@
             element.checkAll();
         });
         allChecked = true;
-        checkSelected()
     }
 
     function unSelectAll() {
@@ -25,7 +24,6 @@
             element.unCheckAll();
         });
         allChecked = false;
-        checkSelected()
     }
 
     function checkSelected() {
@@ -35,12 +33,12 @@
                 count++;
             }
         });
-        console.log(count)
-        if (count === filteredIndicators.length) {
-            allChecked = !allChecked;
-            console.log("if activated")
+        if (count !== lines.length) {
+            allChecked = false;
         }
-        console.log("checkSelected activated")
+        else {
+            allChecked = true
+        }
     }
 
     function updateList() {
@@ -56,6 +54,7 @@
     <h2>Active indicators</h2>
     <div class="actions-bar">
         <div class="button-group">
+            <button onclick={checkSelected}>test</button>
             {#if allChecked}
                 <button class="select__button" onclick={unSelectAll}
                     >Unselect all</button
@@ -83,6 +82,7 @@
                     <Line
                         bind:this={lines[i]}
                         {line}
+                        f={checkSelected}
                         id={line.id}
                         name={line.name}
                         target={line.target}
