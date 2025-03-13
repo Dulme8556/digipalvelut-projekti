@@ -9,7 +9,7 @@
 
     let editing = $state(false);
     let deleted = $state(false);
-    let checkboxChecked = $state(false);
+    let checkboxChecked = $state(true);
 
     function checkboxClick(event) {
         checkboxChecked = !checkboxChecked;
@@ -95,43 +95,47 @@
         <!-- editing off -->
     {:else}
         <div class="line">
-            <input class="checkbox" type=checkbox checked={checkboxChecked} onclick={checkboxClick}>
-            <div class="component long">
-                <h3>indicator:</h3>
-                <div>{name}</div>
-            </div>
-            <div class="component">
-                <h3>target:</h3>
-                <div>{target}</div>
-            </div>
-            <div class="component">
-                <h3>start:</h3>
-                <div>{start}</div>
-            </div>
-            <div class="component">
-                <h3>end:</h3>
-                <div>{end}</div>
-            </div>
-            <div class="component">
-                <h3>percent:</h3>
-                {#if percent !== "placeholder"}
+            <div class="data__container">
+                <input class="checkbox" type=checkbox checked={checkboxChecked} onclick={checkboxClick}>
+                <div class="component long">
+                    <h3>indicator:</h3>
+                    <div>{name}</div>
+                </div>
+                <div class="component">
+                    <h3>target:</h3>
+                    <div>{target}</div>
+                </div>
+                <div class="component">
+                    <h3>start:</h3>
+                    <div>{start}</div>
+                </div>
+                <div class="component">
+                    <h3>end:</h3>
+                    <div>{end}</div>
+                </div>
+                <div class="component">
+                    <h3>percent:</h3>
+                    {#if percent !== "placeholder"}
                     <div>{percent}%</div>
-                {/if}
+                    {/if}
+                </div>
+                <div class="component long">
+                    <h3>unit:</h3>
+                    <div>{unit}</div>
+                </div>
             </div>
-            <div class="component long">
-                <h3>unit:</h3>
-                <div>{unit}</div>
-            </div>
-            <button class="button button__edit" onclick={editThis}>
-                <img
+            <div class="button__container">
+                <button class="button button__edit" onclick={editThis}>
+                    <img
                     src="./images/edit-icon.svg"
                     class="image image__edit"
                     alt=""
-                />
-            </button>
-            <button class="button button__delete" onclick={deleteThis}>
-                <img src="./images/delete-icon.svg" class="image image__delete" alt="" />
-            </button>
+                    />
+                </button>
+                <button class="button button__delete" onclick={deleteThis}>
+                    <img src="./images/delete-icon.svg" class="image image__delete" alt="" />
+                </button>
+            </div>
         </div>
     {/if}
 </div>
@@ -155,6 +159,16 @@
         align-items: center;
         margin-right: 10px;
         flex: 1;
+    }
+
+    .data__container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .button__container {
+        display: flex;
+        flex-direction: row;
     }
 
     .long {

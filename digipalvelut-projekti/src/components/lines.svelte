@@ -85,7 +85,7 @@
 
     .active-lines {
         margin-top: 160px;
-        margin-left: 50px;
+        margin-left: 40px;
     }
 
     .actions-bar {
