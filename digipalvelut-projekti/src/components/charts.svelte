@@ -6,7 +6,7 @@
 
 
   function downloadPDF(){
-    const doc = new jsPDF('p', 'pt', 'a4');
+    const doc = new jsPDF('l', 'mm', [400,200.3]);
     doc.html(document.getElementById('content'), {
       callback: function (doc) {
         doc.save("chart.pdf")
