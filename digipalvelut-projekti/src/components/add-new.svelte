@@ -37,8 +37,9 @@
     }
 </script>
 
-<div style='min-width:400px; max-width:400px;'>
-    <h1 class="title">Add an existing chart</h1>
+<div style='min-width:350px; max-width:350px;'>
+    <!-- <h1 class="title">Add an existing chart</h1> -->
+    <h1 class="title">Read existing data</h1>
     <div class="import-button">
         <FileReader />
     </div>
@@ -85,6 +86,7 @@
         padding-bottom:10px;
         padding-left:10px;
         padding-top:10px;
+        justify-self: center;
     }
 
     .add-button__button {
@@ -130,7 +132,7 @@
         padding: 3px 0;
         margin: 15px 15px;
         color: black;
-        max-width:396px;
+        max-width: 396px;
     }
 
     .input:first-child {

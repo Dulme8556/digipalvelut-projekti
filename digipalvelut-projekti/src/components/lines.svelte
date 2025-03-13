@@ -5,7 +5,7 @@
     let lists = getContext("list");
 
     let searchQuery = "";
-    let test = [];
+    let lines = [];
     let allChecked = false;
 
     onMount(() => {
@@ -13,17 +13,34 @@
     });
 
     function selectAll() {
-        test.forEach((element) => {
+        lines.forEach((element) => {
             element.checkAll();
         });
         allChecked = true;
+        checkSelected()
     }
 
     function unSelectAll() {
-        test.forEach((element) => {
+        lines.forEach((element) => {
             element.unCheckAll();
         });
         allChecked = false;
+        checkSelected()
+    }
+
+    function checkSelected() {
+        let count = 0;
+        lines.forEach(element => {
+            if (element.selected()) {
+                count++;
+            }
+        });
+        console.log(count)
+        if (count === filteredIndicators.length) {
+            allChecked = !allChecked;
+            console.log("if activated")
+        }
+        console.log("checkSelected activated")
     }
 
     function updateList() {
@@ -57,23 +74,27 @@
             type="text"
         />
     </div>
-    <ul>
-        {#each filteredIndicators as line, i}
-            <li>
-                <Line
-                    bind:this={test[i]}
-                    {line}
-                    id={line.id}
-                    name={line.name}
-                    target={line.target}
-                    start={line.start}
-                    end={line.end}
-                    unit={line.unit}
-                    on:remove={(e) => removeLine(e.detail)}
-                />
-            </li>
-        {/each}
-    </ul>
+    {#if filteredIndicators.length === 0}
+        <div class="empty">Add data</div>
+    {:else}
+        <ul>
+            {#each filteredIndicators as line, i}
+                <li>
+                    <Line
+                        bind:this={lines[i]}
+                        {line}
+                        id={line.id}
+                        name={line.name}
+                        target={line.target}
+                        start={line.start}
+                        end={line.end}
+                        unit={line.unit}
+                        on:remove={(e) => removeLine(e.detail)}
+                    />
+                </li>
+            {/each}
+        </ul>
+    {/if}
 </div>
 
 <style>
@@ -108,8 +129,12 @@
     .searchbar {
         padding: 5px 3px;
         font-size: 15px;
-        margin-left: 20px;
+        margin-left: 10px;
         display: flex;
         flex: 4;
+    }
+
+    .empty {
+        padding: 20px;
     }
 </style>

@@ -16,12 +16,16 @@
         setTimeout(() => event.target.checked = checked, 0);
     }
 
-    export function checkAll(event) {
+    export function checkAll() {
         checkboxChecked = true;
     }
 
-    export function unCheckAll(event) {
+    export function unCheckAll() {
         checkboxChecked = false;
+    }
+
+    export function selected() {
+        return checkboxChecked;
     }
 
     onMount(() => {
@@ -31,7 +35,13 @@
     function percentCalculation() {
         if (end != "" && target != "") {
             let rawValue = (end / target) * 100;
-            percent = rawValue.toFixed(0);
+            if (rawValue % 1 !== 0) {
+                percent = rawValue.toFixed(0);
+                percent = "~" + percent
+            }
+            else {
+                percent = rawValue
+            }
         }
     }
 
@@ -149,8 +159,8 @@
         display: flex;
         flex-direction: row;
         max-width: 1400px;
-        margin: 0 10px;
         font-size: 15px;
+        padding-top: 10px;
     }
 
     .component {
@@ -201,22 +211,22 @@
         border: 1px gray solid;
         cursor: pointer;
     }
+    
+    .image {
+        padding: 3px;
+    }
 
     .button__delete:hover {
         background-color: #E74433;
     }
 
-    .button__save {
-        width: 40px;
+    .image__delete:hover {
+        filter: brightness(0) saturate(100%) invert(73%) sepia(100%) saturate(4%) hue-rotate(8deg) brightness(92%) contrast(87%);
     }
-
+    
     .image__edit {
         filter: brightness(0) saturate(100%) invert(17%) sepia(8%) saturate(21%)
             hue-rotate(359deg) brightness(100%) contrast(83%);
-    }
-
-    .image__delete:hover {
-        filter: brightness(0) saturate(100%) invert(73%) sepia(100%) saturate(4%) hue-rotate(8deg) brightness(92%) contrast(87%);
     }
 
     .input {
@@ -230,5 +240,9 @@
 
     .input__long {
         width: 140px;
+    }
+
+    .button__save {
+        width: 40px;
     }
 </style>
