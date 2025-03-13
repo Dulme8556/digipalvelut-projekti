@@ -19,8 +19,9 @@
             newStart = 0;
         }
 
-        if (newName === "" && newtarget === "" && newStart === "" && newEnd === "" && newUnit === "") {
+        if (newName === "" && newtarget === "" && newStart === 0 && newEnd === "" && newUnit === "") {
             alert("Can't add empty")
+            newStart = "";
         }
         else {
             lists.list = [
