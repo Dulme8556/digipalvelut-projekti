@@ -1,10 +1,12 @@
 <script>
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { Chart, registerables } from "chart.js";
   import * as XLSX from "xlsx";
   import {jsPDF} from 'jspdf';
 
-
+  // to get the list with correct values
+  let lists = getContext('list')  
+  
   function downloadPDF(){
     const chartCanvas = document.getElementById('content');
     const chartWidth = chartCanvas ? chartCanvas.offsetWidth : 400;
@@ -16,24 +18,24 @@
       },
     });
   }
-
-
+  
+  
   Chart.register(...registerables);
-
+  
   let canvas;
   let chartInstance = null;
   let jsonData = [];
-
+  
   onMount(async () => {
     await loadExcelData();
   });
-
+  
   async function loadExcelData() {
     try {
       const response = await fetch("/test.xlsx");
       const arrayBuffer = await response.arrayBuffer();
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
-
+      
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -41,8 +43,12 @@
       console.error("Error loading Excel file:", error);
     }
   }
-
+  
   function createChart() {
+    // when the button is clicked it gets the selected values
+    // these are the values that the chart is made out of
+    let selected = lists.selectedValues
+    
     if (!jsonData.length) {
       console.error("No data loaded");
       return;

@@ -9,6 +9,7 @@
 
     let lists = $state({
         list: [],
+        selectedValues: [],
     });
     
     setContext('list', lists);

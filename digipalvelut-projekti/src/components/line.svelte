@@ -9,24 +9,28 @@
 
     let editing = $state(false);
     let deleted = $state(false);
-    let checkboxChecked = $state(true);
+    let checked = $state(true);
 
     function checkboxClick(event) {
-        checkboxChecked = !checkboxChecked;
+        checked = !checked;
         setTimeout(() => (event.target.checked = checked), 0);
         functionFromAdult();
     }
 
     export function checkAll() {
-        checkboxChecked = true;
+        checked = true;
     }
 
-    export function unCheckAll() {
-        checkboxChecked = false;
+    export function uncheckAll() {
+        checked = false;
     }
 
     export function selected() {
-        return checkboxChecked;
+        return checked;
+    }
+
+    export function values() {
+        return [name, target, start, end, unit]
     }
 
     function functionFromAdult() {
@@ -121,7 +125,7 @@
                 <input
                     class="checkbox"
                     type="checkbox"
-                    checked={checkboxChecked}
+                    checked={checked}
                     onclick={checkboxClick}
                 />
                 <div class="component long">
@@ -195,6 +199,7 @@
     .data__container {
         display: flex;
         flex-direction: row;
+        flex: 1;
     }
 
     .button__container {

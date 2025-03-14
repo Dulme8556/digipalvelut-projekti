@@ -33,6 +33,8 @@
             newStart = "";
             newEnd = "";
             newUnit = "";
+
+            lists.selectedValues = lists.list;
         }
     }
 </script>

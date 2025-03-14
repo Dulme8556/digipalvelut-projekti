@@ -8,6 +8,8 @@
     let lines = [];
     let allChecked = true;
 
+    let selectedLines = [];
+
     onMount(() => {
         updateList();
     });
@@ -17,20 +19,24 @@
             element.checkAll();
         });
         allChecked = true;
+        checkSelected()
     }
 
-    function unSelectAll() {
+    function unselectAll() {
         lines.forEach((element) => {
-            element.unCheckAll();
+            element.uncheckAll();
         });
         allChecked = false;
+        checkSelected()
     }
 
     function checkSelected() {
         let count = 0;
+        selectedLines = [];
         lines.forEach(element => {
             if (element.selected()) {
                 count++;
+                selectedLines.push(element.values())
             }
         });
         if (count !== lines.length) {
@@ -39,6 +45,7 @@
         else {
             allChecked = true
         }
+        lists.selectedValues = selectedLines;
     }
 
     function updateList() {
@@ -55,7 +62,7 @@
     <div class="actions-bar">
         <div class="button-group">
             {#if allChecked}
-                <button class="select__button" onclick={unSelectAll}
+                <button class="select__button" onclick={unselectAll}
                     >Unselect all</button
                 >
             {:else}
@@ -73,7 +80,7 @@
         />
     </div>
     {#if filteredIndicators.length === 0}
-        <div class="empty">Add data</div>
+        <div class="empty">No data found</div>
     {:else}
         <ul>
             {#each filteredIndicators as line, i}
@@ -135,5 +142,6 @@
 
     .empty {
         padding: 20px;
+        color: gray;
     }
 </style>
