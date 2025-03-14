@@ -54,7 +54,6 @@
     <h2>Active indicators</h2>
     <div class="actions-bar">
         <div class="button-group">
-            <button onclick={checkSelected}>test</button>
             {#if allChecked}
                 <button class="select__button" onclick={unSelectAll}
                     >Unselect all</button
