@@ -40,10 +40,14 @@
     function percentCalculation() {
         if (end != "" && target != "") {
             let rawValue = (end / target) * 100;
-            if (rawValue % 1 !== 0) {
-                percent = rawValue.toFixed(0);
+            let calculation = rawValue.toFixed(3);
+
+            percent = rawValue.toFixed(0);
+
+            if (calculation % 1 !== 0) {
                 percent = "~" + percent;
             } else {
+                rawValue = rawValue.toFixed(0);
                 percent = rawValue;
             }
         }
