@@ -19,12 +19,14 @@
     });
   }
   
-  
   Chart.register(...registerables);
   
   let canvas;
   let chartInstance = null;
   let jsonData = [];
+
+  let typeOfChart;
+  let chartTypes = ['bar', 'line', 'pie', 'bubble', 'doughnut', 'polarArea', 'radar', 'scatter']
   
   onMount(async () => {
     await loadExcelData();
@@ -76,8 +78,11 @@
     };
     // ^^ pdf download button css
 
+    console.log(chartTypes)
+    console.log(typeOfChart)
+
     chartInstance = new Chart(canvas, {
-      type: "line",
+      type: typeOfChart,
       data: {
         labels: labels,
         datasets: [
@@ -96,6 +101,17 @@
 </script>
 
 <style>
+  .toolbar {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .selectList {
+    width: 50px;
+    margin-top: 12px;
+    margin-left: 10px;
+  }
+
   .chartContainer {
     width: 400px;
     height: 200px;
@@ -125,8 +141,15 @@
 
 </style>
 
-<div class="chartButton">
-  <button class="chartButton__button" onclick={createChart}>Create a chart</button>
+<div class="toolbar">
+  <div class="chartButton">
+    <button class="chartButton__button" onclick={createChart}>Create a chart</button>
+  </div>
+  <select bind:value={typeOfChart} class="selectList">
+    {#each chartTypes as s, i}
+        <option value={chartTypes[i]}> {chartTypes[i]}</option>
+    {/each}
+  </select>
 </div>
 
 <div class="chartContainer">
