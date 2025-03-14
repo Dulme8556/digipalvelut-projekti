@@ -78,9 +78,6 @@
     };
     // ^^ pdf download button css
 
-    console.log(chartTypes)
-    console.log(typeOfChart)
-
     chartInstance = new Chart(canvas, {
       type: typeOfChart,
       data: {
