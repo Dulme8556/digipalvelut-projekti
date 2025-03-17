@@ -40,22 +40,11 @@
     chartMade = false;
   }
   
-  // async function loadExcelData() {
-  //   try {
-  //     const response = await fetch("/test.xlsx");
-  //     const arrayBuffer = await response.arrayBuffer();
-  //     const workbook = XLSX.read(arrayBuffer, { type: "array" });
-  
-  //     const sheetName = workbook.SheetNames[0];
-  //     const worksheet = workbook.Sheets[sheetName];
-  //     jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-  //   } catch (error) {
-    //     console.error("Error loading Excel file:", error);
-    //   }
-    //   console.log(jsonData)
-  // }
-  
   function createChart() {
+    if (chartInstance) {
+      chartInstance.destroy();
+    }
+
     let datasetDataEnd = [];
     let datasetDataTarget = [];
     let jsonData = [];
@@ -83,12 +72,9 @@
     });
 
     selected.forEach(element => {
-      labels = [...labels, element.unit]
+      labels = [...labels, element.name]
     });
     
-    if (chartInstance) {
-      chartInstance.destroy();
-    }
         
     chartInstance = new Chart(canvas, {
       type: typeOfChart,
