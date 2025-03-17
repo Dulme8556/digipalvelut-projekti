@@ -85,6 +85,7 @@
       return;
     } else if(jsonData.length) {
       chartMade = true;
+    //make cannot add charts after creating one ^^, just a temp solution
 
     // all end values to array
     selected.forEach(element => {
