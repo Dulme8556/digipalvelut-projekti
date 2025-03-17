@@ -59,6 +59,7 @@
 
     function deleteThis() {
         lists.list = lists.list.filter((item) => item.id !== id);
+        lists.selectedValues = lists.selectedValues.filter((item) => item.id !== id);
     }
 
     function editThis() {
