@@ -3,7 +3,6 @@
   import { Chart, registerables } from "chart.js";
   import * as XLSX from "xlsx";
   import {jsPDF} from 'jspdf';
-    import { json } from "@sveltejs/kit";
 
   // to get the list with correct values
   let lists = getContext('list')  
@@ -28,10 +27,6 @@
     console.error('The chart canvas is not a valid canvas element.');
   }
 }
-
-
-
-
   
   Chart.register(...registerables);
   
