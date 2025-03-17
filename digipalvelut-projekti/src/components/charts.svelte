@@ -49,8 +49,6 @@
 
   onMount(async () => {
     selected = lists.selectedValues;
-    // console.log("onMount charts.svelte");
-    // console.log(lists.selectedValues);
   });
 
   function deleteChart() {
@@ -87,7 +85,6 @@
       // all target values to array
       selected.forEach((element) => {
         datasetDataTarget = [...datasetDataTarget, element.target];
-        // console.log(element.target)
       });
       console.log(datasetDataTarget)
 
