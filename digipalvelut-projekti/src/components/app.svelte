@@ -9,6 +9,7 @@
 
     let lists = $state({
         list: [],
+        selectedValues: [],
     });
     
     setContext('list', lists);
@@ -24,7 +25,7 @@
 
 
 <div class="website">
-    <div class="add__new">
+    <div class="main__functions">
         <div style='display:flex;'>
             <AddNew />
             {#key lists.list.length}

@@ -1,10 +1,12 @@
 <script>
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { Chart, registerables } from "chart.js";
   import * as XLSX from "xlsx";
   import {jsPDF} from 'jspdf';
 
-
+  // to get the list with correct values
+  let lists = getContext('list')  
+  
   function downloadPDF(){
     const chartCanvas = document.getElementById('content');
     const chartWidth = chartCanvas ? chartCanvas.offsetWidth : 400;
@@ -16,24 +18,26 @@
       },
     });
   }
-
-
+  
   Chart.register(...registerables);
-
+  
   let canvas;
   let chartInstance = null;
   let jsonData = [];
 
+  let typeOfChart;
+  let chartTypes = ['bar', 'line', 'pie', 'bubble', 'doughnut', 'polarArea', 'radar', 'scatter']
+  
   onMount(async () => {
     await loadExcelData();
   });
-
+  
   async function loadExcelData() {
     try {
       const response = await fetch("/test.xlsx");
       const arrayBuffer = await response.arrayBuffer();
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
-
+      
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -41,8 +45,12 @@
       console.error("Error loading Excel file:", error);
     }
   }
-
+  
   function createChart() {
+    // when the button is clicked it gets the selected values
+    // these are the values that the chart is made out of
+    let selected = lists.selectedValues
+    
     if (!jsonData.length) {
       console.error("No data loaded");
       return;
@@ -71,7 +79,7 @@
     // ^^ pdf download button css
 
     chartInstance = new Chart(canvas, {
-      type: "line",
+      type: typeOfChart,
       data: {
         labels: labels,
         datasets: [
@@ -90,6 +98,17 @@
 </script>
 
 <style>
+  .toolbar {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .selectList {
+    width: 50px;
+    margin-top: 12px;
+    margin-left: 10px;
+  }
+
   .chartContainer {
     width: 400px;
     height: 200px;
@@ -119,8 +138,15 @@
 
 </style>
 
-<div class="chartButton">
-  <button class="chartButton__button" onclick={createChart}>Create a chart</button>
+<div class="toolbar">
+  <div class="chartButton">
+    <button class="chartButton__button" onclick={createChart}>Create a chart</button>
+  </div>
+  <select bind:value={typeOfChart} class="selectList">
+    {#each chartTypes as s, i}
+        <option value={chartTypes[i]}> {chartTypes[i]}</option>
+    {/each}
+  </select>
 </div>
 
 <div class="chartContainer">

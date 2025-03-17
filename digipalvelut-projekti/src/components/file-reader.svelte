@@ -26,6 +26,8 @@
                 { id: newId, name: element.Title, target: element.Target, start: element.Start, end: element.End, unit: element.Unit },
             ];
         });
+
+        lists.selectedValues = lists.list
     }
 
     function handleFileInput(event) {
