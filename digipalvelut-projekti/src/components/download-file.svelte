@@ -12,6 +12,7 @@
 
 <style>
     .container {
+        pointer-events: none;
         position: fixed;
         top: 15px;
         right: 20px;
@@ -23,6 +24,7 @@
         border: #3B3B3B solid 2px;
         border-radius: 5px;
         background-color: #757575;
+        pointer-events: auto;
         width: 45px;
     }
 
