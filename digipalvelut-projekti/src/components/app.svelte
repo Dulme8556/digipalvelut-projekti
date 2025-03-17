@@ -11,18 +11,14 @@
         list: [],
         selectedValues: [],
     });
-    
-    setContext('list', lists);
-</script>
 
-<style>
-    .website {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+    setContext("list", lists);
+
+    // temporary function
+    function debugging() {
+        console.log(lists.selectedValues);
     }
-</style>
-
+</script>
 
 <div class="website">
     <div class="main__functions">
@@ -32,11 +28,21 @@
                 <Lines />
             {/key}
         </div>
-        <Charts />
+        {#key lists.selectedValues.length}
+            {debugging()}
+            <Charts />
+        {/key}
     </div>
     <DownloadFile />
 </div>
 
-
 <!-- font is added in here -->
 <GlobalStyles />
+
+<style>
+    .website {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+</style>
