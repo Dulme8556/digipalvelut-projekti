@@ -76,14 +76,15 @@
 
   
     let selected = lists.selectedValues;
-    chartMade = true;
 
     jsonData = selected;
     
     if (!jsonData.length) {
       console.error("No data loaded");
+      alert("Couldn't create an empty chart")
       return;
-    }
+    } else if(jsonData.length) {
+      chartMade = true;
 
     // all end values to array
     selected.forEach(element => {
@@ -132,6 +133,7 @@
          }]
       }
     });
+  }
   }
 </script>
 
