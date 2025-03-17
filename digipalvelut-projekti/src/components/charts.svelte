@@ -7,17 +7,30 @@
   // to get the list with correct values
   let lists = getContext('list')  
   
-  function downloadPDF(){
-    const chartCanvas = document.getElementById('content');
-    const chartWidth = chartCanvas ? chartCanvas.offsetWidth : 400;
-    const chartHeight = chartCanvas ? chartCanvas.offsetHeight : 200;
-    const doc = new jsPDF('l', 'mm', [chartWidth+0.4, chartHeight+0.4]);
-    doc.html(document.getElementById('content'), {
-      callback: function (doc) {
-        doc.save("chart.pdf")
-      },
-      });
+  function downloadPDF() {
+  const chartCanvas = document.querySelector('canvas')
+
+  //check if canvas is actually a canvas
+  if (chartCanvas instanceof HTMLCanvasElement) {
+    const chartWidth = chartCanvas.width;
+    const chartHeight = chartCanvas.height;
+
+    const doc = new jsPDF('l', 'mm', [chartWidth, chartHeight]);
+
+    const imgData = chartCanvas.toDataURL('image/png');
+
+    doc.addImage(imgData, 'PNG', 0, 0, chartWidth, chartHeight);
+
+    // Save the PDF
+    doc.save('chart.pdf');
+  } else {
+    console.error('The chart canvas is not a valid canvas element.');
   }
+}
+
+
+
+
   
   Chart.register(...registerables);
   
