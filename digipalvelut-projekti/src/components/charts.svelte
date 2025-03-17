@@ -11,13 +11,13 @@
   function downloadPDF(){
     const chartCanvas = document.getElementById('content');
     const chartWidth = chartCanvas ? chartCanvas.offsetWidth : 400;
-    const chartHeight = chartCanvas ? chartCanvas.offsetHeight : 400;
-    const doc = new jsPDF('l', 'mm', [chartWidth, chartHeight+0.1]);
+    const chartHeight = chartCanvas ? chartCanvas.offsetHeight : 200;
+    const doc = new jsPDF('l', 'mm', [chartWidth+0.4, chartHeight+0.4]);
     doc.html(document.getElementById('content'), {
       callback: function (doc) {
         doc.save("chart.pdf")
       },
-    });
+      });
   }
   
   Chart.register(...registerables);
