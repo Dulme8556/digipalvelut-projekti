@@ -181,6 +181,7 @@
         display: flex;
         flex-direction: row;
         max-width: 1400px;
+        min-width: 850px;
         font-size: 15px;
         padding-top: 10px;
     }
@@ -206,7 +207,7 @@
 
     .long {
         display: flex;
-        flex: 2;
+        flex: 2.5;
     }
 
     .checkbox {

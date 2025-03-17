@@ -67,9 +67,6 @@
     let datasetDataTarget = [];
     let labels = "";
 
-    console.log("createChart function")
-    console.log(selected);
-
     if (!selected.length) {
       alert("Couldn't create an empty chart");
       return;
@@ -86,7 +83,6 @@
       selected.forEach((element) => {
         datasetDataTarget = [...datasetDataTarget, element.target];
       });
-      console.log(datasetDataTarget)
 
       // all name values to array
       selected.forEach((element) => {
