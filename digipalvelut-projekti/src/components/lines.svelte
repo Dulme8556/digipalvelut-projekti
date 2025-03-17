@@ -19,7 +19,7 @@
             element.checkAll();
         });
         allChecked = true;
-        checkSelected()
+        checkSelected();
     }
 
     function unselectAll() {
@@ -27,23 +27,22 @@
             element.uncheckAll();
         });
         allChecked = false;
-        checkSelected()
+        checkSelected();
     }
 
     function checkSelected() {
         let count = 0;
         selectedLines = [];
-        lines.forEach(element => {
+        lines.forEach((element) => {
             if (element.selected()) {
                 count++;
-                selectedLines.push(element.values())
+                selectedLines.push(element.values());
             }
         });
         if (count !== lines.length) {
             allChecked = false;
-        }
-        else {
-            allChecked = true
+        } else {
+            allChecked = true;
         }
         lists.selectedValues = selectedLines;
     }
@@ -87,7 +86,6 @@
                 <li>
                     <Line
                         bind:this={lines[i]}
-                        {line}
                         f={checkSelected}
                         id={line.id}
                         name={line.name}

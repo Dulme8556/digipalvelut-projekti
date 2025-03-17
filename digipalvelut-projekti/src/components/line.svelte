@@ -1,7 +1,7 @@
 <script>
     import { getContext, onMount, setContext } from "svelte";
 
-    let { f: parentFuncion, id, name, target, start, end, unit } = $props();
+    let { f: parentFunction, id, name, target, start, end, unit } = $props();
 
     let lists = getContext("list");
 
@@ -14,7 +14,7 @@
     function checkboxClick(event) {
         checked = !checked;
         setTimeout(() => (event.target.checked = checked), 0);
-        functionFromAdult();
+        parentFunction();
     }
 
     export function checkAll() {
@@ -30,11 +30,7 @@
     }
 
     export function values() {
-        return [name, target, start, end, unit]
-    }
-
-    function functionFromAdult() {
-        parentFuncion();
+        return {id: id, name: name, target: target, start: start, end: end, unit: unit}
     }
 
     onMount(() => {
