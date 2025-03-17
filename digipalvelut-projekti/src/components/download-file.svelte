@@ -12,7 +12,7 @@
 
 <style>
     .container {
-        position: absolute;
+        position: fixed;
         top: 15px;
         right: 20px;
     }
