@@ -65,18 +65,18 @@
           alt=""
         />
       </button>
+      {/if}
+    </div>
       <div id="content">
         <canvas bind:this={canvas}></canvas>
       </div>
-    {/if}
-  </div>
 
 </div>
 
 <style>
   .chartContainer {
     width: 400px;
-    height: 200px;
+    height: 300px;
   }
 
   .pdf-download__button {

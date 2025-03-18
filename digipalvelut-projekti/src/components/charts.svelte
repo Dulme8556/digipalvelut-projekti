@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount, setContext } from "svelte";
+    import { getContext } from "svelte";
     import Chart from "./chart.svelte";
 
     let chartsData = [];
@@ -58,15 +58,11 @@
                     },
                 ],
             },
-            scales: {
-                xAxes: [{ stacked: true }],
-                yAxes: [{ stacked: true }],
-            },
         },
     ];
 
     const generateCharts = () => {
-        if ( datasetDataEnd[0] === "" || datasetDataTarget[0] === "" || labels[0] === "") {
+        if (datasetDataEnd.length === 0 || datasetDataTarget.length === 0 || labels.length === 0) {
             alert("Necessary data is missing.");
             return;
         }
@@ -112,7 +108,7 @@
 
 <div>
     {#each chartsData as data, i}
-        <div style="width: 400px; height: 300px;">
+        <div class="chart">
             <Chart {data} key={i} chartMade={chartMade} chartType={typeOfChart}/>
         </div>
     {/each}
@@ -142,5 +138,10 @@
 
     .chartButton__button:hover {
         cursor: pointer;
+    }
+
+    .chart {
+        width: 400px;
+        height: 300px;
     }
 </style>
