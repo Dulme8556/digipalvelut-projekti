@@ -13,7 +13,7 @@
 <style>
     .container {
         pointer-events: none;
-        position: fixed;
+        position: absolute;
         top: 15px;
         right: 20px;
     }
