@@ -116,13 +116,10 @@
         </select>
     </div>
 
-    <ul>
-        {#each chartsData as data, i}
-            <li class="chart">
-                <Chart {data} key={i} {chartMade} chartType={typeOfChart} />
-            </li>
-        {/each}
-    </ul>
+<div>
+    {#each chartsData as data, i}
+            <Chart {data} key={i} chartMade={chartMade} chartType={typeOfChart}/>
+    {/each}
 </div>
 
 <style>
