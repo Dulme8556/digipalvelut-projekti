@@ -9,7 +9,7 @@
 
   let canvas;
   let chartInstance;
-  let chartContainer; // Store the container reference
+  let chartContainer; 
 
   onMount(() => {
     if (!canvas) return;
@@ -30,15 +30,16 @@
 
   function deleteChart() {
     if (chartInstance) {
-      // Destroy the chart instance
+      // Destroy the current chart instance
       chartInstance.destroy();
       chartInstance = null;
-      chartMade = false; // Update chartMade to hide the chart
+      chartMade = false;
 
       // Remove the parent container of the chart (the div that contains the canvas)
       if (chartContainer) {
-        chartContainer.remove(); // This will remove the parent div from the DOM
+        chartContainer.remove(); 
       }
+      // ^^ set OnMount 
     }
   }
 
@@ -77,7 +78,7 @@
       </button>
     </div>
     <div id="content" style='width:400px; height:300px;'>
-      <canvas bind:this={canvas}></canvas>
+      <canvas style='width: 400px; height:300px;' bind:this={canvas}></canvas>
     </div>
   </div>
 {/if}
