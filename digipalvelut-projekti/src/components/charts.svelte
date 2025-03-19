@@ -108,9 +108,7 @@
 
 <div>
     {#each chartsData as data, i}
-        <div class="chart">
             <Chart {data} key={i} chartMade={chartMade} chartType={typeOfChart}/>
-        </div>
     {/each}
 </div>
 

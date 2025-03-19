@@ -9,6 +9,7 @@
 
   let canvas;
   let chartInstance;
+  let chartContainer; // Store the container reference
 
   onMount(() => {
     if (!canvas) return;
@@ -18,6 +19,9 @@
       data,
       options: { responsive: true }
     });
+
+    // Store the parent container of this chart
+    chartContainer = canvas.closest(".chartContainer");
   });
 
   onDestroy(() => {
@@ -26,9 +30,15 @@
 
   function deleteChart() {
     if (chartInstance) {
+      // Destroy the chart instance
       chartInstance.destroy();
       chartInstance = null;
-      chartMade = false;
+      chartMade = false; // Update chartMade to hide the chart
+
+      // Remove the parent container of the chart (the div that contains the canvas)
+      if (chartContainer) {
+        chartContainer.remove(); // This will remove the parent div from the DOM
+      }
     }
   }
 
@@ -48,9 +58,9 @@
   }
 </script>
 
-<div class="chartContainer">
-  <div class="buttonContainer">
-    {#if chartMade}
+{#if chartMade}
+  <div class="chartContainer">
+    <div class="buttonContainer">
       <button class="pdf-download__button" onclick={downloadPDF}>
         <img
           class="pdf-download__image"
@@ -65,18 +75,18 @@
           alt=""
         />
       </button>
-      {/if}
     </div>
-      <div id="content">
-        <canvas bind:this={canvas}></canvas>
-      </div>
-
-</div>
+    <div id="content" style='width:400px; height:300px;'>
+      <canvas bind:this={canvas}></canvas>
+    </div>
+  </div>
+{/if}
 
 <style>
   .chartContainer {
     width: 400px;
     height: 300px;
+    margin: 30px 0;
   }
 
   .pdf-download__button {
@@ -99,8 +109,7 @@
     display: flex;
     width: 28px;
     height: 27px;
-    filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(7%)
-      hue-rotate(314deg) brightness(89%) contrast(93%);
+    filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(7%) hue-rotate(314deg) brightness(89%) contrast(93%);
   }
 
   .buttonContainer {
