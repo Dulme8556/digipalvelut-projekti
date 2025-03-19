@@ -1,5 +1,5 @@
 <script>
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import Chart from "./chart.svelte";
 
     let chartsData = [];
@@ -10,6 +10,7 @@
 
     let datasetDataEnd = [];
     let datasetDataTarget = [];
+    let datasetDataStart = [];
     let labels = "";
     let chartMade = false;
 
@@ -25,44 +26,50 @@
         "scatter",
     ];
 
-    // all end values to array
+    onMount(async () => {
+        // chartsData = lists.charts;
+        // if (chartsData.length > 0) {
+        //     chartsData.forEach((element) => {
+        //         generateCharts();
+        //     });
+        // }
+    });
+
+    // all values to array
     selected.forEach((element) => {
         datasetDataEnd = [...datasetDataEnd, element.end];
-    });
-
-    // all target values to array
-    selected.forEach((element) => {
         datasetDataTarget = [...datasetDataTarget, element.target];
-    });
-
-    // all name values to array
-    selected.forEach((element) => {
+        datasetDataStart = [...datasetDataStart, element.start];
         labels = [...labels, element.name];
     });
 
     let listOfCharts = [
         {
-            type: typeOfChart,
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "target",
-                        backgroundColor: "red",
-                        data: datasetDataTarget,
-                    },
-                    {
-                        label: "end",
-                        backgroundColor: "blue",
-                        data: datasetDataEnd,
-                    },
-                ],
+            labels: labels,
+            data1: {
+                label: "start",
+                data: datasetDataStart,
+                backgroundColor: "yellow",
+            },
+            data2: {
+                label: "end",
+                data: datasetDataEnd,
+                backgroundColor: "blue",
+            },
+            data3: {
+                label: "target",
+                data: datasetDataTarget,
+                backgroundColor: "red",
             },
         },
     ];
 
     const generateCharts = () => {
-        if (datasetDataEnd.length === 0 || datasetDataTarget.length === 0 || labels.length === 0) {
+        if (
+            datasetDataEnd.length === 0 ||
+            datasetDataTarget.length === 0 ||
+            labels.length === 0
+        ) {
             alert("Necessary data is missing.");
             return;
         }
@@ -72,44 +79,48 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: "end",
-                        data: datasetDataEnd,
-                        borderColor: "red",
-                        backgroundColor: "blue",
-                        fill: false,
+                        label: listOfCharts[0].data1.label,
+                        data: listOfCharts[0].data1.data,
+                        backgroundColor: listOfCharts[0].data1.backgroundColor,
                     },
                     {
-                        label: "target",
-                        data: datasetDataTarget,
-                        borderColor: "blue",
-                        backgroundColor: "red",
-                        fill: false,
+                        label: listOfCharts[0].data2.label,
+                        data: listOfCharts[0].data2.data,
+                        backgroundColor: listOfCharts[0].data2.backgroundColor,
+                    },
+                    {
+                        label: listOfCharts[0].data3.label,
+                        data: listOfCharts[0].data3.data,
+                        backgroundColor: listOfCharts[0].data3.backgroundColor,
                     },
                 ],
             },
         ];
         chartId++;
         chartMade = true;
+        lists.charts = chartsData;
     };
 </script>
 
-<div class="toolbar">
-    <div class="chartButton">
-        <button class="chartButton__button" onclick={generateCharts}>
-            Create a chart
-        </button>
-    </div>
-    <select bind:value={typeOfChart} class="selectList">
-        {#each chartTypes as s, i}
-            <option value={chartTypes[i]}> {chartTypes[i]}</option>
-        {/each}
-    </select>
-</div>
-
 <div>
-    {#each chartsData as data, i}
-            <Chart {data} key={i} chartMade={chartMade} chartType={typeOfChart}/>
-    {/each}
+    <div class="toolbar">
+        <div class="chartButton">
+            <button class="chartButton__button" onclick={generateCharts}>
+                Create a chart
+            </button>
+        </div>
+        <select bind:value={typeOfChart} class="selectList">
+            {#each chartTypes as s, i}
+                <option value={chartTypes[i]}> {chartTypes[i]}</option>
+            {/each}
+        </select>
+    </div>
+
+    <div>
+        {#each chartsData as data, i}
+            <Chart {data} key={i} {chartMade} chartType={typeOfChart} />
+        {/each}
+    </div>
 </div>
 
 <style>
@@ -136,10 +147,5 @@
 
     .chartButton__button:hover {
         cursor: pointer;
-    }
-
-    .chart {
-        width: 400px;
-        height: 300px;
     }
 </style>

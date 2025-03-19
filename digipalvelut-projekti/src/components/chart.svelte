@@ -3,8 +3,8 @@
   import Chart from "chart.js/auto";
   import { jsPDF } from "jspdf";
 
-  export let data;
   export let chartType;
+  export let data;
   export let chartMade;
 
   let canvas;
@@ -12,12 +12,14 @@
   let chartContainer; 
 
   onMount(() => {
-    if (!canvas) return;
+    if (!canvas) {
+      return;
+    }
 
     chartInstance = new Chart(canvas, {
       type: chartType,
       data,
-      options: { responsive: true }
+      options: { responsive: true },
     });
 
     // Store the parent container of this chart
@@ -138,5 +140,9 @@
   .chart-delete__button:hover {
     background-color: #e74433;
     cursor: pointer;
+  }
+
+  .chart-delete__image:hover {
+    filter: brightness(0) saturate(100%) invert(59%) sepia(6%) saturate(18%) hue-rotate(324deg) brightness(84%) contrast(94%);
   }
 </style>
