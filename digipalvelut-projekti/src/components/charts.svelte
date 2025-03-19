@@ -10,6 +10,7 @@
 
     let datasetDataEnd = [];
     let datasetDataTarget = [];
+    let datasetDataStart = [];
     let labels = "";
     let chartMade = false;
 
@@ -26,13 +27,13 @@
     ];
 
     onMount(async () => {
-        chartsData = lists.charts
+        chartsData = lists.charts;
         if (chartsData.length > 0) {
-            chartsData.forEach(element => {
-                generateCharts()
+            chartsData.forEach((element) => {
+                generateCharts();
             });
         }
-    })
+    });
 
     // all end values to array
     selected.forEach((element) => {
@@ -44,6 +45,11 @@
         datasetDataTarget = [...datasetDataTarget, element.target];
     });
 
+    // all start values to array
+    selected.forEach((element) => {
+        datasetDataStart = [...datasetDataStart, element.start];
+    });
+
     // all name values to array
     selected.forEach((element) => {
         labels = [...labels, element.name];
@@ -53,11 +59,16 @@
         {
             labels: labels,
             data1: {
+                label: "start",
+                data: datasetDataStart,
+                backgroundColor: "yellow",
+            },
+            data2: {
                 label: "end",
                 data: datasetDataEnd,
                 backgroundColor: "blue",
             },
-            data2: {
+            data3: {
                 label: "target",
                 data: datasetDataTarget,
                 backgroundColor: "red",
@@ -65,9 +76,8 @@
         },
     ];
 
-    
     const generateCharts = () => {
-        console.log("generateCharts first thing")
+        console.log("generateCharts first thing");
         if (
             datasetDataEnd.length === 0 ||
             datasetDataTarget.length === 0 ||
@@ -91,6 +101,11 @@
                         data: listOfCharts[0].data2.data,
                         backgroundColor: listOfCharts[0].data2.backgroundColor,
                     },
+                    {
+                        label: listOfCharts[0].data3.label,
+                        data: listOfCharts[0].data3.data,
+                        backgroundColor: listOfCharts[0].data3.backgroundColor,
+                    },
                 ],
             },
         ];
@@ -98,7 +113,7 @@
         chartMade = true;
 
         lists.charts = chartsData;
-        console.log("generateCharts last thing")
+        console.log("generateCharts last thing");
     };
 </script>
 
@@ -116,24 +131,14 @@
         </select>
     </div>
 
-<div>
-    {#each chartsData as data, i}
-            <Chart {data} key={i} chartMade={chartMade} chartType={typeOfChart}/>
-    {/each}
+    <div>
+        {#each chartsData as data, i}
+            <Chart {data} key={i} {chartMade} chartType={typeOfChart} />
+        {/each}
+    </div>
 </div>
 
 <style>
-    ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    li {
-        margin: 0;
-        padding: 0;
-    }
-
     .toolbar {
         display: flex;
         flex-direction: row;
@@ -157,10 +162,5 @@
 
     .chartButton__button:hover {
         cursor: pointer;
-    }
-
-    .chart {
-        width: 400px;
-        height: 300px;
     }
 </style>
