@@ -77,8 +77,8 @@
         />
       </button>
     </div>
-    <div id="content" style='width:400px; height:300px;'>
-      <canvas style='width: 400px; height:300px;' bind:this={canvas}></canvas>
+    <div id="content" style='width:400px; max-height:300px;'>
+      <canvas style='width: 400px; max-height:300px;' bind:this={canvas}></canvas>
     </div>
   </div>
 {/if}
@@ -86,8 +86,7 @@
 <style>
   .chartContainer {
     width: 400px;
-    height: 300px;
-    margin: 30px 0;
+    margin: 60px 0;
   }
 
   .pdf-download__button {
@@ -114,6 +113,7 @@
   }
 
   .buttonContainer {
+    padding-top:20px;
     margin-right: 13px;
     display: flex;
     flex-direction: row;
