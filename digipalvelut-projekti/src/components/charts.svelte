@@ -27,15 +27,12 @@
     ];
 
     onMount(async () => {
-        // chartsData = lists.charts;
-        // if (chartsData.length > 0) {
-        //     chartsData.forEach((element) => {
-        //         generateCharts();
-        //     });
-        // }
+        if (lists.charts.length > 0) {
+            listOfChartData = lists.charts
+        }
     });
 
-    // all values to array
+    // all values to arrays
     selected.forEach((element) => {
         datasetDataEnd = [...datasetDataEnd, element.end];
         datasetDataTarget = [...datasetDataTarget, element.target];
@@ -43,8 +40,9 @@
         labels = [...labels, element.name];
     });
 
-    let listOfCharts = [
-        {
+    let listOfChartData = [
+        { 
+            type: typeOfChart,
             labels: labels,
             data1: {
                 label: "start",
@@ -64,7 +62,9 @@
         },
     ];
 
-    const generateCharts = () => {
+    const generateCharts = (i) => {
+        console.log("chart creating function")
+        console.log(listOfChartData)
         if (
             datasetDataEnd.length === 0 ||
             datasetDataTarget.length === 0 ||
@@ -76,29 +76,18 @@
         chartsData = [
             ...chartsData,
             {
-                labels: labels,
+                labels: [...labels],
                 datasets: [
-                    {
-                        label: listOfCharts[0].data1.label,
-                        data: listOfCharts[0].data1.data,
-                        backgroundColor: listOfCharts[0].data1.backgroundColor,
-                    },
-                    {
-                        label: listOfCharts[0].data2.label,
-                        data: listOfCharts[0].data2.data,
-                        backgroundColor: listOfCharts[0].data2.backgroundColor,
-                    },
-                    {
-                        label: listOfCharts[0].data3.label,
-                        data: listOfCharts[0].data3.data,
-                        backgroundColor: listOfCharts[0].data3.backgroundColor,
-                    },
+                    { ...listOfChartData[0].data1 },
+                    { ...listOfChartData[0].data2 },
+                    { ...listOfChartData[0].data3 },
                 ],
             },
         ];
         chartId++;
         chartMade = true;
-        lists.charts = chartsData;
+
+        lists.charts = [...lists.charts, ...listOfChartData]
     };
 </script>
 
@@ -109,7 +98,7 @@
                 Create a chart
             </button>
         </div>
-        <select bind:value={typeOfChart} class="selectList">
+        <select bind:value={listOfChartData[0].type} class="selectList">
             {#each chartTypes as s, i}
                 <option value={chartTypes[i]}> {chartTypes[i]}</option>
             {/each}
@@ -118,7 +107,7 @@
 
     <div>
         {#each chartsData as data, i}
-            <Chart {data} key={i} {chartMade} chartType={typeOfChart} />
+            <Chart {data} key={i} {chartMade} chartType={listOfChartData[0].type} />
         {/each}
     </div>
 </div>
