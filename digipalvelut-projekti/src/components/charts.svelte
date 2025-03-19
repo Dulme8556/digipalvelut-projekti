@@ -27,31 +27,19 @@
     ];
 
     onMount(async () => {
-        chartsData = lists.charts;
-        if (chartsData.length > 0) {
-            chartsData.forEach((element) => {
-                generateCharts();
-            });
-        }
+        // chartsData = lists.charts;
+        // if (chartsData.length > 0) {
+        //     chartsData.forEach((element) => {
+        //         generateCharts();
+        //     });
+        // }
     });
 
-    // all end values to array
+    // all values to array
     selected.forEach((element) => {
         datasetDataEnd = [...datasetDataEnd, element.end];
-    });
-
-    // all target values to array
-    selected.forEach((element) => {
         datasetDataTarget = [...datasetDataTarget, element.target];
-    });
-
-    // all start values to array
-    selected.forEach((element) => {
         datasetDataStart = [...datasetDataStart, element.start];
-    });
-
-    // all name values to array
-    selected.forEach((element) => {
         labels = [...labels, element.name];
     });
 
@@ -77,7 +65,6 @@
     ];
 
     const generateCharts = () => {
-        console.log("generateCharts first thing");
         if (
             datasetDataEnd.length === 0 ||
             datasetDataTarget.length === 0 ||
@@ -111,9 +98,7 @@
         ];
         chartId++;
         chartMade = true;
-
         lists.charts = chartsData;
-        console.log("generateCharts last thing");
     };
 </script>
 
