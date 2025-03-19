@@ -10,6 +10,7 @@
     let lists = $state({
         list: [],
         selectedValues: [],
+        charts: [],
     });
 
     setContext("list", lists);
