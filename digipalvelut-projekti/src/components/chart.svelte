@@ -86,7 +86,11 @@
 <style>
   .chartContainer {
     width: 400px;
-    margin: 60px 0;
+    margin: 55px 0;
+  }
+
+  .chartContainer:first-child {
+    margin-top: 0px;
   }
 
   .pdf-download__button {
