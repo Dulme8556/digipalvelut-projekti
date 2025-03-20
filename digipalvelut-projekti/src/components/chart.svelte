@@ -20,7 +20,7 @@
     chartInstance = new Chart(canvas, {
       type: chartType,
       data,
-      options: { responsive: true },
+      options: { responsive: false },
     });
 
     // Store the parent container of this chart
