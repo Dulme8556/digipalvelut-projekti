@@ -61,15 +61,23 @@
     const imgData = canvas.toDataURL("image/png");
 
     doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
-    doc.save("chart.pdf");
-  }
+
+    const filename = chartName && chartName.trim() !== "" ? `${chartName}.pdf` : "chart.pdf";
+
+    doc.save(filename);
+}
+
 </script>
 
 {#if chartMade}
   <div class="chartContainer">
     <div style='display:flex; justify-content:space-between'>
     <div class='buttonContainer__chartName' style='display:flex; font-size:larger; font-weight:700;'>
+      {#if (chartName == "")}
+      <p>*UNNAMED CHART*</p>
+      {:else}
       {chartName}
+      {/if}
     </div>
     <div class="buttonContainer">
       <button class="pdf-download__button" onclick={downloadPDF}>
