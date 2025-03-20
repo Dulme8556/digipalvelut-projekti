@@ -30,6 +30,7 @@
     ];
 
     let test = [];
+    let modified = false;
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
@@ -37,6 +38,7 @@
         test = lists.charts;
         if (test.length > 0) {
             chartsData = test;
+            modified = true;
         }
     });
 
@@ -52,34 +54,42 @@
         {
             type: typeOfChart,
             labels: labels,
-            data1: {
-                label: "start",
-                data: datasetDataStart,
-                backgroundColor: "yellow",
-            },
-            data2: {
-                label: "end",
-                data: datasetDataEnd,
-                backgroundColor: "blue",
-            },
-            data3: {
-                label: "target",
-                data: datasetDataTarget,
-                backgroundColor: "red",
-            },
+            datasets: [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                },
+            ],
         },
     ];
 
     function createAllCharts() {
-        console.log(listOfChartData);
         let count = 0;
-        listOfChartData.forEach((element) => {
-            generateCharts(count);
-            count++;
-        });
+        if (modified) {
+            chartsData.forEach((element) => {
+                generateCharts(count, element);
+                count++;
+            });
+        } else {
+            listOfChartData.forEach((element) => {
+                generateCharts(count, element);
+                count++;
+            });
+        }
     }
 
-    const generateCharts = (i) => {
+    const generateCharts = (i, element) => {
         if (
             datasetDataEnd.length === 0 ||
             datasetDataTarget.length === 0 ||
@@ -88,15 +98,18 @@
             alert("Necessary data is missing.");
             return;
         }
+
+        element = JSON.parse(JSON.stringify(element))
+
         chartsData = [
             ...chartsData,
             {
-                type: listOfChartData[i].type,
-                labels: [...labels],
+                type: typeOfChart,
+                labels: element.labels,
                 datasets: [
-                    { ...listOfChartData[i].data1 },
-                    { ...listOfChartData[i].data2 },
-                    { ...listOfChartData[i].data3 },
+                    { ...element.datasets[0] },
+                    { ...element.datasets[1] },
+                    { ...element.datasets[2] },
                 ],
             },
         ];
@@ -104,7 +117,7 @@
         chartMade = true;
         chartNames = [...chartNames, chartName]; // Save the chart name
         chartName = "";
-        lists.charts = chartsData;
+        lists.charts = [lists.charts, ...chartsData];
     };
 
     function testi() {
@@ -138,8 +151,8 @@
         {#each chartsData as data, i}
             <div>
                 <Chart
-                    {data}
                     key={i}
+                    {data}
                     {chartMade}
                     chartType={typeOfChart}
                     chartName={chartNames[i]}

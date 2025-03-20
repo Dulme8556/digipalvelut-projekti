@@ -17,6 +17,9 @@
       return;
     }
 
+    console.log(chartType)
+    console.log(data.datasets)
+
     chartInstance = new Chart(canvas, {
       type: chartType,
       data,
@@ -58,36 +61,32 @@
     const imgData = canvas.toDataURL("image/png");
 
     doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
-    doc.save("chart.pdf");
-  }
+
+    const filename = chartName && chartName.trim() !== "" ? `${chartName}.pdf` : "chart.pdf";
+
+    doc.save(filename);
+}
+
 </script>
 
 {#if chartMade}
   <div class="chartContainer">
     <div style='display:flex; justify-content:space-between'>
-    <div class='buttonContainer__chartName' style='display:flex; font-size:larger; font-weight:700;'>
-      {#if (chartName == "")}
-      <p>*UNNAMED CHART*</p>
-      {:else}
-      {chartName}
-      {/if}
-    </div>
-    <div class="buttonContainer">
-      <button class="pdf-download__button" onclick={downloadPDF}>
-        <img
-          class="pdf-download__image"
-          src="./images/download-icon.svg"
-          alt=""
-        />
-      </button>
-      <button class="chart-delete__button" onclick={deleteChart}>
-        <img
-          class="chart-delete__image"
-          src="./images/delete-icon.svg"
-          alt=""
-        />
-      </button>
-    </div>
+        <div class='buttonContainer__chartName' style='display:flex; font-size:larger; font-weight:700;'>
+          {#if (chartName == "")}
+            <p>*UNNAMED CHART*</p>
+          {:else}
+            {chartName}
+          {/if}
+        </div>
+      <div class="buttonContainer">
+        <button class="pdf-download__button" onclick={downloadPDF}>
+          <img class="pdf-download__image"src="./images/download-icon.svg"alt=""/>
+        </button>
+        <button class="chart-delete__button" onclick={deleteChart}>
+          <img class="chart-delete__image" src="./images/delete-icon.svg" alt="" />
+        </button>
+      </div>
     </div>
     <div id="content" style='width:400px; max-height:300px;'>
       <canvas style='width: 400px; max-height:300px;' bind:this={canvas}></canvas>
