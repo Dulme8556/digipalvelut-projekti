@@ -133,6 +133,7 @@
     display: flex;
     flex-direction: row;
     justify-content: end;
+    align-items: center;
   }
 
   .chart-delete__button {
