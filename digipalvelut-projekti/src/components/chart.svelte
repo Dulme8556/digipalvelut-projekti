@@ -66,7 +66,11 @@
   <div class="chartContainer">
     <div style='display:flex; justify-content:space-between'>
     <div class='buttonContainer__chartName' style='display:flex; font-size:larger; font-weight:700;'>
+      {#if (chartName == "")}
+      <p>*UNNAMED CHART*</p>
+      {:else}
       {chartName}
+      {/if}
     </div>
     <div class="buttonContainer">
       <button class="pdf-download__button" onclick={downloadPDF}>
