@@ -17,6 +17,9 @@
       return;
     }
 
+    console.log(chartType)
+    console.log(data.datasets)
+
     chartInstance = new Chart(canvas, {
       type: chartType,
       data,
