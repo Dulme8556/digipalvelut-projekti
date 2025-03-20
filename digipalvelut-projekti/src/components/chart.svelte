@@ -1,11 +1,12 @@
 <script>
-  import { onDestroy, onMount } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
   import Chart from "chart.js/auto";
   import { jsPDF } from "jspdf";
 
   export let chartType;
   export let data;
   export let chartMade;
+  export let chartName;
 
   let canvas;
   let chartInstance;
@@ -63,6 +64,10 @@
 
 {#if chartMade}
   <div class="chartContainer">
+    <div style='display:flex; justify-content:space-between'>
+    <div class='buttonContainer__chartName' style='display:flex; font-size:larger; font-weight:700;'>
+      {chartName}
+    </div>
     <div class="buttonContainer">
       <button class="pdf-download__button" onclick={downloadPDF}>
         <img
@@ -79,6 +84,7 @@
         />
       </button>
     </div>
+    </div>
     <div id="content" style='width:400px; max-height:300px;'>
       <canvas style='width: 400px; max-height:300px;' bind:this={canvas}></canvas>
     </div>
@@ -88,11 +94,11 @@
 <style>
   .chartContainer {
     width: 400px;
-    margin: 55px 0;
+    margin-bottom: 55px;
   }
 
   .chartContainer:first-child {
-    margin-top: 0px;
+    margin-top: 25px;
   }
 
   .pdf-download__button {
@@ -119,7 +125,6 @@
   }
 
   .buttonContainer {
-    padding-top:20px;
     margin-right: 13px;
     display: flex;
     flex-direction: row;
