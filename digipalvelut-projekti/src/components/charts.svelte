@@ -48,7 +48,7 @@
         labels = [...labels, element.name];
     });
 
-    let listOfCharts = [
+    let listOfChartData = [
         {
             type: typeOfChart,
             labels: labels,
