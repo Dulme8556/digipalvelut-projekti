@@ -26,9 +26,15 @@
         "scatter",
     ];
 
+    let test = []
+
     onMount(async () => {
-        if (lists.charts.length > 0) {
-            listOfChartData = lists.charts
+        lists.charts = lists.charts.filter(item => !Array.isArray(item));
+
+        test = lists.charts
+        if (test.length > 0) {
+            chartsData = test
+            // listOfChartData = test
         }
     });
 
@@ -62,9 +68,16 @@
         },
     ];
 
-    const generateCharts = (i) => {
-        console.log("chart creating function")
+    function createAllCharts() {
         console.log(listOfChartData)
+        let count = 0;
+        listOfChartData.forEach(element => {
+            generateCharts(count)
+            count++;
+        });
+    }
+
+    const generateCharts = (i) => {
         if (
             datasetDataEnd.length === 0 ||
             datasetDataTarget.length === 0 ||
@@ -76,25 +89,30 @@
         chartsData = [
             ...chartsData,
             {
+                type: listOfChartData[i].type,
                 labels: [...labels],
                 datasets: [
-                    { ...listOfChartData[0].data1 },
-                    { ...listOfChartData[0].data2 },
-                    { ...listOfChartData[0].data3 },
+                    { ...listOfChartData[i].data1 },
+                    { ...listOfChartData[i].data2 },
+                    { ...listOfChartData[i].data3 },
                 ],
             },
         ];
         chartId++;
         chartMade = true;
 
-        lists.charts = [...lists.charts, ...listOfChartData]
+        lists.charts = [lists.charts, ...chartsData]
     };
-</script>
 
+    function testi() {
+        console.log(JSON.parse(JSON.stringify(chartsData)))
+    }
+</script>
+<button onclick={testi}>ok</button>
 <div>
     <div class="toolbar">
         <div class="chartButton">
-            <button class="chartButton__button" onclick={generateCharts}>
+            <button class="chartButton__button" onclick={createAllCharts}>
                 Create a chart
             </button>
         </div>
@@ -107,7 +125,7 @@
 
     <div>
         {#each chartsData as data, i}
-            <Chart {data} key={i} {chartMade} chartType={listOfChartData[0].type} />
+            <Chart {data} key={i} {chartMade} chartType={chartsData[i].type} />
         {/each}
     </div>
 </div>
