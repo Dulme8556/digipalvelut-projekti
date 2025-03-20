@@ -58,8 +58,12 @@
     const imgData = canvas.toDataURL("image/png");
 
     doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
-    doc.save("chart.pdf");
-  }
+
+    const filename = chartName && chartName.trim() !== "" ? `${chartName}.pdf` : "chart.pdf";
+
+    doc.save(filename);
+}
+
 </script>
 
 {#if chartMade}
