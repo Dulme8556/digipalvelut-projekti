@@ -28,7 +28,7 @@
                 <Lines />
             {/key}
         </div>
-        <button onclick={test}>test</button>
+        <button onclick={test}>lists.charts</button>
         {#key lists.selectedValues.length}
             <Charts />
         {/key}
