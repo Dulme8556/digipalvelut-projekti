@@ -1,22 +1,22 @@
 <script>
     import { getContext, onMount } from "svelte";
     import Chart from "./chart.svelte"; // Import the Chart component
-
+    
     let chartsData = [];
     let chartId = 0;
-
+    
     let lists = getContext("list");
     let selected = lists.selectedValues;
-
+    
     let chartName = ""; // Chart name
     let chartNames = []; // Array to hold chart names
     let chartMade = false;
-
+    
     let datasetDataEnd = [];
     let datasetDataTarget = [];
     let datasetDataStart = [];
-    let labels = "";
-
+    let labels = [];
+    
     let typeOfChart = "bar";
     let chartTypes = [
         "bar",
@@ -28,17 +28,26 @@
         "radar",
         "scatter",
     ];
-
-    let test = [];
+    
     let modified = false;
-
+    
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
-
-        test = lists.charts;
-        if (test.length > 0) {
-            chartsData = test;
+        
+        // detect if selected values have changed
+        if (lists.charts.length > 0) {
+            chartsData = lists.charts;
             modified = true;
+
+            lists.charts.forEach(element => {
+                listOfChartData = [
+                    ...listOfChartData, {
+                        type: element.type,
+                        labels: element.labels,
+                        datasets: element.datasets,
+                    }
+                ]
+            });
         }
     });
 
@@ -75,21 +84,13 @@
     ];
 
     function createAllCharts() {
-        let count = 0;
-        if (modified) {
-            chartsData.forEach((element) => {
-                generateCharts(count, element);
-                count++;
-            });
-        } else {
-            listOfChartData.forEach((element) => {
-                generateCharts(count, element);
-                count++;
-            });
-        }
+        listOfChartData[0].type = typeOfChart
+        listOfChartData.forEach((element) => {
+            generateCharts(element);
+        });
     }
 
-    const generateCharts = (i, element) => {
+    const generateCharts = (element) => {
         if (
             datasetDataEnd.length === 0 ||
             datasetDataTarget.length === 0 ||
@@ -104,7 +105,7 @@
         chartsData = [
             ...chartsData,
             {
-                type: typeOfChart,
+                type: element.type,
                 labels: element.labels,
                 datasets: [
                     { ...element.datasets[0] },
@@ -113,19 +114,26 @@
                 ],
             },
         ];
+
         chartId++;
         chartMade = true;
         chartNames = [...chartNames, chartName]; // Save the chart name
         chartName = "";
-        lists.charts = [lists.charts, ...chartsData];
+
+        lists.charts.push(chartsData[chartsData.length - 1]);
     };
 
     function testi() {
         console.log(JSON.parse(JSON.stringify(chartsData)));
     }
+    
+    function toinentesti() {
+        console.log(JSON.parse(JSON.stringify(listOfChartData)));
+    }
 </script>
 
-<button onclick={testi}>ok</button>
+<button onclick={testi}>chartsData</button>
+<button onclick={toinentesti}>listOfChartData</button>
 <div>
     <div class="toolbar">
         <div class="chartName">
@@ -137,7 +145,7 @@
         </div>
         <select bind:value={typeOfChart} class="selectList">
             {#each chartTypes as s, i}
-                <option value={chartTypes[i]}> {chartTypes[i]}</option>
+                <option value={chartTypes[i]}>{chartTypes[i]}</option>
             {/each}
         </select>
         <div class="chartButton">
@@ -147,19 +155,34 @@
         </div>
     </div>
 
-    <div>
-        {#each chartsData as data, i}
+    {#if modified}
+        <div>
+            {#each listOfChartData as data, i}
             <div>
+                {console.log("Chart Data:", data, "Chart Name:", chartNames[i])}
                 <Chart
-                    key={i}
-                    {data}
-                    {chartMade}
-                    chartType={typeOfChart}
-                    chartName={chartNames[i]}
+                key={i}
+                {data}
+                {chartMade}
+                chartName={chartNames[i]}
                 />
             </div>
-        {/each}
-    </div>
+            {/each}
+        </div>
+    {:else}
+        <div>
+            {#each chartsData as data, i}
+            <div>
+                <Chart
+                key={i}
+                {data}
+                {chartMade}
+                chartName={chartNames[i]}
+                />
+            </div>
+            {/each}
+        </div>
+    {/if}
 </div>
 
 <style>

@@ -3,7 +3,6 @@
   import Chart from "chart.js/auto";
   import { jsPDF } from "jspdf";
 
-  export let chartType;
   export let data;
   export let chartMade;
   export let chartName;
@@ -17,11 +16,8 @@
       return;
     }
 
-    console.log(chartType)
-    console.log(data.datasets)
-
     chartInstance = new Chart(canvas, {
-      type: chartType,
+      type: data.type,
       data,
       options: { responsive: false },
     });
