@@ -59,6 +59,30 @@
         labels = [...labels, element.name];
     });
 
+    let defaultValues = [
+        {
+            type: typeOfChart,
+            labels: labels,
+            datasets: [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                },
+            ],
+        },
+    ];
+
     let listOfChartData = [
         {
             type: typeOfChart,
@@ -88,6 +112,7 @@
         listOfChartData.forEach((element) => {
             generateCharts(element);
         });
+        listOfChartData = defaultValues
     }
 
     const generateCharts = (element) => {
