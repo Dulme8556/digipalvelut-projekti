@@ -36,7 +36,7 @@
         
         // detect if selected values have changed
         if (lists.charts.length > 0) {
-            chartsData = lists.charts;
+            chartsData = []; // empty the chart data
             modified = true;
 
             lists.charts.forEach(element => {
@@ -58,6 +58,30 @@
         datasetDataStart = [...datasetDataStart, element.start];
         labels = [...labels, element.name];
     });
+
+    let defaultValues = [
+        {
+            type: typeOfChart,
+            labels: labels,
+            datasets: [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                },
+            ],
+        },
+    ];
 
     let listOfChartData = [
         {
@@ -88,6 +112,7 @@
         listOfChartData.forEach((element) => {
             generateCharts(element);
         });
+        listOfChartData = defaultValues
     }
 
     const generateCharts = (element) => {
@@ -120,7 +145,7 @@
         chartNames = [...chartNames, chartName]; // Save the chart name
         chartName = "";
 
-        lists.charts.push(chartsData[chartsData.length - 1]);
+        lists.charts = chartsData; // replace lists.charts values with chartsData values
     };
 
     function testi() {
@@ -154,22 +179,6 @@
             </button>
         </div>
     </div>
-
-    {#if modified}
-        <div>
-            {#each listOfChartData as data, i}
-            <div>
-                {console.log("Chart Data:", data, "Chart Name:", chartNames[i])}
-                <Chart
-                key={i}
-                {data}
-                {chartMade}
-                chartName={chartNames[i]}
-                />
-            </div>
-            {/each}
-        </div>
-    {:else}
         <div>
             {#each chartsData as data, i}
             <div>
@@ -182,7 +191,6 @@
             </div>
             {/each}
         </div>
-    {/if}
 </div>
 
 <style>
