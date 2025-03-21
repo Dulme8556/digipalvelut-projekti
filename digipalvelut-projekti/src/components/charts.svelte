@@ -36,7 +36,7 @@
         
         // detect if selected values have changed
         if (lists.charts.length > 0) {
-            chartsData = [];
+            chartsData = []; // empty the chart data
             modified = true;
 
             lists.charts.forEach(element => {
@@ -120,7 +120,7 @@
         chartNames = [...chartNames, chartName]; // Save the chart name
         chartName = "";
 
-        lists.charts = chartsData;
+        lists.charts = chartsData; // replace lists.charts values with chartsData values
     };
 
     function testi() {
