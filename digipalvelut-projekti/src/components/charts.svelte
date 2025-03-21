@@ -59,6 +59,7 @@
         labels = [...labels, element.name];
     });
 
+    // default values for listOfChartData
     let defaultValues = [
         {
             type: typeOfChart,
@@ -148,17 +149,8 @@
         lists.charts = chartsData; // replace lists.charts values with chartsData values
     };
 
-    function testi() {
-        console.log(JSON.parse(JSON.stringify(chartsData)));
-    }
-    
-    function toinentesti() {
-        console.log(JSON.parse(JSON.stringify(listOfChartData)));
-    }
 </script>
 
-<button onclick={testi}>chartsData</button>
-<button onclick={toinentesti}>listOfChartData</button>
 <div>
     <div class="toolbar">
         <div class="chartName">
