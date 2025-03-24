@@ -18,20 +18,22 @@
     if (!canvas) {
       return;
     }
-    
+
     id = data.id;
-    
+
     if (data.title) {
       chartName = data.title;
     } else {
       chartName = "";
     }
-    
+
     chartInstance = new Chart(canvas, {
       type: data.type,
       data,
-      options: { responsive: false,
-      maintainAspectRatio: false,
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        animations: false,
       },
     });
 

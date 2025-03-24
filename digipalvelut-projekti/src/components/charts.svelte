@@ -188,7 +188,7 @@
             {/each}
         </select>
         <div class="chartButton">
-            <button class="chartButton__button" onclick={createAllCharts(true)}>
+            <button class="chartButton__button" onclick={() => createAllCharts(true)}>
                 Create a chart
             </button>
         </div>
