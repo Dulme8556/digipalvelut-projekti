@@ -7,7 +7,7 @@
 
   export let data;
   export let chartMade;
-  export let id;
+  let id;
   let chartName;
 
   let canvas;
@@ -18,13 +18,15 @@
     if (!canvas) {
       return;
     }
-
+    
+    id = data.id;
+    
     if (data.title) {
       chartName = data.title;
     } else {
       chartName = "";
     }
-
+    
     chartInstance = new Chart(canvas, {
       type: data.type,
       data,
@@ -53,7 +55,8 @@
         chartContainer.remove();
       }
       // ^^ set OnMount
-      lists.charts = lists.charts.filter((item, index) => index !== id);
+
+      lists.charts = lists.charts.filter((item) => item.id !== id);
     }
   }
 
@@ -82,8 +85,7 @@
     <div style="display:flex; justify-content:space-between">
       <div
         class="buttonContainer__chartName"
-        style="display:flex; font-size:larger; font-weight:700;"
-      >
+        style="display:flex; font-size:larger; font-weight:700;">
         {#if chartName == ""}
           <p>*UNNAMED CHART*</p>
         {:else}

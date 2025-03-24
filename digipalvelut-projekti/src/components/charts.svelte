@@ -1,12 +1,12 @@
 <script>
     import { getContext, onMount } from "svelte";
-    import Chart from "./chart.svelte"; // Import the Chart component
-
-    let chartsData = [];
-    let chartId = 0;
-
+    import Chart from "./chart.svelte";
+    
     let lists = getContext("list");
     let selected = lists.selectedValues;
+
+    let chartsData = [];
+    $: chartId = lists.charts.length ? Math.max(...lists.charts.map((t) => t.id)) + 1: 1;
 
     let chartName = ""; // Chart name
     let chartNames = []; // Array to hold chart names
@@ -43,6 +43,7 @@
                 listOfChartData = [
                     ...listOfChartData,
                     {
+                        id: element.id,
                         title: element.title,
                         type: element.type,
                         labels: element.labels,
@@ -65,6 +66,7 @@
     // default values for listOfChartData
     let defaultValues = [
         {
+            id: chartId,
             title: chartName,
             type: typeOfChart,
             labels: labels,
@@ -88,30 +90,7 @@
         },
     ];
 
-    let listOfChartData = [
-        {
-            title: chartName,
-            type: typeOfChart,
-            labels: labels,
-            datasets: [
-                {
-                    label: "start",
-                    data: datasetDataStart,
-                    backgroundColor: "yellow",
-                },
-                {
-                    label: "end",
-                    data: datasetDataEnd,
-                    backgroundColor: "blue",
-                },
-                {
-                    label: "target",
-                    data: datasetDataTarget,
-                    backgroundColor: "red",
-                },
-            ],
-        },
-    ];
+    let listOfChartData = [defaultValues[0]];
 
     function createAllCharts(createNew) {
         if (createNew) {
@@ -120,8 +99,9 @@
                 datasetDataTarget.length !== 0 ||
                 labels.length !== 0
             ) {
-                listOfChartData[0].type = typeOfChart;
+                listOfChartData[0].id = chartId;
                 listOfChartData[0].title = chartName;
+                listOfChartData[0].type = typeOfChart;
                 listOfChartData.forEach((element) => {
                     generateCharts(element);
                 });
@@ -171,6 +151,7 @@
             chartsData = [
                 ...chartsData,
                 {
+                    id: element.id,
                     title: element.title,
                     type: element.type,
                     labels: element.labels,
@@ -213,9 +194,9 @@
         </div>
     </div>
     <div>
-        {#each chartsData as data, i}
+        {#each chartsData as data}
             <div>
-                <Chart id={i} {data} {chartMade} />
+                <Chart {data} {chartMade} />
             </div>
         {/each}
     </div>
