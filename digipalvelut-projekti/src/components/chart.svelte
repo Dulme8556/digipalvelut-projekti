@@ -28,7 +28,9 @@
     chartInstance = new Chart(canvas, {
       type: data.type,
       data,
-      options: { responsive: false, maintainAspectRatio: false },
+      options: { responsive: false,
+      maintainAspectRatio: false,
+      },
     });
 
     // Store the parent container of this chart
@@ -151,6 +153,7 @@
     display: flex;
     flex-direction: row;
     justify-content: end;
+    align-items: center;
   }
 
   .chart-delete__button {
