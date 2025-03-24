@@ -3,9 +3,12 @@
   import Chart from "chart.js/auto";
   import { jsPDF } from "jspdf";
 
+  let lists = getContext('list')
+
   export let data;
   export let chartMade;
   export let chartName;
+  export let id;
 
   let canvas;
   let chartInstance;
@@ -42,6 +45,7 @@
         chartContainer.remove(); 
       }
       // ^^ set OnMount 
+      lists.charts = lists.charts.filter((item, index) => index !== id);
     }
   }
 

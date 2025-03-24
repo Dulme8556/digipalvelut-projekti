@@ -173,9 +173,10 @@
     </div>
         <div>
             {#each chartsData as data, i}
+            <div>{i}</div>
             <div>
                 <Chart
-                key={i}
+                id={i}
                 {data}
                 {chartMade}
                 chartName={chartNames[i]}
