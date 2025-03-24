@@ -130,7 +130,7 @@
                 alert("Necessary data is missing.");
                 return;
             }
-        } 
+        }
         // ^^ createAllCharts is called from Create chart button so it also adds new chart
         // vv else just load the old ones
         else {
@@ -145,26 +145,48 @@
     const generateCharts = (element) => {
         element = JSON.parse(JSON.stringify(element));
 
-        chartsData = [
-            ...chartsData,
-            {
-                title: element.title,
-                type: element.type,
-                labels: element.labels,
-                datasets: [
-                    { ...element.datasets[0] },
-                    { ...element.datasets[1] },
-                    { ...element.datasets[2] },
-                ],
-            },
-        ];
+        if (element.type === "doughnut") {
+            chartsData = [
+                ...chartsData,
+                {
+                    type: "doughnut",
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Values",
+                            data: datasetDataEnd,
+                            backgroundColor: [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56",
+                                "#4BC0C0",
+                                "#9966FF",
+                            ],
+                        },
+                    ],
+                },
+            ];
+        } else {
+            chartsData = [
+                ...chartsData,
+                {
+                    type: element.type,
+                    labels: element.labels,
+                    datasets: [
+                        { ...element.datasets[0] },
+                        { ...element.datasets[1] },
+                        { ...element.datasets[2] },
+                    ],
+                },
+            ];
+        }
 
         chartId++;
         chartMade = true;
-        chartNames = [...chartNames, chartName]; // Save the chart name
+        chartNames = [...chartNames, chartName];
         chartName = "";
 
-        lists.charts = chartsData; // replace lists.charts values with chartsData values
+        lists.charts = chartsData;
     };
 </script>
 
@@ -191,8 +213,7 @@
     <div>
         {#each chartsData as data, i}
             <div>
-                <Chart id={i} {data} {chartMade} 
-                />
+                <Chart id={i} {data} {chartMade} />
                 <!-- chartName={chartNames[i]}  -->
             </div>
         {/each}

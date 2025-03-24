@@ -72,7 +72,7 @@
 
     const filename =
       chartName && chartName.trim() !== "" ? `${chartName}.pdf` : "chart.pdf";
-
+      
     doc.save(filename);
   }
 </script>
