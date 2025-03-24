@@ -26,6 +26,7 @@
         "doughnut",
         "polarArea",
         "radar",
+        "scatter",
     ];
 
     let modified = false;
@@ -42,6 +43,7 @@
                 listOfChartData = [
                     ...listOfChartData,
                     {
+                        title: element.title,
                         type: element.type,
                         labels: element.labels,
                         datasets: element.datasets,
@@ -63,6 +65,7 @@
     // default values for listOfChartData
     let defaultValues = [
         {
+            title: chartName,
             type: typeOfChart,
             labels: labels,
             datasets: [
@@ -87,6 +90,7 @@
 
     let listOfChartData = [
         {
+            title: chartName,
             type: typeOfChart,
             labels: labels,
             datasets: [
@@ -117,6 +121,7 @@
                 labels.length !== 0
             ) {
                 listOfChartData[0].type = typeOfChart;
+                listOfChartData[0].title = chartName;
                 listOfChartData.forEach((element) => {
                     generateCharts(element);
                 });
@@ -138,52 +143,29 @@
     }
 
     const generateCharts = (element) => {
-    if (
-        datasetDataEnd.length === 0 ||
-        datasetDataTarget.length === 0 ||
-        labels.length === 0
-    ) {
-        alert("Necessary data is missing.");
-        return;
-    }
+        element = JSON.parse(JSON.stringify(element));
 
-    element = JSON.parse(JSON.stringify(element));
+        chartsData = [
+            ...chartsData,
+            {
+                title: element.title,
+                type: element.type,
+                labels: element.labels,
+                datasets: [
+                    { ...element.datasets[0] },
+                    { ...element.datasets[1] },
+                    { ...element.datasets[2] },
+                ],
+            },
+        ];
 
-    let chartData;
-    
-    if (element.type === "doughnut") {
-        chartData = {
-            type: "doughnut",
-            labels: labels,
-            datasets: [{
-                label: "Values",
-                data: datasetDataEnd, 
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"], 
-            }]
-        };
-    } else {
-        chartData = {
-            type: element.type,
-            labels: element.labels,
-            datasets: [
-                { ...element.datasets[0] },
-                { ...element.datasets[1] },
-                { ...element.datasets[2] },
-            ],
-        };
-    }
+        chartId++;
+        chartMade = true;
+        chartNames = [...chartNames, chartName]; // Save the chart name
+        chartName = "";
 
-    chartsData = [...chartsData, chartData];
-
-    chartId++;
-    chartMade = true;
-    chartNames = [...chartNames, chartName]; 
-    chartName = "";
-
-    lists.charts = chartsData; 
-};
-
-
+        lists.charts = chartsData; // replace lists.charts values with chartsData values
+    };
 </script>
 
 <div>
@@ -209,7 +191,9 @@
     <div>
         {#each chartsData as data, i}
             <div>
-                <Chart id={i} {data} {chartMade} chartName={chartNames[i]} />
+                <Chart id={i} {data} {chartMade} 
+                />
+                <!-- chartName={chartNames[i]}  -->
             </div>
         {/each}
     </div>
