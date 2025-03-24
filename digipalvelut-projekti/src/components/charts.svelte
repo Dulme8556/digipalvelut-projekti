@@ -149,6 +149,7 @@
             chartsData = [
                 ...chartsData,
                 {
+                    title: element.title,
                     type: "doughnut",
                     labels: labels,
                     datasets: [
@@ -170,6 +171,7 @@
             chartsData = [
                 ...chartsData,
                 {
+                    title: element.title,
                     type: element.type,
                     labels: element.labels,
                     datasets: [
@@ -214,7 +216,6 @@
         {#each chartsData as data, i}
             <div>
                 <Chart id={i} {data} {chartMade} />
-                <!-- chartName={chartNames[i]}  -->
             </div>
         {/each}
     </div>
