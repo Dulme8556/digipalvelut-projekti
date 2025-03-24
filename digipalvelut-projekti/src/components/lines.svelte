@@ -21,7 +21,7 @@
         allChecked = true;
         checkSelected();
     }
-
+    
     function unselectAll() {
         lines.forEach((element) => {
             element.uncheckAll();
