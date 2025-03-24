@@ -26,7 +26,6 @@
         "doughnut",
         "polarArea",
         "radar",
-        "scatter",
     ];
     
     let modified = false;
@@ -117,37 +116,51 @@
     }
 
     const generateCharts = (element) => {
-        if (
-            datasetDataEnd.length === 0 ||
-            datasetDataTarget.length === 0 ||
-            labels.length === 0
-        ) {
-            alert("Necessary data is missing.");
-            return;
-        }
+    if (
+        datasetDataEnd.length === 0 ||
+        datasetDataTarget.length === 0 ||
+        labels.length === 0
+    ) {
+        alert("Necessary data is missing.");
+        return;
+    }
 
-        element = JSON.parse(JSON.stringify(element))
+    element = JSON.parse(JSON.stringify(element));
 
-        chartsData = [
-            ...chartsData,
-            {
-                type: element.type,
-                labels: element.labels,
-                datasets: [
-                    { ...element.datasets[0] },
-                    { ...element.datasets[1] },
-                    { ...element.datasets[2] },
-                ],
-            },
-        ];
+    let chartData;
+    
+    if (element.type === "doughnut") {
+        chartData = {
+            type: "doughnut",
+            labels: labels,
+            datasets: [{
+                label: "Values",
+                data: datasetDataEnd, 
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"], 
+            }]
+        };
+    } else {
+        chartData = {
+            type: element.type,
+            labels: element.labels,
+            datasets: [
+                { ...element.datasets[0] },
+                { ...element.datasets[1] },
+                { ...element.datasets[2] },
+            ],
+        };
+    }
 
-        chartId++;
-        chartMade = true;
-        chartNames = [...chartNames, chartName]; // Save the chart name
-        chartName = "";
+    chartsData = [...chartsData, chartData];
 
-        lists.charts = chartsData; // replace lists.charts values with chartsData values
-    };
+    chartId++;
+    chartMade = true;
+    chartNames = [...chartNames, chartName]; 
+    chartName = "";
+
+    lists.charts = chartsData; 
+};
+
 
 </script>
 

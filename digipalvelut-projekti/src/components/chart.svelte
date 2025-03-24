@@ -22,7 +22,9 @@
     chartInstance = new Chart(canvas, {
       type: data.type,
       data,
-      options: { responsive: false },
+      options: { responsive: false,
+      maintainAspectRatio: false,
+      },
     });
 
     // Store the parent container of this chart
@@ -45,7 +47,8 @@
         chartContainer.remove(); 
       }
       // ^^ set OnMount 
-      lists.charts = lists.charts.filter((item, index) => index !== id);
+      lists.charts = lists.char
+      ts.filter((item, index) => index !== id);
     }
   }
 
