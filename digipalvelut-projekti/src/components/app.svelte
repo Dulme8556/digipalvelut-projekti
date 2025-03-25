@@ -14,10 +14,6 @@
     });
 
     setContext("list", lists);
-
-    function debug() {
-        console.log(lists.list)
-    }
 </script>
 
 <div class="website">
@@ -28,7 +24,6 @@
                 <Lines />
             {/key}
         </div>
-        <button onclick={debug}>debug</button>
         {#key lists.selectedValues.length}
             <Charts />
         {/key}
