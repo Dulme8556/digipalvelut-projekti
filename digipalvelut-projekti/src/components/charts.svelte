@@ -150,10 +150,10 @@
     element = JSON.parse(JSON.stringify(element));
 
     let chartData;
-    
-    if (element.type === "doughnut") {
+
+    if (element.type === "doughnut" || element.type === "pie") {
         chartData = {
-            type: "doughnut",
+            type: element.type,
             labels: labels,
             datasets: [{
                 label: "Values",
@@ -182,6 +182,7 @@
 
     lists.charts = chartsData; 
 };
+
 
 
 </script>
