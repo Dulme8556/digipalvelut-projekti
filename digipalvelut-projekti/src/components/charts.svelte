@@ -1,15 +1,14 @@
 <script>
     import { getContext, onMount } from "svelte";
-    import Chart from "./chart.svelte"; // Import the Chart component
-
-    let chartsData = [];
-    let chartId = 0;
-
+    import Chart from "./chart.svelte";
+    
     let lists = getContext("list");
     let selected = lists.selectedValues;
 
-    let chartName = ""; // Chart name
-    let chartNames = []; // Array to hold chart names
+    let chartsData = [];
+    $: chartId = lists.charts.length ? Math.max(...lists.charts.map((t) => t.id)) + 1: 1;
+
+    let chartName = "";
     let chartMade = false;
 
     let datasetDataEnd = [];
@@ -26,29 +25,28 @@
         "doughnut",
         "polarArea",
         "radar",
+        "scatter",
     ];
-
-    let modified = false;
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
 
-        // detect if selected values have changed
         if (lists.charts.length > 0) {
-            chartsData = []; // empty the chart data
-            modified = true;
+            chartsData = [];
 
             lists.charts.forEach((element) => {
                 listOfChartData = [
                     ...listOfChartData,
                     {
+                        id: element.id,
+                        title: element.title,
                         type: element.type,
                         labels: element.labels,
                         datasets: element.datasets,
                     },
                 ];
             });
-            createAllCharts(false);
+            loadOldCharts;
         }
     });
 
@@ -63,6 +61,8 @@
     // default values for listOfChartData
     let defaultValues = [
         {
+            id: chartId,
+            title: chartName,
             type: typeOfChart,
             labels: labels,
             datasets: [
@@ -85,106 +85,84 @@
         },
     ];
 
-    let listOfChartData = [
-        {
-            type: typeOfChart,
-            labels: labels,
-            datasets: [
-                {
-                    label: "start",
-                    data: datasetDataStart,
-                    backgroundColor: "yellow",
-                },
-                {
-                    label: "end",
-                    data: datasetDataEnd,
-                    backgroundColor: "blue",
-                },
-                {
-                    label: "target",
-                    data: datasetDataTarget,
-                    backgroundColor: "red",
-                },
-            ],
-        },
-    ];
+    let listOfChartData = [defaultValues[0]];
 
-    function createAllCharts(createNew) {
-        if (createNew) {
-            if (
-                datasetDataEnd.length !== 0 ||
-                datasetDataTarget.length !== 0 ||
-                labels.length !== 0
-            ) {
-                listOfChartData[0].type = typeOfChart;
-                listOfChartData.forEach((element) => {
-                    generateCharts(element);
-                });
-                listOfChartData = defaultValues;
-            } else {
-                alert("Necessary data is missing.");
-                return;
-            }
-        } 
-        // ^^ createAllCharts is called from Create chart button so it also adds new chart
-        // vv else just load the old ones
-        else {
-            for (let i = 1; i < listOfChartData.length; i++) {
-                let element = listOfChartData[i];
+    function createNewChart() {
+        if (
+            datasetDataEnd.length !== 0 ||
+            datasetDataTarget.length !== 0 ||
+            labels.length !== 0
+        ) {
+            listOfChartData[0].id = chartId;
+            listOfChartData[0].title = chartName;
+            listOfChartData[0].type = typeOfChart;
+            listOfChartData.forEach((element) => {
                 generateCharts(element);
-            }
+            });
             listOfChartData = defaultValues;
+        } else {
+            alert("Necessary data is missing.");
+            return;
         }
+    }
+    // ^^ createChart button is clicked so it adds new chart
+    // vv load the old ones
+
+    function loadOldCharts(createNew) {
+        for (let i = 1; i < listOfChartData.length; i++) {
+            let element = listOfChartData[i];
+            generateCharts(element);
+        }
+        listOfChartData = defaultValues;
     }
 
     const generateCharts = (element) => {
-    if (
-        datasetDataEnd.length === 0 ||
-        datasetDataTarget.length === 0 ||
-        labels.length === 0
-    ) {
-        alert("Necessary data is missing.");
-        return;
-    }
+        element = JSON.parse(JSON.stringify(element));
 
-    element = JSON.parse(JSON.stringify(element));
+        if (element.type === "doughnut") {
+            chartsData = [
+                ...chartsData,
+                {
+                    title: element.title,
+                    type: "doughnut",
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Values",
+                            data: datasetDataEnd,
+                            backgroundColor: [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56",
+                                "#4BC0C0",
+                                "#9966FF",
+                            ],
+                        },
+                    ],
+                },
+            ];
+        } else {
+            chartsData = [
+                ...chartsData,
+                {
+                    id: element.id,
+                    title: element.title,
+                    type: element.type,
+                    labels: element.labels,
+                    datasets: [
+                        { ...element.datasets[0] },
+                        { ...element.datasets[1] },
+                        { ...element.datasets[2] },
+                    ],
+                },
+            ];
+        }
 
-    let chartData;
+        chartMade = true;
+        chartName = "";
 
-    if (element.type === "doughnut" || element.type === "pie") {
-        chartData = {
-            type: element.type,
-            labels: labels,
-            datasets: [{
-                label: "Values",
-                data: datasetDataEnd, 
-                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"], 
-            }]
-        };
-    } else {
-        chartData = {
-            type: element.type,
-            labels: element.labels,
-            datasets: [
-                { ...element.datasets[0] },
-                { ...element.datasets[1] },
-                { ...element.datasets[2] },
-            ],
-        };
-    }
-
-    chartsData = [...chartsData, chartData];
-
-    chartId++;
-    chartMade = true;
-    chartNames = [...chartNames, chartName]; 
-    chartName = "";
-
-    lists.charts = chartsData; 
-};
-
-
-
+        lists.charts = chartsData;
+    };
 </script>
 
 <div>
@@ -202,15 +180,15 @@
             {/each}
         </select>
         <div class="chartButton">
-            <button class="chartButton__button" onclick={createAllCharts(true)}>
+            <button class="chartButton__button" onclick={createNewChart}>
                 Create a chart
             </button>
         </div>
     </div>
     <div>
-        {#each chartsData as data, i}
+        {#each chartsData as data}
             <div>
-                <Chart id={i} {data} {chartMade} chartName={chartNames[i]} />
+                <Chart {data} {chartMade} />
             </div>
         {/each}
     </div>

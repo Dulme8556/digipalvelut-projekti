@@ -3,27 +3,37 @@
   import Chart from "chart.js/auto";
   import { jsPDF } from "jspdf";
 
-  let lists = getContext('list')
+  let lists = getContext("list");
 
   export let data;
   export let chartMade;
-  export let chartName;
-  export let id;
+  let id;
+  let chartName;
 
   let canvas;
   let chartInstance;
-  let chartContainer; 
+  let chartContainer;
 
   onMount(() => {
     if (!canvas) {
       return;
     }
 
+    id = data.id;
+
+    if (data.title) {
+      chartName = data.title;
+    } else {
+      chartName = "";
+    }
+
     chartInstance = new Chart(canvas, {
       type: data.type,
       data,
-      options: { responsive: false,
-      maintainAspectRatio: false,
+      options: {
+        responsive: false,
+        maintainAspectRatio: false,
+        animations: false,
       },
     });
 
@@ -44,11 +54,11 @@
 
       // Remove the parent container of the chart (the div that contains the canvas)
       if (chartContainer) {
-        chartContainer.remove(); 
+        chartContainer.remove();
       }
-      // ^^ set OnMount 
-      lists.charts = lists.char
-      ts.filter((item, index) => index !== id);
+      // ^^ set OnMount
+
+      lists.charts = lists.charts.filter((item) => item.id !== id);
     }
   }
 
@@ -65,34 +75,45 @@
 
     doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
 
-    const filename = chartName && chartName.trim() !== "" ? `${chartName}.pdf` : "chart.pdf";
+    const filename =
+      chartName && chartName.trim() !== "" ? `${chartName}.pdf` : "chart.pdf";
 
     doc.save(filename);
-}
-
+  }
 </script>
 
 {#if chartMade}
   <div class="chartContainer">
-    <div style='display:flex; justify-content:space-between'>
-        <div class='buttonContainer__chartName' style='display:flex; font-size:larger; font-weight:700;'>
-          {#if (chartName == "")}
-            <p>*UNNAMED CHART*</p>
-          {:else}
-            {chartName}
-          {/if}
-        </div>
+    <div style="display:flex; justify-content:space-between">
+      <div
+        class="buttonContainer__chartName"
+        style="display:flex; font-size:larger; font-weight:700;">
+        {#if chartName == ""}
+          <p>*UNNAMED CHART*</p>
+        {:else}
+          {chartName}
+        {/if}
+      </div>
       <div class="buttonContainer">
         <button class="pdf-download__button" onclick={downloadPDF}>
-          <img class="pdf-download__image"src="./images/download-icon.svg"alt=""/>
+          <img
+            class="pdf-download__image"
+            src="./images/download-icon.svg"
+            alt=""
+          />
         </button>
         <button class="chart-delete__button" onclick={deleteChart}>
-          <img class="chart-delete__image" src="./images/delete-icon.svg" alt="" />
+          <img
+            class="chart-delete__image"
+            src="./images/delete-icon.svg"
+            alt=""
+          />
         </button>
       </div>
     </div>
-    <div id="content" style='width:400px; max-height:300px;'>
-      <canvas style='width: 400px; max-height:300px;' bind:this={canvas}></canvas>
+    <div id="content" style="width:400px; max-height:300px;">
+      <canvas style="width: 400px; max-height:300px;" bind:this={canvas}
+      ></canvas>
     </div>
   </div>
 {/if}
@@ -127,7 +148,8 @@
     display: flex;
     width: 28px;
     height: 27px;
-    filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(7%) hue-rotate(314deg) brightness(89%) contrast(93%);
+    filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(7%)
+      hue-rotate(314deg) brightness(89%) contrast(93%);
   }
 
   .buttonContainer {
@@ -155,6 +177,7 @@
   }
 
   .chart-delete__image:hover {
-    filter: brightness(0) saturate(100%) invert(59%) sepia(6%) saturate(18%) hue-rotate(324deg) brightness(84%) contrast(94%);
+    filter: brightness(0) saturate(100%) invert(59%) sepia(6%) saturate(18%)
+      hue-rotate(324deg) brightness(84%) contrast(94%);
   }
 </style>
