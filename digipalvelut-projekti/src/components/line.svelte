@@ -1,17 +1,18 @@
 <script>
     import { getContext, onMount, setContext } from "svelte";
 
-    let { f: parentFunction, id, name, target, start, end, unit } = $props();
+    let { function: parentFunction, update: updateEditedValues, id, check, name, target, start, end, unit } = $props();
 
     let lists = getContext("list");
 
     let percent = $state("placeholder");
 
     let editing = $state(false);
-    let deleted = $state(false);
-    let checked = $state(true);
+    let checked = $state(check);
 
     function checkboxClick(event) {
+        lists.list[id-1].check = !check
+
         checked = !checked;
         setTimeout(() => (event.target.checked = checked), 0);
         parentFunction();
@@ -67,6 +68,7 @@
 
         lists.list.forEach((element) => {
             if (element.id === id) {
+                element.check = checked;
                 element.name = name;
                 element.target = target;
                 element.start = start;
@@ -75,6 +77,8 @@
             }
         });
         percentCalculation();
+
+        updateEditedValues();
     }
 </script>
 

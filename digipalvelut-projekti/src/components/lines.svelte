@@ -11,21 +11,29 @@
     let selectedLines = [];
 
     onMount(() => {
-        updateList();
+        getList();
     });
 
     function selectAll() {
         lines.forEach((element) => {
             element.checkAll();
         });
+        lists.list.forEach((element) => {
+            element.check = true;
+        });
+
         allChecked = true;
         checkSelected();
     }
-    
+
     function unselectAll() {
         lines.forEach((element) => {
             element.uncheckAll();
         });
+        lists.list.forEach((element) => {
+            element.check = false;
+        });
+
         allChecked = false;
         checkSelected();
     }
@@ -47,8 +55,22 @@
         lists.selectedValues = selectedLines;
     }
 
-    function updateList() {
+    function getList() {
         let filteredIndicators = lists.list;
+
+    }
+
+    function updateValues() {
+        // to keep old values
+        lists.selectedValues = [];
+        setTimeout(() => {
+            checkSelected();
+            
+            for (let i=0; i<lists.list.length; i++) {
+                let element = lines[i]
+                element.check = lists.list[i].check;
+            }
+        }, 1);
     }
 
     $: filteredIndicators = lists.list.filter((item) =>
@@ -86,7 +108,9 @@
                 <li>
                     <Line
                         bind:this={lines[i]}
-                        f={checkSelected}
+                        function={checkSelected}
+                        update={updateValues}
+                        check={line.check}
                         id={line.id}
                         name={line.name}
                         target={line.target}

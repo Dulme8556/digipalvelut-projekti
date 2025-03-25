@@ -23,10 +23,11 @@
             alert("Can't add empty")
             newStart = "";
         }
+
         else {
             lists.list = [
                 ...lists.list,
-                { id: newId, name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
+                { id: newId, check: true, name: newName, target: newtarget, start: newStart, end: newEnd, unit: newUnit },
             ];
             newName = "";
             newtarget = "";

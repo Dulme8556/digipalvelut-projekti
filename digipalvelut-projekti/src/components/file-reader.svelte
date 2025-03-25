@@ -23,7 +23,7 @@
             let newId = lists.list.length ? Math.max(...lists.list.map((t) => t.id)) + 1 : 1;
             lists.list = [
                 ...lists.list,
-                { id: newId, name: element.Title, target: element.Target, start: element.Start, end: element.End, unit: element.Unit },
+                { id: newId, check: true, name: element.Title, target: element.Target, start: element.Start, end: element.End, unit: element.Unit },
             ];
         });
 

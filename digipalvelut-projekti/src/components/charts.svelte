@@ -46,7 +46,7 @@
                     },
                 ];
             });
-            loadOldCharts;
+            loadOldCharts();
         }
     });
 
@@ -106,7 +106,7 @@
         }
     }
     // ^^ createChart button is clicked so it adds new chart
-    // vv load the old ones
+    // vv load the old ones in onMount
 
     function loadOldCharts(createNew) {
         for (let i = 1; i < listOfChartData.length; i++) {
