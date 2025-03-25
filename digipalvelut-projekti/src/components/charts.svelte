@@ -8,8 +8,7 @@
     let chartsData = [];
     $: chartId = lists.charts.length ? Math.max(...lists.charts.map((t) => t.id)) + 1: 1;
 
-    let chartName = ""; // Chart name
-    let chartNames = []; // Array to hold chart names
+    let chartName = "";
     let chartMade = false;
 
     let datasetDataEnd = [];
@@ -29,15 +28,11 @@
         "scatter",
     ];
 
-    let modified = false;
-
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
 
-        // detect if selected values have changed
         if (lists.charts.length > 0) {
-            chartsData = []; // empty the chart data
-            modified = true;
+            chartsData = [];
 
             lists.charts.forEach((element) => {
                 listOfChartData = [
@@ -51,7 +46,7 @@
                     },
                 ];
             });
-            createAllCharts(false);
+            loadOldCharts;
         }
     });
 
@@ -92,34 +87,33 @@
 
     let listOfChartData = [defaultValues[0]];
 
-    function createAllCharts(createNew) {
-        if (createNew) {
-            if (
-                datasetDataEnd.length !== 0 ||
-                datasetDataTarget.length !== 0 ||
-                labels.length !== 0
-            ) {
-                listOfChartData[0].id = chartId;
-                listOfChartData[0].title = chartName;
-                listOfChartData[0].type = typeOfChart;
-                listOfChartData.forEach((element) => {
-                    generateCharts(element);
-                });
-                listOfChartData = defaultValues;
-            } else {
-                alert("Necessary data is missing.");
-                return;
-            }
-        }
-        // ^^ createAllCharts is called from Create chart button so it also adds new chart
-        // vv else just load the old ones
-        else {
-            for (let i = 1; i < listOfChartData.length; i++) {
-                let element = listOfChartData[i];
+    function createNewChart() {
+        if (
+            datasetDataEnd.length !== 0 ||
+            datasetDataTarget.length !== 0 ||
+            labels.length !== 0
+        ) {
+            listOfChartData[0].id = chartId;
+            listOfChartData[0].title = chartName;
+            listOfChartData[0].type = typeOfChart;
+            listOfChartData.forEach((element) => {
                 generateCharts(element);
-            }
+            });
             listOfChartData = defaultValues;
+        } else {
+            alert("Necessary data is missing.");
+            return;
         }
+    }
+    // ^^ createChart button is clicked so it adds new chart
+    // vv load the old ones
+
+    function loadOldCharts(createNew) {
+        for (let i = 1; i < listOfChartData.length; i++) {
+            let element = listOfChartData[i];
+            generateCharts(element);
+        }
+        listOfChartData = defaultValues;
     }
 
     const generateCharts = (element) => {
@@ -164,9 +158,7 @@
             ];
         }
 
-        chartId++;
         chartMade = true;
-        chartNames = [...chartNames, chartName];
         chartName = "";
 
         lists.charts = chartsData;
@@ -188,7 +180,7 @@
             {/each}
         </select>
         <div class="chartButton">
-            <button class="chartButton__button" onclick={() => createAllCharts(true)}>
+            <button class="chartButton__button" onclick={createNewChart}>
                 Create a chart
             </button>
         </div>
