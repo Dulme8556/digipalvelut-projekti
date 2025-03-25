@@ -11,7 +11,7 @@
     let selectedLines = [];
 
     onMount(() => {
-        getList();
+        let filteredIndicators = lists.list;
     });
 
     function selectAll() {
@@ -55,19 +55,13 @@
         lists.selectedValues = selectedLines;
     }
 
-    function getList() {
-        let filteredIndicators = lists.list;
-
-    }
-
     function updateValues() {
-        // to keep old values
         lists.selectedValues = [];
         setTimeout(() => {
             checkSelected();
-            
-            for (let i=0; i<lists.list.length; i++) {
-                let element = lines[i]
+
+            for (let i = 0; i < lists.list.length; i++) {
+                let element = lines[i];
                 element.check = lists.list[i].check;
             }
         }, 1);
@@ -83,13 +77,13 @@
     <div class="actions-bar">
         <div class="button-group">
             {#if allChecked}
-                <button class="select__button" onclick={unselectAll}
-                    >Unselect all</button
-                >
+                <button class="select__button" onclick={unselectAll}>
+                    Unselect all
+                </button>
             {:else}
-                <button class="select__button" onclick={selectAll}
-                    >Select all</button
-                >
+                <button class="select__button" onclick={selectAll}>
+                    Select all
+                </button>
             {/if}
         </div>
         <input
@@ -116,6 +110,7 @@
                         target={line.target}
                         start={line.start}
                         end={line.end}
+                        percent={line.percent}
                         unit={line.unit}
                         on:remove={(e) => removeLine(e.detail)}
                     />

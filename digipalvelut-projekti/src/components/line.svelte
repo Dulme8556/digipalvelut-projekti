@@ -1,42 +1,68 @@
 <script>
     import { getContext, onMount, setContext } from "svelte";
 
-    let { function: parentFunction, update: updateEditedValues, id, check, name, target, start, end, unit } = $props();
+    let {
+        function: parentFunction,
+        update: updateEditedValues,
+        id,
+        check,
+        name,
+        target,
+        start,
+        end,
+        percent = "placeholder",
+        unit,
+    } = $props();
 
     let lists = getContext("list");
 
-    let percent = $state("placeholder");
-
     let editing = $state(false);
     let checked = $state(check);
-
+    
+    onMount(() => {
+        lists.list.forEach((element) => {
+            if (element.id === id) {
+                element.check = checked;
+                element.name = name;
+                element.target = target;
+                element.start = start;
+                element.end = end;
+                element.percent = percent;
+                element.unit = unit;
+            }
+        });
+    });
+    
+    export function checkAll() {
+        checked = true;
+    }
+    
+    export function uncheckAll() {
+        checked = false;
+    }
+    
+    export function selected() {
+        return checked;
+    }
+    
+    export function values() {
+        return {
+            id: id,
+            name: name,
+            target: target,
+            start: start,
+            end: end,
+            unit: unit,
+        };
+    }
+    
     function checkboxClick(event) {
-        lists.list[id-1].check = !check
+        lists.list[id - 1].check = !check;
 
         checked = !checked;
         setTimeout(() => (event.target.checked = checked), 0);
         parentFunction();
     }
-
-    export function checkAll() {
-        checked = true;
-    }
-
-    export function uncheckAll() {
-        checked = false;
-    }
-
-    export function selected() {
-        return checked;
-    }
-
-    export function values() {
-        return {id: id, name: name, target: target, start: start, end: end, unit: unit}
-    }
-
-    onMount(() => {
-        percentCalculation();
-    });
 
     function percentCalculation() {
         if (end != "" && target != "") {
@@ -48,15 +74,16 @@
             if (calculation % 1 !== 0) {
                 percent = "~" + percent;
             } else {
-                rawValue = rawValue.toFixed(0);
-                percent = rawValue;
+                return percent;
             }
         }
     }
 
     function deleteThis() {
         lists.list = lists.list.filter((item) => item.id !== id);
-        lists.selectedValues = lists.selectedValues.filter((item) => item.id !== id);
+        lists.selectedValues = lists.selectedValues.filter(
+            (item) => item.id !== id,
+        );
     }
 
     function editThis() {
@@ -65,6 +92,8 @@
 
     function onSave(event) {
         editing = !editing;
+        
+        percentCalculation();
 
         lists.list.forEach((element) => {
             if (element.id === id) {
@@ -73,11 +102,10 @@
                 element.target = target;
                 element.start = start;
                 element.end = end;
+                element.percent = percent;
                 element.unit = unit;
             }
         });
-        percentCalculation();
-
         updateEditedValues();
     }
 </script>
@@ -126,7 +154,7 @@
                 <input
                     class="checkbox"
                     type="checkbox"
-                    checked={checked}
+                    {checked}
                     onclick={checkboxClick}
                 />
                 <div class="component long">
