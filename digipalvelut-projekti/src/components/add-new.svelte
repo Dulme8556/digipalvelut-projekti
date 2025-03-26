@@ -14,19 +14,16 @@
     let newUnit = $state("");
 
     function percentCalculation() {
-        if (newEnd != "" && newTarget != "") {
-            let rawValue = (newEnd / newTarget) * 100;
-            let calculation = rawValue.toFixed(3);
 
-            newPercent = rawValue.toFixed(0);
+    if (!newEnd || !newTarget) return;
 
-            if (calculation % 1 !== 0) {
-                newPercent = "~" + newPercent;
-            } else {
-                return newPercent;
-            }
-        }
-    }
+    let rawValue = (newEnd / newTarget) * 100;
+    let roundedValue = rawValue.toFixed(0);
+    let preciseValue = rawValue.toFixed(3);
+    
+    newPercent = preciseValue % 1 !== 0 ? `~${roundedValue}` : roundedValue;
+}
+
 
     function addNew(event) {
         percentCalculation()
