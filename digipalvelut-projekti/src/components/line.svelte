@@ -65,18 +65,13 @@
     }
 
     function percentCalculation() {
-        if (end != "" && target != "") {
-            let rawValue = (end / target) * 100;
-            let calculation = rawValue.toFixed(3);
+        if (!end || !target) return;
 
-            percent = rawValue.toFixed(0);
+        let rawValue = (end / target) * 100;
+        let roundedValue = rawValue.toFixed(0);
+        let preciseValue = rawValue.toFixed(3);
 
-            if (calculation % 1 !== 0) {
-                percent = "~" + percent;
-            } else {
-                return percent;
-            }
-        }
+        percent = preciseValue % 1 !== 0 ? `~${roundedValue}` : roundedValue;
     }
 
     function deleteThis() {
