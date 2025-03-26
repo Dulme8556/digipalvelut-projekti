@@ -136,7 +136,7 @@
     const generateCharts = (element) => {
         element = JSON.parse(JSON.stringify(element));
 
-        if (element.type === "doughnut") {
+        if (element.type === "doughnut" || element.type === "pie") {
             chartsData = [
                 ...chartsData,
                 {
