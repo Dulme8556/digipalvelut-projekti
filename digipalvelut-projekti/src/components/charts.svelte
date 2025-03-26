@@ -10,15 +10,17 @@
 
     let chartName = "";
     let chartMade = false;
+    let indexAxis = 'x';
 
     let datasetDataEnd = [];
     let datasetDataTarget = [];
     let datasetDataStart = [];
     let labels = [];
 
-    let typeOfChart = "bar";
+    let typeOfChart = "bar (vertical)";
     let chartTypes = [
-        "bar",
+        "bar (vertical)",
+        "bar (horizontal)",
         "line",
         "pie",
         "bubble",
@@ -27,6 +29,9 @@
         "radar",
         "scatter",
     ];
+
+    let subVertical = "(vertical)"
+    let subHorizontal = "(horizontal)"
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
@@ -42,6 +47,7 @@
                         title: element.title,
                         type: element.type,
                         labels: element.labels,
+                        indexAxis: element.indexAxis,
                         datasets: element.datasets,
                     },
                 ];
@@ -49,6 +55,15 @@
             loadOldCharts();
         }
     });
+
+    function trimTypeOfChart() {
+        if (typeOfChart.includes(subVertical)) {
+            typeOfChart = typeOfChart.replace(subVertical, "").trim();
+        } else if (typeOfChart.includes(subHorizontal)) {
+            typeOfChart = typeOfChart.replace(subHorizontal, "").trim();
+            indexAxis = 'y';
+        }
+    }
 
     // all values to arrays
     selected.forEach((element) => {
@@ -65,17 +80,21 @@
             title: chartName,
             type: typeOfChart,
             labels: labels,
+            indexAxis: indexAxis,
             datasets: [
+                // slot 0 start values
                 {
                     label: "start",
                     data: datasetDataStart,
                     backgroundColor: "yellow",
                 },
+                // slot 1 end values
                 {
                     label: "end",
                     data: datasetDataEnd,
                     backgroundColor: "blue",
                 },
+                // slot 2 target values
                 {
                     label: "target",
                     data: datasetDataTarget,
@@ -88,6 +107,7 @@
     let listOfChartData = [defaultValues[0]];
 
     function createNewChart() {
+        trimTypeOfChart();
         if (
             datasetDataEnd.length !== 0 ||
             datasetDataTarget.length !== 0 ||
@@ -96,6 +116,7 @@
             listOfChartData[0].id = chartId;
             listOfChartData[0].title = chartName;
             listOfChartData[0].type = typeOfChart;
+            listOfChartData[0].indexAxis = indexAxis;
             listOfChartData.forEach((element) => {
                 generateCharts(element);
             });
@@ -149,17 +170,20 @@
                     title: element.title,
                     type: element.type,
                     labels: element.labels,
+                    indexAxis: element.indexAxis,
                     datasets: [
                         { ...element.datasets[0] },
                         { ...element.datasets[1] },
                         { ...element.datasets[2] },
                     ],
+
                 },
             ];
         }
 
         chartMade = true;
         chartName = "";
+        indexAxis = 'x';
 
         lists.charts = chartsData;
     };

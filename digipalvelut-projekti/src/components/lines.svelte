@@ -10,6 +10,9 @@
 
     let selectedLines = [];
 
+    let sortByValue = "oldest";
+    let sortingOptions = ["oldest", "newest", "highest", "lowest"];
+
     onMount(() => {
         let filteredIndicators = lists.list;
     });
@@ -70,6 +73,30 @@
     $: filteredIndicators = lists.list.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
+
+    $: {
+        sortBy(sortByValue);
+    }
+
+    function sortBy(value) {
+        let sortedList = lists.list;
+        if (value === "oldest") {
+            sortedList.sort(({ id: a }, { id: b }) => a - b);
+        } else if (value === "newest") {
+            sortedList.sort(({ id: a }, { id: b }) => b - a);
+        } else if (value === "highest") {
+            sortedList.sort(({ percent: a }, { percent: b }) => b - a);
+        } else if (value === "lowest") {
+            sortedList.sort(({ percent: a }, { percent: b }) => a - b);
+        } else {
+            alert("idk what you did but you aren't supposed to do that");
+        }
+
+        // so that charts.svelte gets updated data
+        sortedList = lists.selectedValues
+        lists.selectedValues = []
+        setTimeout(() => (lists.selectedValues = sortedList), 1)
+    }
 </script>
 
 <div class="active-lines">
@@ -93,31 +120,38 @@
             placeholder="Search indicators..."
             type="text"
         />
-    </div>
-    {#if filteredIndicators.length === 0}
-        <div class="empty">No data found</div>
-    {:else}
-        <ul>
-            {#each filteredIndicators as line, i}
-                <li>
-                    <Line
-                        bind:this={lines[i]}
-                        function={checkSelected}
-                        update={updateValues}
-                        check={line.check}
-                        id={line.id}
-                        name={line.name}
-                        target={line.target}
-                        start={line.start}
-                        end={line.end}
-                        percent={line.percent}
-                        unit={line.unit}
-                        on:remove={(e) => removeLine(e.detail)}
-                    />
-                </li>
+        <select bind:value={sortByValue} class="selectList">
+            {#each sortingOptions as s, i}
+                <option value={sortingOptions[i]}>{sortingOptions[i]}</option>
             {/each}
-        </ul>
-    {/if}
+        </select>
+    </div>
+    {#key sortByValue}
+        {#if filteredIndicators.length === 0}
+            <div class="empty">No data found</div>
+        {:else}
+            <ul>
+                {#each filteredIndicators as line, i}
+                    <li>
+                        <Line
+                            bind:this={lines[i]}
+                            function={checkSelected}
+                            update={updateValues}
+                            check={line.check}
+                            id={line.id}
+                            name={line.name}
+                            target={line.target}
+                            start={line.start}
+                            end={line.end}
+                            percent={line.percent}
+                            unit={line.unit}
+                            on:remove={(e) => removeLine(e.detail)}
+                        />
+                    </li>
+                {/each}
+            </ul>
+        {/if}
+    {/key}
 </div>
 
 <style>
@@ -135,7 +169,7 @@
     .actions-bar {
         display: flex;
         flex-direction: row;
-        width: 500px;
+        width: 600px;
     }
 
     .button-group {
@@ -144,8 +178,10 @@
     }
 
     .select__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        padding: 5px 3px;
         font-size: 15px;
     }
 
@@ -155,6 +191,15 @@
         margin-left: 10px;
         display: flex;
         flex: 4;
+    }
+
+    .selectList {
+        display: flex;
+        flex: 1;
+        font-size: 15px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 15px;
     }
 
     .empty {
