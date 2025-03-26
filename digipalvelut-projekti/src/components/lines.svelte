@@ -11,21 +11,29 @@
     let selectedLines = [];
 
     onMount(() => {
-        updateList();
+        let filteredIndicators = lists.list;
     });
 
     function selectAll() {
         lines.forEach((element) => {
             element.checkAll();
         });
+        lists.list.forEach((element) => {
+            element.check = true;
+        });
+
         allChecked = true;
         checkSelected();
     }
-    
+
     function unselectAll() {
         lines.forEach((element) => {
             element.uncheckAll();
         });
+        lists.list.forEach((element) => {
+            element.check = false;
+        });
+
         allChecked = false;
         checkSelected();
     }
@@ -47,8 +55,16 @@
         lists.selectedValues = selectedLines;
     }
 
-    function updateList() {
-        let filteredIndicators = lists.list;
+    function updateValues() {
+        lists.selectedValues = [];
+        setTimeout(() => {
+            checkSelected();
+
+            for (let i = 0; i < lists.list.length; i++) {
+                let element = lines[i];
+                element.check = lists.list[i].check;
+            }
+        }, 1);
     }
 
     $: filteredIndicators = lists.list.filter((item) =>
@@ -61,13 +77,13 @@
     <div class="actions-bar">
         <div class="button-group">
             {#if allChecked}
-                <button class="select__button" onclick={unselectAll}
-                    >Unselect all</button
-                >
+                <button class="select__button" onclick={unselectAll}>
+                    Unselect all
+                </button>
             {:else}
-                <button class="select__button" onclick={selectAll}
-                    >Select all</button
-                >
+                <button class="select__button" onclick={selectAll}>
+                    Select all
+                </button>
             {/if}
         </div>
         <input
@@ -86,12 +102,15 @@
                 <li>
                     <Line
                         bind:this={lines[i]}
-                        f={checkSelected}
+                        function={checkSelected}
+                        update={updateValues}
+                        check={line.check}
                         id={line.id}
                         name={line.name}
                         target={line.target}
                         start={line.start}
                         end={line.end}
+                        percent={line.percent}
                         unit={line.unit}
                         on:remove={(e) => removeLine(e.detail)}
                     />
