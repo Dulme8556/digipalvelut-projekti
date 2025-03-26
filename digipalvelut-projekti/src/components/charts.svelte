@@ -47,6 +47,7 @@
                         title: element.title,
                         type: element.type,
                         labels: element.labels,
+                        indexAxis: element.indexAxis,
                         datasets: element.datasets,
                     },
                 ];
@@ -81,16 +82,19 @@
             labels: labels,
             indexAxis: indexAxis,
             datasets: [
+                // slot 0 start values
                 {
                     label: "start",
                     data: datasetDataStart,
                     backgroundColor: "yellow",
                 },
+                // slot 1 end values
                 {
                     label: "end",
                     data: datasetDataEnd,
                     backgroundColor: "blue",
                 },
+                // slot 2 target values
                 {
                     label: "target",
                     data: datasetDataTarget,

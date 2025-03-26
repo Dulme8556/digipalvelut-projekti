@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount, setContext } from "svelte";
+    import { getContext, onMount } from "svelte";
 
     let {
         function: parentFunction,
@@ -57,9 +57,9 @@
     }
     
     function checkboxClick(event) {
-        lists.list[id - 1].check = !check;
-
         checked = !checked;
+        lists.list[id - 1].check = checked;
+        
         setTimeout(() => (event.target.checked = checked), 0);
         parentFunction();
     }

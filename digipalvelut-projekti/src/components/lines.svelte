@@ -68,7 +68,7 @@
     }
 
     $: filteredIndicators = lists.list.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 </script>
 
