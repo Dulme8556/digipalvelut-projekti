@@ -179,6 +179,7 @@
 
         chartMade = true;
         chartName = "";
+        indexAxis = 'x';
 
         lists.charts = chartsData;
     };
