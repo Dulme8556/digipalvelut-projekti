@@ -225,7 +225,7 @@
     }
 
     .selectList {
-        width: 100px;
+        width: 120px;
         margin-top: 12px;
         margin-left: 10px;
     }
