@@ -34,6 +34,7 @@
         responsive: false,
         maintainAspectRatio: false,
         animations: false,
+        indexAxis: data.indexAxis,
       },
     });
 
