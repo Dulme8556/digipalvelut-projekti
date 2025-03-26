@@ -10,7 +10,7 @@
 
     let chartName = "";
     let chartMade = false;
-    let indexAxis = 'x';
+    let indexAxis = '';
 
     let datasetDataEnd = [];
     let datasetDataTarget = [];
@@ -59,6 +59,7 @@
     function trimTypeOfChart() {
         if (typeOfChart.includes(subVertical)) {
             typeOfChart = typeOfChart.replace(subVertical, "").trim();
+            indexAxis = 'x';
         } else if (typeOfChart.includes(subHorizontal)) {
             typeOfChart = typeOfChart.replace(subHorizontal, "").trim();
             indexAxis = 'y';
@@ -145,7 +146,7 @@
                 ...chartsData,
                 {
                     title: element.title,
-                    type: "doughnut",
+                    type: element.type,
                     labels: labels,
                     datasets: [
                         {
@@ -186,6 +187,7 @@
         indexAxis = 'x';
 
         lists.charts = chartsData;
+        typeOfChart = "bar (vertical)";
     };
 </script>
 
