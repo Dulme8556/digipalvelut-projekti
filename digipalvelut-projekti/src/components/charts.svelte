@@ -130,7 +130,7 @@
     // ^^ createChart button is clicked so it adds new chart
     // vv load the old ones in onMount
 
-    function loadOldCharts(createNew) {
+    function loadOldCharts() {
         for (let i = 1; i < listOfChartData.length; i++) {
             let element = listOfChartData[i];
             generateCharts(element);
@@ -189,6 +189,10 @@
         lists.charts = chartsData;
         typeOfChart = "bar (vertical)";
     };
+
+    function deleteChart() {
+        chartsData = lists.charts;
+    }
 </script>
 
 <div>
@@ -213,9 +217,9 @@
     </div>
     <div>
         {#each chartsData as data}
-            <div>
-                <Chart {data} {chartMade} />
-            </div>
+        <div>
+            <Chart {data} {chartMade} parentFuncion={deleteChart} />
+        </div>
         {/each}
     </div>
 </div>

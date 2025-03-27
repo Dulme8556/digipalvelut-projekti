@@ -7,6 +7,7 @@
 
   export let data;
   export let chartMade;
+  export let parentFuncion;
   let id;
   let chartName;
 
@@ -60,6 +61,7 @@
       // ^^ set OnMount
 
       lists.charts = lists.charts.filter((item) => item.id !== id);
+      parentFuncion()
     }
   }
 

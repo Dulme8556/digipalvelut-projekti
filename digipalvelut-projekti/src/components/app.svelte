@@ -24,8 +24,11 @@
                 <Lines />
             {/key}
         </div>
+        <!-- bad way to fix a bug -->
         {#key lists.selectedValues.length}
-            <Charts />
+            {#key lists.charts.length}
+                <Charts />
+            {/key}
         {/key}
     </div>
     <DownloadFile />
