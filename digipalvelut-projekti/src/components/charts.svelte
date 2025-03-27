@@ -76,34 +76,35 @@
 
     // default values for listOfChartData
     let defaultValues = [
-        {
-            id: chartId,
-            title: chartName,
-            type: typeOfChart,
-            labels: labels,
-            indexAxis: indexAxis,
-            datasets: [
-                // slot 0 start values
-                {
-                    label: "start",
-                    data: datasetDataStart,
-                    backgroundColor: "yellow",
-                },
-                // slot 1 end values
-                {
-                    label: "end",
-                    data: datasetDataEnd,
-                    backgroundColor: "blue",
-                },
-                // slot 2 target values
-                {
-                    label: "target",
-                    data: datasetDataTarget,
-                    backgroundColor: "red",
-                },
-            ],
-        },
-    ];
+    {
+        id: chartId,
+        title: chartName,
+        type: typeOfChart,
+        labels: labels,
+        indexAxis: indexAxis,
+        datasets: [
+            {
+                label: "start",
+                data: datasetDataStart,
+                backgroundColor: "yellow",
+                minBarLength: 4,  
+            },
+            {
+                label: "end",
+                data: datasetDataEnd,
+                backgroundColor: "blue",
+                minBarLength: 4,
+            },
+            {
+                label: "target",
+                data: datasetDataTarget,
+                backgroundColor: "red",
+                minBarLength: 4,
+            },
+        ],
+    },
+];
+
 
     let listOfChartData = [defaultValues[0]];
 
