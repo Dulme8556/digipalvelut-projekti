@@ -24,8 +24,9 @@
                 <Lines />
             {/key}
         </div>
-        {#key lists.selectedValues.length}
-            <Charts />
+        <!-- bad way to fix a bug -->
+        {#key `${lists.selectedValues.length}-${lists.charts.length}`}
+                <Charts />
         {/key}
     </div>
     <DownloadFile />

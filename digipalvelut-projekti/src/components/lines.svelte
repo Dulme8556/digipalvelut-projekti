@@ -88,8 +88,6 @@
             sortedList.sort(({ percent: a }, { percent: b }) => b - a);
         } else if (value === "lowest") {
             sortedList.sort(({ percent: a }, { percent: b }) => a - b);
-        } else {
-            alert("idk what you did but you aren't supposed to do that");
         }
 
         // so that charts.svelte gets updated data
