@@ -195,7 +195,8 @@
     }
 
     .input:first-child {
-        margin: 35px 15px;
+        margin: 15px 15px;
+        margin-top: 35px;
     }
 
     input::-webkit-outer-spin-button,
