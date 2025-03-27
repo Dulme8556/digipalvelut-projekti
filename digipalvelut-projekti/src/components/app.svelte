@@ -25,10 +25,8 @@
             {/key}
         </div>
         <!-- bad way to fix a bug -->
-        {#key lists.selectedValues.length}
-            {#key lists.charts.length}
+        {#key `${lists.selectedValues.length}-${lists.charts.length}`}
                 <Charts />
-            {/key}
         {/key}
     </div>
     <DownloadFile />
