@@ -107,8 +107,24 @@
 
     let listOfChartData = [defaultValues[0]];
 
+    function getTrimmedChartType() {
+        let tempType = typeOfChart;
+        let axis = 'x';
+
+        if (tempType.includes(subVertical)) {
+            tempType = tempType.replace(subVertical, "").trim();
+        } else if (tempType.includes(subHorizontal)) {
+            tempType = tempType.replace(subHorizontal, "").trim();
+            axis = 'y';
+        }
+
+        return { type: tempType, axis };
+    }
+
+
     function createNewChart() {
-        trimTypeOfChart();
+        const { type, axis } = getTrimmedChartType();
+
         if (
             datasetDataEnd.length !== 0 ||
             datasetDataTarget.length !== 0 ||
@@ -116,8 +132,8 @@
         ) {
             listOfChartData[0].id = chartId;
             listOfChartData[0].title = chartName;
-            listOfChartData[0].type = typeOfChart;
-            listOfChartData[0].indexAxis = indexAxis;
+            listOfChartData[0].type = type; // Use the returned type
+            listOfChartData[0].indexAxis = axis; // Use the returned axis
             listOfChartData.forEach((element) => {
                 generateCharts(element);
             });
