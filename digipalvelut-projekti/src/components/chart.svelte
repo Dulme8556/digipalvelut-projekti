@@ -177,6 +177,13 @@
     cursor: pointer;
   }
 
+  .chart-delete__image {
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    padding: 3px;
+  }
+
   .chart-delete__image:hover {
     filter: brightness(0) saturate(100%) invert(59%) sepia(6%) saturate(18%)
       hue-rotate(324deg) brightness(84%) contrast(94%);
