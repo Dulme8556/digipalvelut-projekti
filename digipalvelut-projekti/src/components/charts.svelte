@@ -26,11 +26,7 @@
         "bar (horizontal)",
         "line",
         "pie",
-        "bubble",
         "doughnut",
-        "polarArea",
-        "radar",
-        "scatter",
     ];
 
     let subVertical = "(vertical)"
@@ -69,34 +65,35 @@
 
     // default values for listOfChartData
     let defaultValues = [
-        {
-            id: chartId,
-            title: chartName,
-            type: typeOfChart,
-            labels: labels,
-            indexAxis: indexAxis,
-            datasets: [
-                // slot 0 start values
-                {
-                    label: "start",
-                    data: datasetDataStart,
-                    backgroundColor: "yellow",
-                },
-                // slot 1 end values
-                {
-                    label: "end",
-                    data: datasetDataEnd,
-                    backgroundColor: "blue",
-                },
-                // slot 2 target values
-                {
-                    label: "target",
-                    data: datasetDataTarget,
-                    backgroundColor: "red",
-                },
-            ],
-        },
-    ];
+    {
+        id: chartId,
+        title: chartName,
+        type: typeOfChart,
+        labels: labels,
+        indexAxis: indexAxis,
+        datasets: [
+            {
+                label: "start",
+                data: datasetDataStart,
+                backgroundColor: "yellow",
+                minBarLength: 4,  
+            },
+            {
+                label: "end",
+                data: datasetDataEnd,
+                backgroundColor: "blue",
+                minBarLength: 4,
+            },
+            {
+                label: "target",
+                data: datasetDataTarget,
+                backgroundColor: "red",
+                minBarLength: 4,
+            },
+        ],
+    },
+];
+
 
     let listOfChartData = [defaultValues[0]];
 
@@ -138,7 +135,7 @@
         console.log(chartsData)
     }
 
-    function loadOldCharts() {
+    function loadOldCharts(createNew) {
         for (let i = 1; i < listOfChartData.length; i++) {
             let element = listOfChartData[i];
             generateCharts(element);
@@ -215,10 +212,6 @@
         typeOfChart = "bar (vertical)";
     };
 
-    function deleteChart() {
-        chartsData = lists.charts;
-    }
-
     function debug() {
         console.log(chartsData)
         lists.charts = chartsData;
@@ -247,9 +240,9 @@
     </div>
     <div>
         {#each chartsData as data}
-        <div>
-            <Chart {data} {chartMade} parentFuncion={deleteChart} />
-        </div>
+            <div>
+                <Chart {data} {chartMade} />
+            </div>
         {/each}
     </div>
 </div>
