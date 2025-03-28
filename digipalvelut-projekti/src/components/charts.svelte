@@ -1,6 +1,9 @@
 <script>
     import { getContext, onMount } from "svelte";
     import Chart from "./chart.svelte";
+    import Line from "./chart-config/line"
+
+    let line = new Line();
     
     let lists = getContext("list");
     let selected = lists.selectedValues;
@@ -55,16 +58,6 @@
             loadOldCharts();
         }
     });
-
-    function trimTypeOfChart() {
-        if (typeOfChart.includes(subVertical)) {
-            typeOfChart = typeOfChart.replace(subVertical, "").trim();
-            indexAxis = 'x';
-        } else if (typeOfChart.includes(subHorizontal)) {
-            typeOfChart = typeOfChart.replace(subHorizontal, "").trim();
-            indexAxis = 'y';
-        }
-    }
 
     // all values to arrays
     selected.forEach((element) => {
@@ -121,7 +114,6 @@
         return { type: tempType, axis };
     }
 
-
     function createNewChart() {
         const { type, axis } = getTrimmedChartType();
 
@@ -142,9 +134,9 @@
             alert("Necessary data is missing.");
             return;
         }
+        console.log("luo uusi")
+        console.log(chartsData)
     }
-    // ^^ createChart button is clicked so it adds new chart
-    // vv load the old ones in onMount
 
     function loadOldCharts() {
         for (let i = 1; i < listOfChartData.length; i++) {
@@ -152,9 +144,11 @@
             generateCharts(element);
         }
         listOfChartData = defaultValues;
+        console.log("lataa vanhat")
+        console.log(chartsData)
     }
 
-    const generateCharts = (element) => {
+    const generateCharts = async (element) => {
         element = JSON.parse(JSON.stringify(element));
 
         if (element.type === "doughnut" || element.type === "pie") {
@@ -179,6 +173,22 @@
                     ],
                 },
             ];
+        } else if (element.type === "line") {
+                line.changeData(element);
+                let newLineData = JSON.parse(JSON.stringify(line.getData()));
+                
+                setTimeout(() => {
+                    chartsData = [...chartsData, newLineData];
+                }, 1);
+                    
+                // await new Promise(resolve => {
+                //     console.log("odota")
+                //     chartsData = [...chartsData, newLineData];
+                //     console.log(chartsData)
+                //     resolve();
+                // });
+                console.log("valmis")
+                lists.charts = chartsData;
         } else {
             chartsData = [
                 ...chartsData,
@@ -193,7 +203,6 @@
                         { ...element.datasets[1] },
                         { ...element.datasets[2] },
                     ],
-
                 },
             ];
         }
@@ -209,8 +218,13 @@
     function deleteChart() {
         chartsData = lists.charts;
     }
-</script>
 
+    function debug() {
+        console.log(chartsData)
+        lists.charts = chartsData;
+    }
+</script>
+<button onclick={debug}>debug2</button>
 <div>
     <div class="toolbar">
         <div class="chartName">
