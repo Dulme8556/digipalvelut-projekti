@@ -147,7 +147,7 @@
     // ^^ createChart button is clicked so it adds new chart
     // vv load the old ones in onMount
 
-    function loadOldCharts() {
+    function loadOldCharts(createNew) {
         for (let i = 1; i < listOfChartData.length; i++) {
             let element = listOfChartData[i];
             generateCharts(element);
@@ -158,29 +158,6 @@
     const generateCharts = (element) => {
         element = JSON.parse(JSON.stringify(element));
 
-        if (element.type === "doughnut" || element.type === "pie") {
-            chartsData = [
-                ...chartsData,
-                {
-                    title: element.title,
-                    type: element.type,
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: "Values",
-                            data: datasetDataEnd,
-                            backgroundColor: [
-                                "#FF6384",
-                                "#36A2EB",
-                                "#FFCE56",
-                                "#4BC0C0",
-                                "#9966FF",
-                            ],
-                        },
-                    ],
-                },
-            ];
-        } else {
             chartsData = [
                 ...chartsData,
                 {
@@ -197,7 +174,6 @@
 
                 },
             ];
-        }
 
         chartMade = true;
         chartName = "";
@@ -206,10 +182,6 @@
         lists.charts = chartsData;
         typeOfChart = "bar (vertical)";
     };
-
-    function deleteChart() {
-        chartsData = lists.charts;
-    }
 </script>
 
 <div>
@@ -234,9 +206,9 @@
     </div>
     <div>
         {#each chartsData as data}
-        <div>
-            <Chart {data} {chartMade} parentFuncion={deleteChart} />
-        </div>
+            <div>
+                <Chart {data} {chartMade} />
+            </div>
         {/each}
     </div>
 </div>
