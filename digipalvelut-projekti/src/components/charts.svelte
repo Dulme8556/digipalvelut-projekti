@@ -23,11 +23,7 @@
         "bar (horizontal)",
         "line",
         "pie",
-        "bubble",
         "doughnut",
-        "polarArea",
-        "radar",
-        "scatter",
     ];
 
     let subVertical = "(vertical)"
