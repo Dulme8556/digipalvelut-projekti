@@ -1,6 +1,9 @@
 <script>
     import { getContext, onMount } from "svelte";
     import Chart from "./chart.svelte";
+    import Line from "./chart-config/line"
+
+    let line = new Line();
     
     let lists = getContext("list");
     let selected = lists.selectedValues;
@@ -51,16 +54,6 @@
             loadOldCharts();
         }
     });
-
-    function trimTypeOfChart() {
-        if (typeOfChart.includes(subVertical)) {
-            typeOfChart = typeOfChart.replace(subVertical, "").trim();
-            indexAxis = 'x';
-        } else if (typeOfChart.includes(subHorizontal)) {
-            typeOfChart = typeOfChart.replace(subHorizontal, "").trim();
-            indexAxis = 'y';
-        }
-    }
 
     // all values to arrays
     selected.forEach((element) => {
@@ -117,7 +110,6 @@
 
         return { type: tempType, axis };
     }
-
 
     function createNewChart() {
     const { type, axis } = getTrimmedChartType();
@@ -189,9 +181,11 @@
             generateCharts(element);
         }
         listOfChartData = defaultValues;
+        console.log("lataa vanhat")
+        console.log(chartsData)
     }
 
-    const generateCharts = (element) => {
+    const generateCharts = async (element) => {
         element = JSON.parse(JSON.stringify(element));
 
         chartsData = [
@@ -214,7 +208,6 @@
         typeOfChart = "bar (vertical)";
     };  
 </script>
-
 <div>
     <div class="toolbar">
         <div class="chartName">
