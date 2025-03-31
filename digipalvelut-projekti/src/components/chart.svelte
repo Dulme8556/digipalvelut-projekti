@@ -7,7 +7,6 @@
 
   export let data;
   export let chartMade;
-  export let parentFuncion;
   let id;
   let chartName;
 
@@ -27,7 +26,7 @@
     } else {
       chartName = "";
     }
-
+    
     chartInstance = new Chart(canvas, {
       type: data.type,
       data,
@@ -61,7 +60,6 @@
       // ^^ set OnMount
 
       lists.charts = lists.charts.filter((item) => item.id !== id);
-      parentFuncion()
     }
   }
 
