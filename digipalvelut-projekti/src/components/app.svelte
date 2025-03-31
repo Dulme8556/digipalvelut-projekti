@@ -25,6 +25,7 @@
             {/key}
         </div>
         <!-- bad way to fix a bug -->
+        <!-- Weird bug with charts element where create toolbaar duplicates itelf randomly-->
         {#key `${lists.selectedValues.length}-${lists.charts.length}`}
                 <Charts />
         {/key}
