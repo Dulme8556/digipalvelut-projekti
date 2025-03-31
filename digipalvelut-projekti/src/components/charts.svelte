@@ -115,27 +115,68 @@
     }
 
     function createNewChart() {
-        const { type, axis } = getTrimmedChartType();
+    const { type, axis } = getTrimmedChartType();
 
-        if (
-            datasetDataEnd.length !== 0 ||
-            datasetDataTarget.length !== 0 ||
-            labels.length !== 0
-        ) {
-            listOfChartData[0].id = chartId;
-            listOfChartData[0].title = chartName;
-            listOfChartData[0].type = type; // Use the returned type
-            listOfChartData[0].indexAxis = axis; // Use the returned axis
-            listOfChartData[0].converted = converted;
-            listOfChartData.forEach((element) => {
-                generateCharts(element);
-            });
-            listOfChartData = defaultValues;
+    if (
+        datasetDataEnd.length !== 0 ||
+        datasetDataTarget.length !== 0 ||
+        labels.length !== 0
+    ) {
+        let chartData = {
+            id: chartId,
+            title: chartName,
+            type: type,
+            labels: [...labels],
+            indexAxis: axis,
+            datasets: [],
+        };
+
+        if (type === "doughnut" || type === "pie") {
+            chartData.datasets = [
+                {
+                    label: "Values",
+                    data: [...datasetDataEnd], // Store static data
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        "#4BC0C0",
+                        "#9966FF",
+                    ],
+                },
+            ];
         } else {
-            alert("Necessary data is missing.");
-            return;
+            chartData.datasets = [
+                {
+                    label: "start",
+                    data: [...datasetDataStart],
+                    backgroundColor: "yellow",
+                    minBarLength: 4,
+                },
+                {
+                    label: "end",
+                    data: [...datasetDataEnd],
+                    backgroundColor: "blue",
+                    minBarLength: 4,
+                },
+                {
+                    label: "target",
+                    data: [...datasetDataTarget],
+                    backgroundColor: "red",
+                    minBarLength: 4,
+                },
+            ];
         }
+
+        listOfChartData = [chartData];
+        listOfChartData.forEach((element) => generateCharts(element));
+    } else {
+        alert("Necessary data is missing.");
     }
+    }
+
+    // ^^ createChart button is clicked so it adds new chart
+    // vv load the old ones in onMount
 
     function loadOldCharts(createNew) {
         for (let i = 1; i < listOfChartData.length; i++) {
@@ -148,60 +189,17 @@
     const generateCharts = async (element) => {
         element = JSON.parse(JSON.stringify(element));
 
-        if (element.type === "doughnut" || element.type === "pie") {
-            chartsData = [
-                ...chartsData,
-                {
-                    id: element.id,
-                    title: element.title,
-                    type: element.type,
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: "Values",
-                            data: datasetDataEnd,
-                            backgroundColor: [
-                                "#FF6384",
-                                "#36A2EB",
-                                "#FFCE56",
-                                "#4BC0C0",
-                                "#9966FF",
-                            ],
-                        },
-                    ],
-                },
-            ];
-            lists.charts = chartsData;
-        } else if (element.type === "line") {
-            let line = new Line();
-            if (!element.converted) {
-                element.converted = true;
-
-                line.changeData(element);
-                let newLineData = JSON.parse(JSON.stringify(line.getData()));
-
-                chartsData = [...chartsData, newLineData];
-            } else {
-                chartsData = [...chartsData, element];
-            }
-        } else {
-            chartsData = [
-                ...chartsData,
-                {
-                    id: element.id,
-                    title: element.title,
-                    type: element.type,
-                    labels: element.labels,
-                    indexAxis: element.indexAxis,
-                    datasets: [
-                        { ...element.datasets[0] },
-                        { ...element.datasets[1] },
-                        { ...element.datasets[2] },
-                    ],
-                },
-            ];
-        }
-        lists.charts = chartsData;
+        chartsData = [
+            ...chartsData,
+            {
+                id: element.id,
+                title: element.title,
+                type: element.type,
+                labels: element.labels,
+                indexAxis: element.indexAxis,
+                datasets: element.datasets,
+            },
+        ];
 
         chartMade = true;
         chartName = "";
@@ -210,7 +208,6 @@
         typeOfChart = "bar (vertical)";
     };
 </script>
-
 <div>
     <div class="toolbar">
         <div class="chartName">
