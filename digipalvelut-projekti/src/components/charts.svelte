@@ -1,19 +1,21 @@
 <script>
     import { getContext, onMount } from "svelte";
     import Chart from "./chart.svelte";
-    import Line from "./chart-config/line"
+    import Line from "./chart-config/line";
 
-    let line = new Line();
-    
     let lists = getContext("list");
     let selected = lists.selectedValues;
 
     let chartsData = [];
-    $: chartId = lists.charts.length ? Math.max(...lists.charts.map((t) => t.id)) + 1: 1;
+    $: chartId = lists.charts.length
+        ? Math.max(...lists.charts.map((t) => t.id)) + 1
+        : 1;
 
     let chartName = "";
     let chartMade = false;
-    let indexAxis = '';
+    let indexAxis = "";
+
+    let converted = false;
 
     let datasetDataEnd = [];
     let datasetDataTarget = [];
@@ -29,8 +31,8 @@
         "doughnut",
     ];
 
-    let subVertical = "(vertical)"
-    let subHorizontal = "(horizontal)"
+    let subVertical = "(vertical)";
+    let subHorizontal = "(horizontal)";
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
@@ -48,6 +50,7 @@
                         labels: element.labels,
                         indexAxis: element.indexAxis,
                         datasets: element.datasets,
+                        converted: element.converted,
                     },
                 ];
             });
@@ -65,47 +68,47 @@
 
     // default values for listOfChartData
     let defaultValues = [
-    {
-        id: chartId,
-        title: chartName,
-        type: typeOfChart,
-        labels: labels,
-        indexAxis: indexAxis,
-        datasets: [
-            {
-                label: "start",
-                data: datasetDataStart,
-                backgroundColor: "yellow",
-                minBarLength: 4,  
-            },
-            {
-                label: "end",
-                data: datasetDataEnd,
-                backgroundColor: "blue",
-                minBarLength: 4,
-            },
-            {
-                label: "target",
-                data: datasetDataTarget,
-                backgroundColor: "red",
-                minBarLength: 4,
-            },
-        ],
-    },
-];
-
+        {
+            id: chartId,
+            title: chartName,
+            type: typeOfChart,
+            labels: labels,
+            indexAxis: indexAxis,
+            converted: converted,
+            datasets: [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                    minBarLength: 4,
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                    minBarLength: 4,
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                    minBarLength: 4,
+                },
+            ],
+        },
+    ];
 
     let listOfChartData = [defaultValues[0]];
 
     function getTrimmedChartType() {
         let tempType = typeOfChart;
-        let axis = 'x';
+        let axis = "x";
 
         if (tempType.includes(subVertical)) {
             tempType = tempType.replace(subVertical, "").trim();
         } else if (tempType.includes(subHorizontal)) {
             tempType = tempType.replace(subHorizontal, "").trim();
-            axis = 'y';
+            axis = "y";
         }
 
         return { type: tempType, axis };
@@ -123,6 +126,7 @@
             listOfChartData[0].title = chartName;
             listOfChartData[0].type = type; // Use the returned type
             listOfChartData[0].indexAxis = axis; // Use the returned axis
+            listOfChartData[0].converted = converted;
             listOfChartData.forEach((element) => {
                 generateCharts(element);
             });
@@ -131,8 +135,6 @@
             alert("Necessary data is missing.");
             return;
         }
-        console.log("luo uusi")
-        console.log(chartsData)
     }
 
     function loadOldCharts(createNew) {
@@ -141,8 +143,6 @@
             generateCharts(element);
         }
         listOfChartData = defaultValues;
-        console.log("lataa vanhat")
-        console.log(chartsData)
     }
 
     const generateCharts = async (element) => {
@@ -152,6 +152,7 @@
             chartsData = [
                 ...chartsData,
                 {
+                    id: element.id,
                     title: element.title,
                     type: element.type,
                     labels: labels,
@@ -170,22 +171,19 @@
                     ],
                 },
             ];
+            lists.charts = chartsData;
         } else if (element.type === "line") {
+            let line = new Line();
+            if (!element.converted) {
+                element.converted = true;
+
                 line.changeData(element);
                 let newLineData = JSON.parse(JSON.stringify(line.getData()));
-                
-                setTimeout(() => {
-                    chartsData = [...chartsData, newLineData];
-                }, 1);
-                    
-                // await new Promise(resolve => {
-                //     console.log("odota")
-                //     chartsData = [...chartsData, newLineData];
-                //     console.log(chartsData)
-                //     resolve();
-                // });
-                console.log("valmis")
-                lists.charts = chartsData;
+
+                chartsData = [...chartsData, newLineData];
+            } else {
+                chartsData = [...chartsData, element];
+            }
         } else {
             chartsData = [
                 ...chartsData,
@@ -203,21 +201,16 @@
                 },
             ];
         }
+        lists.charts = chartsData;
 
         chartMade = true;
         chartName = "";
-        indexAxis = 'x';
+        indexAxis = "x";
 
-        lists.charts = chartsData;
         typeOfChart = "bar (vertical)";
     };
-
-    function debug() {
-        console.log(chartsData)
-        lists.charts = chartsData;
-    }
 </script>
-<button onclick={debug}>debug2</button>
+
 <div>
     <div class="toolbar">
         <div class="chartName">
