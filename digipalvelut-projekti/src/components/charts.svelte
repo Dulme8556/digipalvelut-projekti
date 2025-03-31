@@ -36,6 +36,7 @@
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
+        console.log(lists.charts)
 
         if (lists.charts.length > 0) {
             chartsData = [];
@@ -184,6 +185,7 @@
 
             listOfChartData = [chartData];
             listOfChartData.forEach((element) => generateCharts(element));
+            lists.charts = [...lists.charts, chartData]
         } else {
             alert("Necessary data is missing.");
         }
@@ -192,7 +194,7 @@
     // ^^ createChart button is clicked so it adds new chart
     // vv load the old ones in onMount
 
-    function loadOldCharts(createNew) {
+    function loadOldCharts() {
         for (let i = 1; i < listOfChartData.length; i++) {
             let element = listOfChartData[i];
             generateCharts(element);
