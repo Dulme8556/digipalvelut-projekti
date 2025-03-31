@@ -115,64 +115,78 @@
     }
 
     function createNewChart() {
-    const { type, axis } = getTrimmedChartType();
+        const { type, axis } = getTrimmedChartType();
 
-    if (
-        datasetDataEnd.length !== 0 ||
-        datasetDataTarget.length !== 0 ||
-        labels.length !== 0
-    ) {
-        let chartData = {
-            id: chartId,
-            title: chartName,
-            type: type,
-            labels: [...labels],
-            indexAxis: axis,
-            datasets: [],
-        };
+        if (
+            datasetDataEnd.length !== 0 ||
+            datasetDataTarget.length !== 0 ||
+            labels.length !== 0
+        ) {
+            let chartData = {
+                id: chartId,
+                title: chartName,
+                type: type,
+                labels: [...labels],
+                indexAxis: axis,
+                converted: converted,
+                datasets: [],
+            };
 
-        if (type === "doughnut" || type === "pie") {
-            chartData.datasets = [
-                {
-                    label: "Values",
-                    data: [...datasetDataEnd], // Store static data
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#4BC0C0",
-                        "#9966FF",
-                    ],
-                },
-            ];
+            if (type === "doughnut" || type === "pie") {
+                chartData.datasets = [
+                    {
+                        label: "Values",
+                        data: [...datasetDataEnd], // Store static data
+                        backgroundColor: [
+                            "#FF6384",
+                            "#36A2EB",
+                            "#FFCE56",
+                            "#4BC0C0",
+                            "#9966FF",
+                        ],
+                    },
+                ];
+            } else if (chartData.type === "line") {
+                let line = new Line();
+
+                if (!chartData.converted) {
+                    chartData.converted = true;
+
+                    line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
+                    let newLineDataset = JSON.parse(JSON.stringify(line.getData()));
+
+                    chartData.datasets = newLineDataset.datasets;
+                    console.log(newLineDataset.datasets)
+                    chartData.labels = newLineDataset.labels;
+                }
+            } else {
+                chartData.datasets = [
+                    {
+                        label: "start",
+                        data: [...datasetDataStart],
+                        backgroundColor: "yellow",
+                        minBarLength: 4,
+                    },
+                    {
+                        label: "end",
+                        data: [...datasetDataEnd],
+                        backgroundColor: "blue",
+                        minBarLength: 4,
+                    },
+                    {
+                        label: "target",
+                        data: [...datasetDataTarget],
+                        backgroundColor: "red",
+                        minBarLength: 4,
+                    },
+                ];
+            }
+
+            listOfChartData = [chartData];
+            listOfChartData.forEach((element) => generateCharts(element));
         } else {
-            chartData.datasets = [
-                {
-                    label: "start",
-                    data: [...datasetDataStart],
-                    backgroundColor: "yellow",
-                    minBarLength: 4,
-                },
-                {
-                    label: "end",
-                    data: [...datasetDataEnd],
-                    backgroundColor: "blue",
-                    minBarLength: 4,
-                },
-                {
-                    label: "target",
-                    data: [...datasetDataTarget],
-                    backgroundColor: "red",
-                    minBarLength: 4,
-                },
-            ];
+            alert("Necessary data is missing.");
         }
-
-        listOfChartData = [chartData];
-        listOfChartData.forEach((element) => generateCharts(element));
-    } else {
-        alert("Necessary data is missing.");
-    }
     }
 
     // ^^ createChart button is clicked so it adds new chart
@@ -208,6 +222,7 @@
         typeOfChart = "bar (vertical)";
     };
 </script>
+
 <div>
     <div class="toolbar">
         <div class="chartName">

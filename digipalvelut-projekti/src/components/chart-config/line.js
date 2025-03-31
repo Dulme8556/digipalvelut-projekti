@@ -1,43 +1,24 @@
 class Line {
     constructor() {
-        this.chartData = [];
+        this.dataset;
     }
 
-    changeData(data) {
-        let labels = [];
-
-        data.datasets.forEach(element => {
-            labels.push(element.label)
-        })
-
+    changeData(start, end, target, labels) {
         let colorList = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"]
         let datasetList = [];
+        let data = {start: start, end: end, target: target}
 
-        console.log(data)
-
-        for (let i = 0; i < data.labels.length ; i++) {
-            let data1 = []
-            data.datasets.forEach(element => {
-                data1.push(element.data[i])
-            });
-
-            let test = { label: data.labels[i], backgroundColor: colorList[i], data: data1}
-            datasetList.push(test);
+        for (let i = 0; i < labels.length; i++) {
+            let test = [data.start[i], data.end[i], data.target[i]]
+            let dataset = {label: labels[i], data: test, backgroundColor: colorList[i], minBarLength: 4}
+            datasetList.push(dataset)
         }
 
-        this.chartData = {
-            id: data.id,
-            title: data.title,
-            type: data.type,
-            labels: labels,
-            indexAxis: data.indexAxis,
-            converted: true,
-            datasets: datasetList,
-        };
+        this.dataset = {datasets: datasetList, labels: ["start", "end", "target"]};
     }
 
     getData() {
-        return this.chartData
+        return this.dataset
     }
 }
 export default Line;
