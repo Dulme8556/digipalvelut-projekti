@@ -20,7 +20,7 @@
     let rawValue = (newEnd / newTarget) * 100;
     let roundedValue = rawValue.toFixed(0);
     let preciseValue = rawValue.toFixed(3);
-    
+
     newPercent = preciseValue % 1 !== 0 ? `~${roundedValue}` : roundedValue;
 }
 
@@ -46,11 +46,12 @@
             alert("Can't add empty");
             newStart = "";
         } else {
-            lists.list = [
-                ...lists.list,
+            let updatedList = lists.list.map((item) => ({ ...item })); 
+
+            updatedList.push(
                 {
                     id: newId,
-                    check: true,
+                    check:false,
                     name: newName,
                     target: newTarget,
                     start: newStart,
@@ -58,7 +59,10 @@
                     percent: newPercent,
                     unit: newUnit,
                 },
-            ];
+            );
+
+            lists.list = updatedList;
+
             newName = "";
             newTarget = "";
             newStart = "";
@@ -66,7 +70,7 @@
             newPercent = "";
             newUnit = "";
 
-            lists.selectedValues = lists.list;
+            lists.selectedValues = lists.list.filter((item) => item.check);
         }
     }
 </script>

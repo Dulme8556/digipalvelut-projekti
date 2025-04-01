@@ -111,74 +111,76 @@
     }
 
     function createNewChart() {
-        const { type, axis } = getTrimmedChartType();
 
-        if (
-            datasetDataEnd.length !== 0 ||
-            datasetDataTarget.length !== 0 ||
-            labels.length !== 0
-        ) {
-            let chartData = {
-                id: chartId,
-                title: chartName,
-                type: type,
-                labels: [...labels],
-                indexAxis: axis,
-                datasets: [],
-            };
+    let checkedItems = lists.list.filter(item => item.check);  
+    let datasetDataEnd = checkedItems.map(item => item.end);
+    let datasetDataTarget = checkedItems.map(item => item.target);
+    let datasetDataStart = checkedItems.map(item => item.start);
+    let labels = checkedItems.map(item => item.name);
 
-            if (type === "doughnut" || type === "pie") {
-                chartData.datasets = [
-                    {
-                        label: "Values",
-                        data: [...datasetDataEnd], // Store static data
-                        backgroundColor: [
-                            "#FF6384",
-                            "#36A2EB",
-                            "#FFCE56",
-                            "#4BC0C0",
-                            "#9966FF",
-                        ],
-                    },
-                ];
-            } else if (chartData.type === "line") {
-                let line = new Line();
-
-                line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
-                let newLineDataset = JSON.parse(JSON.stringify(line.getData()));
-
-                chartData.datasets = newLineDataset.datasets;
-                chartData.labels = newLineDataset.labels;
-            } else {
-                chartData.datasets = [
-                    {
-                        label: "start",
-                        data: [...datasetDataStart],
-                        backgroundColor: "yellow",
-                        minBarLength: 4,
-                    },
-                    {
-                        label: "end",
-                        data: [...datasetDataEnd],
-                        backgroundColor: "blue",
-                        minBarLength: 4,
-                    },
-                    {
-                        label: "target",
-                        data: [...datasetDataTarget],
-                        backgroundColor: "red",
-                        minBarLength: 4,
-                    },
-                ];
-            }
-
-            listOfChartData = [chartData];
-            listOfChartData.forEach((element) => generateCharts(element));
-            lists.charts = [...lists.charts, chartData]
-        } else {
-            alert("Necessary data is missing.");
-        }
+    if (checkedItems.length === 0) {
+        alert("Error. No indicators selected.");
+        return;
     }
+
+    const { type, axis } = getTrimmedChartType();
+
+    let chartData = {
+        id: chartId,
+        title: chartName,
+        type: type,
+        labels: labels,
+        indexAxis: axis,
+        datasets: []
+    };
+
+    if (type === "doughnut" || type === "pie") {
+        chartData.datasets = [
+            {
+                label: "Values",
+                data: datasetDataEnd,
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#FFCE56",
+                    "#4BC0C0",
+                    "#9966FF"
+                ],
+            },
+        ];
+    } else if (type === "line") {
+        let line = new Line();
+        line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
+        chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
+        chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
+    } else {
+        chartData.datasets = [
+            {
+                label: "start",
+                data: datasetDataStart,
+                backgroundColor: "yellow",
+                minBarLength: 4,
+            },
+            {
+                label: "end",
+                data: datasetDataEnd,
+                backgroundColor: "blue",
+                minBarLength: 4,
+            },
+            {
+                label: "target",
+                data: datasetDataTarget,
+                backgroundColor: "red",
+                minBarLength: 4,
+            },
+        ];
+    }
+
+    listOfChartData = [chartData];
+    listOfChartData.forEach((element) => generateCharts(element));
+    lists.charts = [...lists.charts, chartData];
+}
+
 
     // ^^ createChart button is clicked so it adds new chart
     // vv load the old ones in onMount

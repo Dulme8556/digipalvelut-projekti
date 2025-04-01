@@ -20,17 +20,10 @@
     let checked = $state(check);
     
     onMount(() => {
-        lists.list.forEach((element) => {
-            if (element.id === id) {
-                element.check = checked;
-                element.name = name;
-                element.target = target;
-                element.start = start;
-                element.end = end;
-                element.percent = percent;
-                element.unit = unit;
-            }
-        });
+        let indicator = lists.list.find((item) => item.id === id);
+        if (indicator) {
+            checked = indicator.check;
+        }
     });
     
     export function checkAll() {
@@ -58,8 +51,12 @@
     
     function checkboxClick(event) {
         checked = !checked;
-        lists.list[id - 1].check = checked;
-        
+
+        let indicator = lists.list.find((item) => item.id === id);
+        if (indicator) {
+            indicator.check = checked;
+        }
+
         setTimeout(() => (event.target.checked = checked), 0);
         parentFunction();
     }

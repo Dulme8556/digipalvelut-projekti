@@ -35,7 +35,7 @@
                 ...lists.list,
                 {
                     id: newId,
-                    check: true,
+                    check: false,
                     name: element.Title,
                     target: element.Target,
                     start: element.Start,
