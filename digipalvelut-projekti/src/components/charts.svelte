@@ -15,8 +15,6 @@
     let chartMade = false;
     let indexAxis = "";
 
-    let converted = false;
-
     let datasetDataEnd = [];
     let datasetDataTarget = [];
     let datasetDataStart = [];
@@ -36,7 +34,6 @@
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
-        console.log(lists.charts)
 
         if (lists.charts.length > 0) {
             chartsData = [];
@@ -51,7 +48,6 @@
                         labels: element.labels,
                         indexAxis: element.indexAxis,
                         datasets: element.datasets,
-                        converted: element.converted,
                     },
                 ];
             });
@@ -75,7 +71,6 @@
             type: typeOfChart,
             labels: labels,
             indexAxis: indexAxis,
-            converted: converted,
             datasets: [
                 {
                     label: "start",
@@ -129,7 +124,6 @@
                 type: type,
                 labels: [...labels],
                 indexAxis: axis,
-                converted: converted,
                 datasets: [],
             };
 
@@ -150,16 +144,11 @@
             } else if (chartData.type === "line") {
                 let line = new Line();
 
-                if (!chartData.converted) {
-                    chartData.converted = true;
+                line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
+                let newLineDataset = JSON.parse(JSON.stringify(line.getData()));
 
-                    line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
-                    let newLineDataset = JSON.parse(JSON.stringify(line.getData()));
-
-                    chartData.datasets = newLineDataset.datasets;
-                    console.log(newLineDataset.datasets)
-                    chartData.labels = newLineDataset.labels;
-                }
+                chartData.datasets = newLineDataset.datasets;
+                chartData.labels = newLineDataset.labels;
             } else {
                 chartData.datasets = [
                     {

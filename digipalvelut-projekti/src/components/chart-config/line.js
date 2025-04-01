@@ -10,7 +10,7 @@ class Line {
 
         for (let i = 0; i < labels.length; i++) {
             let test = [data.start[i], data.end[i], data.target[i]]
-            let dataset = {label: labels[i], data: test, backgroundColor: colorList[i], minBarLength: 4}
+            let dataset = {label: labels[i], data: test, backgroundColor: colorList[i]}
             datasetList.push(dataset)
         }
 
