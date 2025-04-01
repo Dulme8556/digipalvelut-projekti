@@ -1,7 +1,6 @@
 <script>
     import { getContext } from "svelte";
     import FileReader from "./file-reader.svelte";
-    let { indicator, value1, value2 } = $props();
 
     let lists = getContext("list");
 
@@ -14,8 +13,7 @@
     let newUnit = $state("");
 
     function percentCalculation() {
-
-    if (!newEnd || !newTarget) return;
+        if (!newEnd || !newTarget) return;
 
     let rawValue = (newEnd / newTarget) * 100;
     let roundedValue = rawValue.toFixed(0);
@@ -24,18 +22,17 @@
     newPercent = preciseValue % 1 !== 0 ? `~${roundedValue}` : roundedValue;
 }
 
+    function addNew() {
+        percentCalculation();
 
-    function addNew(event) {
-        percentCalculation()
-        
         newId = lists.list.length
-        ? Math.max(...lists.list.map((t) => t.id)) + 1
-        : 1;
-        
+            ? Math.max(...lists.list.map((t) => t.id)) + 1
+            : 1;
+
         if (newStart === "") {
             newStart = 0;
         }
-        
+
         if (
             newName === "" &&
             newTarget === "" &&

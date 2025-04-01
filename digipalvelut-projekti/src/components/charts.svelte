@@ -193,7 +193,7 @@
         listOfChartData = defaultValues;
     }
 
-    const generateCharts = async (element) => {
+    const generateCharts = (element) => {
         element = JSON.parse(JSON.stringify(element));
 
         chartsData = [

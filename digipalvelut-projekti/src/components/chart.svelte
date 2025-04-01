@@ -48,7 +48,6 @@
 
   function deleteChart() {
     if (chartInstance) {
-      // Destroy the current chart instance
       chartInstance.destroy();
       chartInstance = null;
       chartMade = false;
@@ -113,8 +112,7 @@
       </div>
     </div>
     <div id="content" style="width:400px; max-height:300px;">
-      <canvas style="width: 400px; max-height:300px;" bind:this={canvas}
-      ></canvas>
+      <canvas style="width: 400px; max-height:300px;" bind:this={canvas}></canvas>
     </div>
   </div>
 {/if}

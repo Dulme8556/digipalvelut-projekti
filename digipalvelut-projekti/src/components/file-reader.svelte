@@ -4,7 +4,7 @@
     import * as XLSX from "xlsx";
 
     let lists = getContext("list");
-    let list = [];
+    let readExcelData = [];
 
     let fileGiven = false;
     let fileInput;
@@ -17,9 +17,9 @@
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
         previewStore.set(JSON.stringify(jsonData, null, 2));
 
-        list = jsonData;
+        readExcelData = jsonData;
 
-        list.forEach((element) => {
+        readExcelData.forEach((element) => {
             let percent;
             let rawValue = (element.End / element.Target) * 100;
             let calculation = rawValue.toFixed(3);
