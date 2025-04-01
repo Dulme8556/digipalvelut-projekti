@@ -6,7 +6,7 @@
 
     let searchQuery = "";
     let lines = [];
-    let allChecked = true;
+    let allChecked = false;
 
     let selectedLines = [];
 
@@ -70,8 +70,8 @@
         }, 1);
     }
 
-    $: filteredIndicators = lists.list.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    $: filteredIndicators = JSON.parse(JSON.stringify(lists.list.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()))),
     );
 
     $: {
@@ -96,7 +96,6 @@
         setTimeout(() => (lists.selectedValues = sortedList), 1)
     }
 </script>
-
 <div class="active-lines">
     <h2>Active indicators</h2>
     <div class="actions-bar">
@@ -124,7 +123,7 @@
             {/each}
         </select>
     </div>
-    {#key sortByValue}
+    {#key `${sortByValue}-${filteredIndicators}`}
         {#if filteredIndicators.length === 0}
             <div class="empty">No data found</div>
         {:else}
