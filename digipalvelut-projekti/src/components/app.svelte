@@ -4,8 +4,8 @@
     import AddNew from "./add-new.svelte";
     import Lines from "./lines.svelte";
     import Charts from "./charts.svelte";
-    import GlobalStyles from "./global-styles.svelte";
     import DownloadFile from "./download-file.svelte";
+    import GlobalStyles from "./global-styles.svelte";
 
     let lists = $state({
         list: [],
@@ -33,7 +33,6 @@
     <DownloadFile />
 </div>
 
-<!-- font is added in here -->
 <GlobalStyles />
 
 <style>
