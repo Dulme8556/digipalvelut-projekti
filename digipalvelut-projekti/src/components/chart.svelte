@@ -14,6 +14,8 @@
   let chartInstance;
   let chartContainer;
 
+  let check = false;
+
   onMount(() => {
     if (!canvas) {
       return;
@@ -80,6 +82,21 @@
 
     doc.save(filename);
   }
+  
+  function checkboxClick() {
+    check = !check
+  }
+
+  // to give needed data to the parent
+  export function returnChartInstance() {
+    return chartInstance;
+  }
+  export function returnCanvas() {
+    return canvas;
+  }
+  export function returnCheck() {
+    return check;
+  }
 </script>
 
 {#if chartMade}
@@ -95,14 +112,15 @@
         {/if}
       </div>
       <div class="buttonContainer">
-        <button class="pdf-download__button" onclick={downloadPDF}>
+        <input type="checkbox" class="chart-button" onclick={checkboxClick}/>
+        <button class="chart-button pdf-download__button" onclick={downloadPDF}>
           <img
             class="pdf-download__image"
             src="./images/download-icon.svg"
             alt=""
           />
         </button>
-        <button class="chart-delete__button" onclick={deleteChart}>
+        <button class="chart-button chart-delete__button" onclick={deleteChart}>
           <img
             class="chart-delete__image"
             src="./images/delete-icon.svg"
@@ -127,7 +145,7 @@
     margin-top: 25px;
   }
 
-  .pdf-download__button {
+  .chart-button {
     display: flex;
     background-color: grey;
     height: 30px;
@@ -136,6 +154,10 @@
     border: 1px solid black;
     border-radius: 3px;
     padding: 0;
+  }
+
+  .pdf-download__button {
+    margin-left: 5px;
   }
 
   .pdf-download__button:hover {
@@ -160,13 +182,6 @@
   }
 
   .chart-delete__button {
-    background-color: grey;
-    height: 30px;
-    width: 30px;
-    justify-self: flex-end;
-    border: 1px solid black;
-    border-radius: 3px;
-    padding: 0;
     margin-left: 5px;
   }
 
