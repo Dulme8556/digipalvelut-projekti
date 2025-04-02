@@ -1,5 +1,7 @@
 <script>
     import { getContext, onMount } from "svelte";
+    import { jsPDF } from "jspdf";
+
     import Chart from "./chart.svelte";
     import Line from "./chart-config/line";
 
@@ -111,76 +113,83 @@
     }
 
     function createNewChart() {
+        let checkedItems = lists.list.filter((item) => item.check);
+        let datasetDataEnd = checkedItems.map((item) => item.end);
+        let datasetDataTarget = checkedItems.map((item) => item.target);
+        let datasetDataStart = checkedItems.map((item) => item.start);
+        let labels = checkedItems.map((item) => item.name);
 
-    let checkedItems = lists.list.filter(item => item.check);  
-    let datasetDataEnd = checkedItems.map(item => item.end);
-    let datasetDataTarget = checkedItems.map(item => item.target);
-    let datasetDataStart = checkedItems.map(item => item.start);
-    let labels = checkedItems.map(item => item.name);
+        if (checkedItems.length === 0) {
+            alert("Error. No indicators selected.");
+            return;
+        }
 
-    if (checkedItems.length === 0) {
-        alert("Error. No indicators selected.");
-        return;
+        const { type, axis } = getTrimmedChartType();
+
+        let chartData = {
+            id: chartId,
+            title: chartName,
+            type: type,
+            labels: labels,
+            indexAxis: axis,
+            datasets: [],
+        };
+
+        if (type === "doughnut" || type === "pie") {
+            chartData.datasets = [
+                {
+                    label: "Values",
+                    data: datasetDataEnd,
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        "#4BC0C0",
+                        "#9966FF",
+                    ],
+                },
+            ];
+        } else if (type === "line") {
+            let line = new Line();
+            line.changeData(
+                datasetDataStart,
+                datasetDataEnd,
+                datasetDataTarget,
+                labels,
+            );
+            chartData.datasets = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).datasets;
+            chartData.labels = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).labels;
+        } else {
+            chartData.datasets = [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                    minBarLength: 4,
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                    minBarLength: 4,
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                    minBarLength: 4,
+                },
+            ];
+        }
+
+        listOfChartData = [chartData];
+        listOfChartData.forEach((element) => generateCharts(element));
+        lists.charts = [...lists.charts, chartData];
     }
-
-    const { type, axis } = getTrimmedChartType();
-
-    let chartData = {
-        id: chartId,
-        title: chartName,
-        type: type,
-        labels: labels,
-        indexAxis: axis,
-        datasets: []
-    };
-
-    if (type === "doughnut" || type === "pie") {
-        chartData.datasets = [
-            {
-                label: "Values",
-                data: datasetDataEnd,
-                backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#4BC0C0",
-                    "#9966FF"
-                ],
-            },
-        ];
-    } else if (type === "line") {
-        let line = new Line();
-        line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
-        chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
-        chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
-    } else {
-        chartData.datasets = [
-            {
-                label: "start",
-                data: datasetDataStart,
-                backgroundColor: "yellow",
-                minBarLength: 4,
-            },
-            {
-                label: "end",
-                data: datasetDataEnd,
-                backgroundColor: "blue",
-                minBarLength: 4,
-            },
-            {
-                label: "target",
-                data: datasetDataTarget,
-                backgroundColor: "red",
-                minBarLength: 4,
-            },
-        ];
-    }
-
-    listOfChartData = [chartData];
-    listOfChartData.forEach((element) => generateCharts(element));
-    lists.charts = [...lists.charts, chartData];
-}
-
 
     // ^^ createChart button is clicked so it adds new chart
     // vv load the old ones in onMount
@@ -214,20 +223,68 @@
 
         typeOfChart = "bar (vertical)";
     };
+
+    // store each charts data
+    let test = [];
+    let storeChartInstances = [];
+    let storeCanvases = [];
+
+    function storeChartData() {
+        storeChartInstances = [];
+        storeCanvases = [];
+        
+        test.forEach((element) => {
+            if (element.returnCheck()) {
+                storeChartInstances.push(element.returnChartInstance());
+                storeCanvases.push(element.returnCanvas());
+            }
+        });
+    }
+
+    // download all selected charts
+    function downloadPDF() {
+        storeChartData();
+
+        if (storeChartInstances.length === 0 || storeCanvases.length === 0) {
+            alert("No selected charts")
+            return;
+        }
+        let chartInstance = storeChartInstances[0];
+        let canvas = storeCanvases[0];
+
+        const chartWidth = canvas.width;
+        const chartHeight = canvas.height;
+        const doc = new jsPDF("l", "mm", [chartWidth, chartHeight]);
+
+        for (let i=0; i < storeCanvases.length; i++) {
+            const imgData = storeCanvases[i].toDataURL("image/png");
+            if (i > 0 ) {
+                doc.addPage()
+            }
+            doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
+        }
+
+        const filename =
+            chartName && chartName.trim() !== ""
+                ? `${chartName}.pdf`
+                : "chart.pdf";
+
+        doc.save(filename);
+    }
 </script>
 
 <div>
     <div class="toolbar">
         <div class="chartName">
             <input
-                style="width: 120px;"
-                placeholder="Chart Name"
-                bind:value={chartName}
+            style="width: 120px;"
+            placeholder="Chart Name"
+            bind:value={chartName}
             />
         </div>
         <select bind:value={typeOfChart} class="selectList">
             {#each chartTypes as s, i}
-                <option value={chartTypes[i]}>{chartTypes[i]}</option>
+            <option value={chartTypes[i]}>{chartTypes[i]}</option>
             {/each}
         </select>
         <div class="chartButton">
@@ -236,10 +293,11 @@
             </button>
         </div>
     </div>
+    <button onclick={downloadPDF} style="margin: 5px 0;">download chosen charts</button>
     <div>
-        {#each chartsData as data}
+        {#each chartsData as data, i}
             <div>
-                <Chart {data} {chartMade} />
+                <Chart {data} {chartMade} bind:this={test[i]} />
             </div>
         {/each}
     </div>
