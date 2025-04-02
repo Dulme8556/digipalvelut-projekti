@@ -41,6 +41,7 @@
     export function values() {
         return {
             id: id,
+            check: check,
             name: name,
             target: target,
             start: start,

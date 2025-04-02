@@ -18,39 +18,53 @@
     });
 
     function selectAll() {
-        lines.forEach((element) => {
+        allChecked = true;
+
+        let filteredArray = lines.filter(item => item !== null)
+
+        filteredArray.forEach((element) => {
             element.checkAll();
         });
-        lists.list.forEach((element) => {
-            element.check = true;
-        });
+        filteredArray.forEach((item) => {
+            if (item.values().id === lists.list[item.values().id-1].id) {
+                lists.list[item.values().id-1].check = true
+            }
+        })
 
-        allChecked = true;
         checkSelected();
     }
 
     function unselectAll() {
-        lines.forEach((element) => {
-            element.uncheckAll();
-        });
-        lists.list.forEach((element) => {
-            element.check = false;
-        });
-
         allChecked = false;
+
+        let filteredArray = lines.filter(item => item !== null)
+
+        filteredArray.forEach((element) => {
+            element.uncheckAll();
+            
+        });
+        filteredArray.forEach((item) => {
+            if (item.values().id === lists.list[item.values().id-1].id) {
+                lists.list[item.values().id-1].check = false
+            }
+        })
+
         checkSelected();
     }
 
     function checkSelected() {
         let count = 0;
         selectedLines = [];
-        lines.forEach((element) => {
+
+        let filteredArray = lines.filter(item => item !== null)
+
+        filteredArray.forEach((element) => {
             if (element.selected()) {
                 count++;
                 selectedLines.push(element.values());
             }
         });
-        if (count !== lines.length) {
+        if (count !== filteredArray.length) {
             allChecked = false;
         } else {
             allChecked = true;
