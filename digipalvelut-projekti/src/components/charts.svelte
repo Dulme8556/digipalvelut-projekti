@@ -120,7 +120,7 @@
         let labels = checkedItems.map((item) => item.name);
 
         if (checkedItems.length === 0) {
-            alert("Error. No indicators selected.");
+            alert("Error: No indicators selected.");
             return;
         }
 
