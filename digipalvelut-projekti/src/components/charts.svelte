@@ -3,7 +3,7 @@
     import { jsPDF } from "jspdf";
 
     import Chart from "./chart.svelte";
-    import Line from "./chart-config/line";
+    import Line from "./chart-config/line.js";
 
     let lists = getContext("list");
     let selected = lists.selectedValues;
@@ -33,6 +33,10 @@
 
     let subVertical = "(vertical)";
     let subHorizontal = "(horizontal)";
+
+    let storeChildComponents = [];
+    let storeCanvases = [];
+    let allChecked = false;
 
     onMount(async () => {
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
@@ -224,44 +228,81 @@
         typeOfChart = "bar (vertical)";
     };
 
-    // store each charts data
-    let test = [];
-    let storeChartInstances = [];
-    let storeCanvases = [];
+    function toggleSelected(selected) {
+        if (selected) {
+            storeChildComponents.forEach(element => {
+                element.checkAll()
+            });
+            allChecked = true;
+        } else {
+            storeChildComponents.forEach(element => {
+                element.uncheckAll()
+            });
+            allChecked = false;
+        }
+    }
+
+    function checkSelected() {
+        let count = 0;
+        storeChildComponents.forEach(element => {
+            if (element.returnCheck()) {
+                count++;
+            }
+        });
+
+        if (count === storeChildComponents.length) {
+            allChecked = true;
+        } else {
+            allChecked = false;
+        }
+    }
 
     function storeChartData() {
-        storeChartInstances = [];
         storeCanvases = [];
         
-        test.forEach((element) => {
+        storeChildComponents.forEach((element) => {
             if (element.returnCheck()) {
-                storeChartInstances.push(element.returnChartInstance());
                 storeCanvases.push(element.returnCanvas());
             }
         });
     }
 
     // download all selected charts
-    function downloadPDF() {
+    async function downloadPDF() {
+        // get the selected charts
         storeChartData();
 
-        if (storeChartInstances.length === 0 || storeCanvases.length === 0) {
+        if (storeCanvases.length === 0) {
             alert("No selected charts")
             return;
         }
-        let chartInstance = storeChartInstances[0];
-        let canvas = storeCanvases[0];
+        const doc = new jsPDF("l", "mm");
+        
+        let pageWidth = doc.internal.pageSize.getWidth();
+        let pageHeight = doc.internal.pageSize.getHeight();
 
-        const chartWidth = canvas.width;
-        const chartHeight = canvas.height;
-        const doc = new jsPDF("l", "mm", [chartWidth, chartHeight]);
+        let margin = 10;
+        let columns = Math.min(2, storeCanvases.length);
+        let rows = Math.ceil(storeCanvases.length / columns);
 
-        for (let i=0; i < storeCanvases.length; i++) {
-            const imgData = storeCanvases[i].toDataURL("image/png");
-            if (i > 0 ) {
-                doc.addPage()
-            }
-            doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
+        let imgWidth = (pageWidth - (columns + 1) * margin) / columns;
+        let imgHeight = (pageHeight - (rows + 1) * margin) / rows;
+
+        for (let i = 0; i < storeCanvases.length; i++) {
+            const img = new Image();
+            img.src = storeCanvases[i].toDataURL("image/png");
+
+            await new Promise((resolve) => {
+                img.onload = () => {
+                    const column = i % columns;
+                    const row = Math.floor(i / columns);
+                    const x = margin + column * (imgWidth + margin);
+                    const y = margin + row * (imgHeight + margin);
+
+                    doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
+                    resolve();
+                }
+            })
         }
 
         const filename =
@@ -293,11 +334,18 @@
             </button>
         </div>
     </div>
-    <button onclick={downloadPDF} style="margin: 5px 0;">download chosen charts</button>
+    <div class="secondLine">
+        <button onclick={downloadPDF} style="margin: 5px 0;">Download chosen charts</button>
+        {#if allChecked}
+            <button onclick={() => toggleSelected(false)}>Unselect all</button>
+        {:else}
+            <button onclick={() => toggleSelected(true)}>Select all</button>
+        {/if}
+    </div>
     <div>
         {#each chartsData as data, i}
             <div>
-                <Chart {data} {chartMade} bind:this={test[i]} />
+                <Chart {data} {chartMade} {checkSelected} bind:this={storeChildComponents[i]} />
             </div>
         {/each}
     </div>

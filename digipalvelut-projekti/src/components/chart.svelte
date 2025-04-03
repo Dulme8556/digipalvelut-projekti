@@ -7,6 +7,7 @@
 
   export let data;
   export let chartMade;
+  export let checkSelected;
   let id;
   let chartName;
 
@@ -14,7 +15,7 @@
   let chartInstance;
   let chartContainer;
 
-  let check = false;
+  let checked = false;
 
   onMount(() => {
     if (!canvas) {
@@ -84,9 +85,17 @@
   }
   
   function checkboxClick() {
-    check = !check
+    checked = !checked;
+    checkSelected()
   }
 
+  export function checkAll() {
+    checked = true;
+  }
+  export function uncheckAll() {
+    checked = false;
+  }
+  
   // to give needed data to the parent
   export function returnChartInstance() {
     return chartInstance;
@@ -95,7 +104,7 @@
     return canvas;
   }
   export function returnCheck() {
-    return check;
+    return checked;
   }
 </script>
 
@@ -112,7 +121,7 @@
         {/if}
       </div>
       <div class="buttonContainer">
-        <input type="checkbox" class="chart-button" onclick={checkboxClick}/>
+        <input type="checkbox" class="chart-button" onclick={checkboxClick} {checked}/>
         <button class="chart-button pdf-download__button" onclick={downloadPDF}>
           <img
             class="pdf-download__image"
