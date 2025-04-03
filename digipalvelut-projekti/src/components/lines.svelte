@@ -88,12 +88,20 @@
         item.name.toLowerCase().includes(searchQuery.toLowerCase()))),
     );
 
-    $: {
-        sortBy(sortByValue);
-    }
+    $: sortBy(sortByValue);
 
     function sortBy(value) {
         let sortedList = lists.list;
+
+        // in progress currently the rounded symbol is completely removed
+        sortedList.forEach(element => {
+            try {
+                element.percent = element.percent.replace("~", "").trim();
+            } catch {
+            }
+            element.percent = Number(element.percent);
+        });
+
         if (value === "oldest") {
             sortedList.sort(({ id: a }, { id: b }) => a - b);
         } else if (value === "newest") {
