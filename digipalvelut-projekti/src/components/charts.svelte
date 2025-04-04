@@ -279,7 +279,7 @@
 
     // download all selected charts
     async function downloadPDF() {
-        
+
         // wait that hte searchQueaqy is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
@@ -295,31 +295,24 @@
         }
         const doc = new jsPDF("l", "mm");
 
-        let pageWidth = doc.internal.pageSize.getWidth();
-        let pageHeight = doc.internal.pageSize.getHeight();
-
-        let margin = 10;
-        let columns = Math.min(2, storeCanvases.length);
-        let rows = Math.ceil(storeCanvases.length / columns);
-
-        let imgWidth = (pageWidth - (columns + 1) * margin) / columns;
-        let imgHeight = (pageHeight - (rows + 1) * margin) / rows;
-
-        for (let i = 0; i < storeCanvases.length; i++) {
-            const img = new Image();
-            img.src = storeCanvases[i].toDataURL("image/png");
-
-            await new Promise((resolve) => {
-                img.onload = () => {
-                    const column = i % columns;
-                    const row = Math.floor(i / columns);
-                    const x = margin + column * (imgWidth + margin);
-                    const y = margin + row * (imgHeight + margin);
-
-                    doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
-                    resolve();
-                };
-            });
+        let x = 0;
+        let y = 0;
+        let columns = 0;
+        for (let i=0; i < storeCanvases.length; i++) {
+            const imgData = storeCanvases[i].toDataURL("image/png");
+            doc.addImage(imgData, "PNG", x, y, 100, 80)
+            x += 100;
+            if (x % 300 === 0) {
+                x = 0;
+                y += 100;
+                columns++;
+                if (columns === 2) {
+                    doc.addPage()
+                    x = 0;
+                    y = 0;
+                    columns = 0;
+                }
+            }
         }
 
         const filename =
@@ -328,6 +321,8 @@
                 : "chart.pdf";
 
         doc.save(filename);
+
+        console.log(storeCanvases.length)
     }
 
     $: filteredCharts = JSON.parse(
@@ -360,7 +355,7 @@
         </div>
     </div>
     <div class="searchbar">
-        <input type="search" placeholder="Search..." bind:value={searchQuery} />
+        <input type="search" style="margin-top: 5px;" placeholder="Search..." bind:value={searchQuery} />
     </div>
     <div class="secondLine">
         <button onclick={downloadPDF} style="margin: 5px 0;"
@@ -373,22 +368,18 @@
         {/if}
     </div>
     {#key filteredCharts}
-        {#if filteredCharts.length === 0}
-            <div class="empty">No data found</div>
-        {:else}
-            <div>
-                {#each filteredCharts as data, i}
-                    <div>
-                        <Chart
-                            {data}
-                            {chartMade}
-                            {checkSelected}
-                            bind:this={storeChildComponents[i]}
-                        />
-                    </div>
-                {/each}
-            </div>
-        {/if}
+        <div>
+            {#each filteredCharts as data, i}
+                <div>
+                    <Chart
+                        {data}
+                        {chartMade}
+                        {checkSelected}
+                        bind:this={storeChildComponents[i]}
+                    />
+                </div>
+            {/each}
+        </div>
     {/key}
 </div>
 
@@ -418,10 +409,5 @@
 
     .chartButton__button:hover {
         cursor: pointer;
-    }
-
-    .empty {
-        padding: 10px;
-        color: gray;
     }
 </style>
