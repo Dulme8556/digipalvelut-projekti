@@ -233,22 +233,28 @@
     };
 
     function toggleSelected(selected) {
+        let tempStoreChild = storeChildComponents.filter(item => item !== null)
+
         if (selected) {
-            storeChildComponents.forEach((element) => {
+            tempStoreChild.forEach((element) => {
                 element.checkAll();
+                lists.charts[element.returnId()-1].check = true;
             });
             allChecked = true;
         } else {
-            storeChildComponents.forEach((element) => {
+            tempStoreChild.forEach((element) => {
                 element.uncheckAll();
+                lists.charts[element.returnId()-1].check = false;
             });
             allChecked = false;
         }
     }
 
     function checkSelected() {
+        let tempStoreChild = storeChildComponents.filter(item => item !== null)
+
         let count = 0;
-        storeChildComponents.forEach((element) => {
+        tempStoreChild.forEach((element) => {
             if (element.returnCheck()) {
                 count++;
             }
@@ -273,6 +279,13 @@
 
     // download all selected charts
     async function downloadPDF() {
+        
+        // wait that hte searchQueaqy is cleared so all charts are shown
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
+
         // get the selected charts
         storeChartData();
 

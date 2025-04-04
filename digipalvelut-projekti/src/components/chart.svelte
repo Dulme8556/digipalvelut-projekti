@@ -43,6 +43,8 @@
 
     // Store the parent container of this chart
     chartContainer = canvas.closest(".chartContainer");
+
+    checked = lists.charts[id-1].check
   });
 
   onDestroy(() => {
@@ -86,6 +88,7 @@
   
   function checkboxClick() {
     checked = !checked;
+    lists.charts[id-1].check = checked;
     checkSelected()
   }
 
@@ -105,6 +108,9 @@
   }
   export function returnCheck() {
     return checked;
+  }
+  export function returnId() {
+    return id;
   }
 </script>
 
