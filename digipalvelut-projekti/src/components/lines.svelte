@@ -93,9 +93,10 @@
     function sortBy(value) {
         let sortedList = lists.list;
 
-        // in progress currently the rounded symbol is completely removed
         sortedList.forEach(element => {
             try {
+                let rawPercent = element.percent.toString().trim();
+                element.isRounded = rawPercent.startsWith("~");
                 element.percent = element.percent.replace("~", "").trim();
             } catch {
             }
@@ -111,6 +112,15 @@
         } else if (value === "lowest") {
             sortedList.sort(({ percent: a }, { percent: b }) => a - b);
         }
+
+        // get '~' symbol back after sorting
+        sortedList.forEach(element => {
+            if (element.isRounded) {
+                element.percent = `~${element.percent}`
+            } else {
+                element.percent = `${element.percent}`
+            }
+        })
 
         // so that charts.svelte gets updated data
         sortedList = lists.selectedValues
