@@ -38,7 +38,10 @@
     let storeCanvases = [];
     let allChecked = false;
 
+    let searchQuery = "";
+
     onMount(async () => {
+        let filteredCharts = lists.charts;
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
 
         if (lists.charts.length > 0) {
@@ -155,6 +158,7 @@
             ];
         } else if (type === "line") {
             let line = new Line();
+
             line.changeData(
                 datasetDataStart,
                 datasetDataEnd,
@@ -230,13 +234,13 @@
 
     function toggleSelected(selected) {
         if (selected) {
-            storeChildComponents.forEach(element => {
-                element.checkAll()
+            storeChildComponents.forEach((element) => {
+                element.checkAll();
             });
             allChecked = true;
         } else {
-            storeChildComponents.forEach(element => {
-                element.uncheckAll()
+            storeChildComponents.forEach((element) => {
+                element.uncheckAll();
             });
             allChecked = false;
         }
@@ -244,7 +248,7 @@
 
     function checkSelected() {
         let count = 0;
-        storeChildComponents.forEach(element => {
+        storeChildComponents.forEach((element) => {
             if (element.returnCheck()) {
                 count++;
             }
@@ -259,7 +263,7 @@
 
     function storeChartData() {
         storeCanvases = [];
-        
+
         storeChildComponents.forEach((element) => {
             if (element.returnCheck()) {
                 storeCanvases.push(element.returnCanvas());
@@ -273,11 +277,11 @@
         storeChartData();
 
         if (storeCanvases.length === 0) {
-            alert("No selected charts")
+            alert("No selected charts");
             return;
         }
         const doc = new jsPDF("l", "mm");
-        
+
         let pageWidth = doc.internal.pageSize.getWidth();
         let pageHeight = doc.internal.pageSize.getHeight();
 
@@ -301,8 +305,8 @@
 
                     doc.addImage(img, "PNG", x, y, imgWidth, imgHeight);
                     resolve();
-                }
-            })
+                };
+            });
         }
 
         const filename =
@@ -312,20 +316,28 @@
 
         doc.save(filename);
     }
+
+    $: filteredCharts = JSON.parse(
+        JSON.stringify(
+            lists.charts.filter((item) =>
+                item.title.toLowerCase().includes(searchQuery.toLowerCase()),
+            ),
+        ),
+    );
 </script>
 
 <div>
     <div class="toolbar">
         <div class="chartName">
             <input
-            style="width: 120px;"
-            placeholder="Chart Name"
-            bind:value={chartName}
+                style="width: 120px;"
+                placeholder="Chart Name"
+                bind:value={chartName}
             />
         </div>
         <select bind:value={typeOfChart} class="selectList">
             {#each chartTypes as s, i}
-            <option value={chartTypes[i]}>{chartTypes[i]}</option>
+                <option value={chartTypes[i]}>{chartTypes[i]}</option>
             {/each}
         </select>
         <div class="chartButton">
@@ -334,21 +346,37 @@
             </button>
         </div>
     </div>
+    <div class="searchbar">
+        <input type="search" placeholder="Search..." bind:value={searchQuery} />
+    </div>
     <div class="secondLine">
-        <button onclick={downloadPDF} style="margin: 5px 0;">Download chosen charts</button>
+        <button onclick={downloadPDF} style="margin: 5px 0;"
+            >Download chosen charts</button
+        >
         {#if allChecked}
             <button onclick={() => toggleSelected(false)}>Unselect all</button>
         {:else}
             <button onclick={() => toggleSelected(true)}>Select all</button>
         {/if}
     </div>
-    <div>
-        {#each chartsData as data, i}
+    {#key filteredCharts}
+        {#if filteredCharts.length === 0}
+            <div class="empty">No data found</div>
+        {:else}
             <div>
-                <Chart {data} {chartMade} {checkSelected} bind:this={storeChildComponents[i]} />
+                {#each filteredCharts as data, i}
+                    <div>
+                        <Chart
+                            {data}
+                            {chartMade}
+                            {checkSelected}
+                            bind:this={storeChildComponents[i]}
+                        />
+                    </div>
+                {/each}
             </div>
-        {/each}
-    </div>
+        {/if}
+    {/key}
 </div>
 
 <style>
@@ -377,5 +405,10 @@
 
     .chartButton__button:hover {
         cursor: pointer;
+    }
+
+    .empty {
+        padding: 10px;
+        color: gray;
     }
 </style>
