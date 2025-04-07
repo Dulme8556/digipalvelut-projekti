@@ -233,25 +233,29 @@
     };
 
     function toggleSelected(selected) {
-        let tempStoreChild = storeChildComponents.filter(item => item !== null)
+        let tempStoreChild = storeChildComponents.filter(
+            (item) => item !== null,
+        );
 
         if (selected) {
             tempStoreChild.forEach((element) => {
                 element.checkAll();
-                lists.charts[element.returnId()-1].check = true;
+                lists.charts[element.returnId() - 1].check = true;
             });
             allChecked = true;
         } else {
             tempStoreChild.forEach((element) => {
                 element.uncheckAll();
-                lists.charts[element.returnId()-1].check = false;
+                lists.charts[element.returnId() - 1].check = false;
             });
             allChecked = false;
         }
     }
 
     function checkSelected() {
-        let tempStoreChild = storeChildComponents.filter(item => item !== null)
+        let tempStoreChild = storeChildComponents.filter(
+            (item) => item !== null,
+        );
 
         let count = 0;
         tempStoreChild.forEach((element) => {
@@ -279,7 +283,6 @@
 
     // download all selected charts
     async function downloadPDF() {
-
         // wait that hte searchQueaqy is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
@@ -293,24 +296,95 @@
             alert("No selected charts");
             return;
         }
-        const doc = new jsPDF("l", "mm");
 
+        let temporary = "";
         let x = 0;
         let y = 0;
-        let columns = 0;
-        for (let i=0; i < storeCanvases.length; i++) {
-            const imgData = storeCanvases[i].toDataURL("image/png");
-            doc.addImage(imgData, "PNG", x, y, 100, 80)
-            x += 100;
-            if (x % 300 === 0) {
-                x = 0;
-                y += 100;
-                columns++;
-                if (columns === 2) {
-                    doc.addPage()
+        let rows = 0;
+        let doc;
+
+        if (storeCanvases.length === 1) {
+            temporary = "l";
+            doc = new jsPDF(temporary, "mm");
+
+            let pageWidth = doc.internal.pageSize.getWidth();
+            let pageHeight = doc.internal.pageSize.getHeight();
+
+            const imgData = storeCanvases[0].toDataURL("image/png");
+            doc.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
+        } else if (storeCanvases.length === 2) {
+            temporary = "p";
+            doc = new jsPDF(temporary, "mm");
+
+            let x = 0;
+            let y = 0;
+
+            let pageWidth = doc.internal.pageSize.getWidth();
+            let pageHeight = doc.internal.pageSize.getHeight();
+
+            let imgWidth = pageWidth;
+            let imgHeight = pageHeight / 2;
+
+            for (let i = 0; i < storeCanvases.length; i++) {
+                const imgData = storeCanvases[i].toDataURL("image/png");
+                doc.addImage(imgData, "PNG", 0, y, imgWidth, imgHeight);
+                if (x % 300 === 0) {
                     x = 0;
-                    y = 0;
-                    columns = 0;
+                    y += 150;
+                    if (rows === 2) {
+                        doc.addPage();
+                        x = 0;
+                        y = 0;
+                        rows = 0;
+                    }
+                }
+            }
+        } else if (storeCanvases.length < 5) {
+            temporary = "l";
+            doc = new jsPDF(temporary, "mm");
+
+            let pageWidth = doc.internal.pageSize.getWidth();
+            let pageHeight = doc.internal.pageSize.getHeight();
+
+            let imgWidth = pageWidth / 2;
+            let imgHeight = 100;
+
+            for (let i = 0; i < storeCanvases.length; i++) {
+                const imgData = storeCanvases[i].toDataURL("image/png");
+                doc.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
+                x += 150;
+                if (x % 300 === 0) {
+                    x = 0;
+                    y += 100;
+                }
+            }
+        } else {
+            temporary = "l";
+            doc = new jsPDF(temporary, "mm");
+
+            let pageWidth = doc.internal.pageSize.getWidth();
+            let pageHeight = doc.internal.pageSize.getHeight();
+
+            // let imgWidth = pageWidth / 3;
+            // let imgHeight = pageHeight / 2;
+
+            let imgWidth = 97;
+            let imgHeight = 100;
+
+            for (let i = 0; i < storeCanvases.length; i++) {
+                const imgData = storeCanvases[i].toDataURL("image/png");
+                doc.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
+                x += 100;
+                if (x % 300 === 0) {
+                    x = 0;
+                    y += 100;
+                    rows++;
+                    if (rows === 2 && i === storeCanvases.length) {
+                        doc.addPage();
+                        x = 0;
+                        y = 0;
+                        rows = 0;
+                    }
                 }
             }
         }
@@ -321,8 +395,6 @@
                 : "chart.pdf";
 
         doc.save(filename);
-
-        console.log(storeCanvases.length)
     }
 
     $: filteredCharts = JSON.parse(
@@ -355,7 +427,12 @@
         </div>
     </div>
     <div class="searchbar">
-        <input type="search" style="margin-top: 5px;" placeholder="Search..." bind:value={searchQuery} />
+        <input
+            type="search"
+            style="margin-top: 5px;"
+            placeholder="Search..."
+            bind:value={searchQuery}
+        />
     </div>
     <div class="secondLine">
         <button onclick={downloadPDF} style="margin: 5px 0;"
