@@ -36,6 +36,8 @@
 
     let storeChildComponents = [];
     let storeCanvases = [];
+    let storeTypes = [];
+    let amountOfRoundCharts = 0;
     let allChecked = false;
 
     let searchQuery = "";
@@ -273,39 +275,66 @@
 
     function storeChartData() {
         storeCanvases = [];
+        storeTypes = [];
 
         storeChildComponents.forEach((element) => {
             if (element.returnCheck()) {
                 storeCanvases.push(element.returnCanvas());
+                storeTypes.push(element.returnType());
             }
         });
     }
 
-    // download all selected charts
+    function sortCanvases() {
+        let typesWithRounds = [];
+        let typesWithoutRounds = [];
+        let typesFinal = [];
+
+        let canvasesWithRounds = [];
+        let canvasesWithoutRounds = [];
+        let canvasesFinal = [];
+
+        for (let i = 0; i < storeCanvases.length; i++) {
+            if (storeTypes[i] === "pie" || storeTypes[i] === "doughnut") {
+                typesWithRounds.push(storeTypes[i]);
+                canvasesWithRounds.push(storeCanvases[i]);
+            } else {
+                typesWithoutRounds.push(storeTypes[i]);
+                canvasesWithoutRounds.push(storeCanvases[i]);
+            }
+        }
+        typesFinal = [...typesWithoutRounds, ...typesWithRounds];
+        canvasesFinal = [...canvasesWithoutRounds, ...canvasesWithRounds];
+        storeTypes = typesFinal;
+        storeCanvases = canvasesFinal;
+
+        amountOfRoundCharts = typesWithRounds.length;
+    }
+
     async function downloadPDF() {
-        // wait that hte searchQueaqy is cleared so all charts are shown
+        // wait that the searchQueary is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
             resolve();
         });
 
-        // get the selected charts
         storeChartData();
+        sortCanvases();
 
         if (storeCanvases.length === 0) {
             alert("No selected charts");
             return;
         }
 
-        let temporary = "";
+        let orientation = "";
         let x = 0;
         let y = 0;
         let rows = 0;
         let doc;
 
         if (storeCanvases.length === 1) {
-            temporary = "l";
-            doc = new jsPDF(temporary, "mm");
+            orientation = "l";
+            doc = new jsPDF(orientation, "mm");
 
             let pageWidth = doc.internal.pageSize.getWidth();
             let pageHeight = doc.internal.pageSize.getHeight();
@@ -313,8 +342,8 @@
             const imgData = storeCanvases[0].toDataURL("image/png");
             doc.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
         } else if (storeCanvases.length === 2) {
-            temporary = "p";
-            doc = new jsPDF(temporary, "mm");
+            orientation = "p";
+            doc = new jsPDF(orientation, "mm");
 
             let x = 0;
             let y = 0;
@@ -340,8 +369,8 @@
                 }
             }
         } else if (storeCanvases.length < 5) {
-            temporary = "l";
-            doc = new jsPDF(temporary, "mm");
+            orientation = "l";
+            doc = new jsPDF(orientation, "mm");
 
             let pageWidth = doc.internal.pageSize.getWidth();
             let pageHeight = doc.internal.pageSize.getHeight();
@@ -359,36 +388,48 @@
                 }
             }
         } else {
-            temporary = "l";
-            doc = new jsPDF(temporary, "mm");
-
-            let pageWidth = doc.internal.pageSize.getWidth();
-            let pageHeight = doc.internal.pageSize.getHeight();
-
-            // let imgWidth = pageWidth / 3;
-            // let imgHeight = pageHeight / 2;
-
-            let imgWidth = 97;
-            let imgHeight = 100;
+            doc = new jsPDF("p", "mm");
+            let firstPie = false;
 
             for (let i = 0; i < storeCanvases.length; i++) {
-                const imgData = storeCanvases[i].toDataURL("image/png");
-                doc.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
-                x += 100;
-                if (x % 300 === 0) {
-                    x = 0;
-                    y += 100;
-                    rows++;
-                    if (rows === 2 && i === storeCanvases.length) {
-                        doc.addPage();
-                        x = 0;
+                const imgURL = storeCanvases[i].toDataURL("image/png");
+
+                const img = new Image();
+                img.src = imgURL;
+
+                const { width, height } = await new Promise((resolve) => {
+                    img.onload = () => {
+                        resolve({ width: img.width, height: img.height });
+                    };
+                });
+
+                if (height > 200) {
+                    x = 110;
+                    y = 0;
+                    if (firstPie) {
+                        y += 104;
+                    }
+                    firstPie = true;
+                }
+
+                doc.addImage(imgURL, "PNG", x, y);
+
+                if (height === 200) {
+                    y += 70;
+                    console.log("i: ",i)
+                    console.log("storeCanvases length: ",storeCanvases.length)
+                    console.log("amount of round charts: ",amountOfRoundCharts)
+                    if (y % 280 === 0 && i === storeCanvases.length - amountOfRoundCharts) {
                         y = 0;
+                        doc.addPage();
                         rows = 0;
+                        // don't know how to make
                     }
                 }
             }
         }
 
+        // currently broken
         const filename =
             chartName && chartName.trim() !== ""
                 ? `${chartName}.pdf`

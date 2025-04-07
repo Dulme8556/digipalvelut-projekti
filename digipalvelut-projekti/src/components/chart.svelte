@@ -105,6 +105,9 @@
     export function returnCanvas() {
         return canvas;
     }
+    export function returnType() {
+        return data.type;
+    }
     export function returnCheck() {
         return checked;
     }
