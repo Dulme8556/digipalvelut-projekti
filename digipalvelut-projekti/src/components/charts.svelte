@@ -37,7 +37,6 @@
     let storeChildComponents = [];
     let storeCanvases = [];
     let storeTypes = [];
-    let amountOfRoundCharts = 0;
     let allChecked = false;
 
     let searchQuery = "";
@@ -286,32 +285,53 @@
     }
 
     function sortCanvases() {
-        let typesWithRounds = [];
-        let typesWithoutRounds = [];
-        let typesFinal = [];
+        let everyOtherList = [];
+        let small = [];
+        let big = [];
 
-        let canvasesWithRounds = [];
-        let canvasesWithoutRounds = [];
-        let canvasesFinal = [];
-
+        // separate bigger charts (pie and doughnut) from smaller ones
         for (let i = 0; i < storeCanvases.length; i++) {
             if (storeTypes[i] === "pie" || storeTypes[i] === "doughnut") {
-                typesWithRounds.push(storeTypes[i]);
-                canvasesWithRounds.push(storeCanvases[i]);
+                big.push(storeCanvases[i]);
             } else {
-                typesWithoutRounds.push(storeTypes[i]);
-                canvasesWithoutRounds.push(storeCanvases[i]);
+                small.push(storeCanvases[i]);
             }
         }
-        typesFinal = [...typesWithoutRounds, ...typesWithRounds];
-        canvasesFinal = [...canvasesWithoutRounds, ...canvasesWithRounds];
-        storeTypes = typesFinal;
-        storeCanvases = canvasesFinal;
 
-        amountOfRoundCharts = typesWithRounds.length;
+        // zip the arrays together
+        for (let i = 0; i < storeCanvases.length; i++) {
+            if (i < small.length) everyOtherList.push(small[i]);
+            if (i < big.length) everyOtherList.push(big[i]);
+        }
+
+        let page = 1;
+        let count = 0;
+        let finalList = {};
+
+        for (let i = 0; i < everyOtherList.length; i++) {
+            if (!finalList[`page${page}`]) {
+                finalList[`page${page}`] = [];
+            }
+            finalList[`page${page}`].push(everyOtherList[i]);
+            count++;
+            if (count === 5) {
+                page++;
+                count = 0;
+            }
+        }
+        return finalList;
     }
 
     async function downloadPDF() {
+        let x = 0;
+        let y = 0;
+        let leftSide = 0;
+        let rightSide = 110;
+        let leftY = 0;
+        let rightY = 20;
+
+        let doc;
+
         // wait that the searchQueary is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
@@ -319,82 +339,23 @@
         });
 
         storeChartData();
-        sortCanvases();
+        let sortedChartList = sortCanvases();
 
-        if (storeCanvases.length === 0) {
+        if (sortedChartList.length === 0) {
             alert("No selected charts");
             return;
         }
 
-        let orientation = "";
-        let x = 0;
-        let y = 0;
-        let rows = 0;
-        let doc;
+        doc = new jsPDF("p", "mm");
 
-        if (storeCanvases.length === 1) {
-            orientation = "l";
-            doc = new jsPDF(orientation, "mm");
-
-            let pageWidth = doc.internal.pageSize.getWidth();
-            let pageHeight = doc.internal.pageSize.getHeight();
-
-            const imgData = storeCanvases[0].toDataURL("image/png");
-            doc.addImage(imgData, "PNG", 0, 0, pageWidth, pageHeight);
-        } else if (storeCanvases.length === 2) {
-            orientation = "p";
-            doc = new jsPDF(orientation, "mm");
-
-            let x = 0;
-            let y = 0;
-
-            let pageWidth = doc.internal.pageSize.getWidth();
-            let pageHeight = doc.internal.pageSize.getHeight();
-
-            let imgWidth = pageWidth;
-            let imgHeight = pageHeight / 2;
-
-            for (let i = 0; i < storeCanvases.length; i++) {
-                const imgData = storeCanvases[i].toDataURL("image/png");
-                doc.addImage(imgData, "PNG", 0, y, imgWidth, imgHeight);
-                if (x % 300 === 0) {
-                    x = 0;
-                    y += 150;
-                    if (rows === 2) {
-                        doc.addPage();
-                        x = 0;
-                        y = 0;
-                        rows = 0;
-                    }
-                }
-            }
-        } else if (storeCanvases.length < 5) {
-            orientation = "l";
-            doc = new jsPDF(orientation, "mm");
-
-            let pageWidth = doc.internal.pageSize.getWidth();
-            let pageHeight = doc.internal.pageSize.getHeight();
-
-            let imgWidth = pageWidth / 2;
-            let imgHeight = 100;
-
-            for (let i = 0; i < storeCanvases.length; i++) {
-                const imgData = storeCanvases[i].toDataURL("image/png");
-                doc.addImage(imgData, "PNG", x, y, imgWidth, imgHeight);
-                x += 150;
-                if (x % 300 === 0) {
-                    x = 0;
-                    y += 100;
-                }
-            }
-        } else {
-            doc = new jsPDF("p", "mm");
-            let firstPie = false;
-
-            for (let i = 0; i < storeCanvases.length; i++) {
-                const imgURL = storeCanvases[i].toDataURL("image/png");
-
+        for (let page in sortedChartList) {
+            const charts = sortedChartList[page];
+            leftY = 0;
+            rightY = 0;
+            
+            for (let i = 0; i < charts.length; i++) {
                 const img = new Image();
+                const imgURL = charts[i].toDataURL("image/png");
                 img.src = imgURL;
 
                 const { width, height } = await new Promise((resolve) => {
@@ -403,38 +364,24 @@
                     };
                 });
 
-                if (height > 200) {
-                    x = 110;
-                    y = 0;
-                    if (firstPie) {
-                        y += 104;
-                    }
-                    firstPie = true;
-                }
-
-                doc.addImage(imgURL, "PNG", x, y);
-
                 if (height === 200) {
-                    y += 70;
-                    console.log("i: ",i)
-                    console.log("storeCanvases length: ",storeCanvases.length)
-                    console.log("amount of round charts: ",amountOfRoundCharts)
-                    if (y % 280 === 0 && i === storeCanvases.length - amountOfRoundCharts) {
-                        y = 0;
-                        doc.addPage();
-                        rows = 0;
-                        // don't know how to make
-                    }
+                    x = leftSide;
+                    y = leftY;
+                    leftY += 120;
+                } else {
+                    x = rightSide;
+                    y = rightY;
+                    rightY += 140;
                 }
+                doc.addImage(imgURL, "PNG", x, y);
             }
+            doc.addPage()
         }
-
         // currently broken
         const filename =
             chartName && chartName.trim() !== ""
                 ? `${chartName}.pdf`
                 : "chart.pdf";
-
         doc.save(filename);
     }
 
