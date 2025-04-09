@@ -200,9 +200,6 @@
         lists.charts = [...lists.charts, chartData];
     }
 
-    // ^^ createChart button is clicked so it adds new chart
-    // vv load the old ones in onMount
-
     function loadOldCharts() {
         for (let i = 1; i < listOfChartData.length; i++) {
             let element = listOfChartData[i];
@@ -380,6 +377,7 @@
         
         storeChartData();
         let sortedChartList = sortCanvases();
+        console.log(sortedChartList)
         
         if (sortedChartList.length === 0) {
             alert("No selected charts");
@@ -388,9 +386,13 @@
         
         doc = new jsPDF("p", "mm");
         let amountOfPages = 0;
+
+        let pageKeys = Object.keys(sortedChartList)
         
-        for (let page in sortedChartList) {
-            const chartSet = sortedChartList[page];
+        // for (let page in sortedChartList) {
+        for (let i = 0; i < pageKeys.length; i++) {
+            let page = pageKeys[i]
+            let chartSet = sortedChartList[page];
 
             amountOfPages++;
             leftY = 0;
@@ -420,7 +422,9 @@
                 doc.addImage(imgURL, "PNG", x, y);
             }
 
-            doc.addPage();
+            if (i < pageKeys.length - 1) {
+                doc.addPage();
+            }
         }
 
         const filename = "chart.pdf";
