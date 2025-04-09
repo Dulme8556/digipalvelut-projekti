@@ -291,32 +291,72 @@
 
         // separate bigger charts (pie and doughnut) from smaller ones
         for (let i = 0; i < storeCanvases.length; i++) {
-            if (storeTypes[i] === "pie" || storeTypes[i] === "doughnut") {
-                big.push(storeCanvases[i]);
+            let type = storeTypes[i];
+            let canvas = storeCanvases[i];
+            let item = { canvas, type };
+
+            if (type === "pie" || type === "doughnut") {
+                big.push(item);
             } else {
-                small.push(storeCanvases[i]);
+                small.push(item);
             }
         }
 
-        // zip the arrays together
-        for (let i = 0; i < storeCanvases.length; i++) {
-            if (i < small.length) everyOtherList.push(small[i]);
-            if (i < big.length) everyOtherList.push(big[i]);
+        let combined = [];
+
+        while (small.length > 0 || big.length > 0) {
+            let counter = 0;
+
+            if (small.length > 0) {
+                combined.push(small.shift());
+                counter++;
+            } else if (big.length > 0) {
+                combined.push(big.shift());
+                counter++;
+            }
+
+            let nextIsNarrow = false;
+            while (counter < 5 && (small.length > 0 || big.length > 0)) {
+                if (nextIsNarrow && small.length > 0) {
+                    combined.push(small.shift());
+                    counter++;
+                } else if (!nextIsNarrow && big.length > 0) {
+                    combined.push(big.shift());
+                    counter++;
+                } else if (small.length > 0) {
+                    combined.push(small.shift());
+                    counter++;
+                } else if (big.length > 0) {
+                    combined.push(big.shift());
+                    counter++;
+                }
+
+                nextIsNarrow = !nextIsNarrow;
+            }
         }
 
         let page = 1;
         let count = 0;
+        let pieCount = 0;
         let finalList = {};
 
-        for (let i = 0; i < everyOtherList.length; i++) {
+        for (let i = 0; i < storeCanvases.length; i++) {
             if (!finalList[`page${page}`]) {
                 finalList[`page${page}`] = [];
             }
-            finalList[`page${page}`].push(everyOtherList[i]);
+            finalList[`page${page}`].push(combined[i].canvas);
             count++;
-            if (count === 5) {
+
+            if (combined[i].type === "pie" || combined[i].type === "doughnut") {
+                pieCount++;
+            }
+            if (
+                count === 5 ||
+                (pieCount === 2 && combined[i+1].type === "pie" || [i].type === "doughnut")
+            ) {
                 page++;
                 count = 0;
+                pieCount = 0;
             }
         }
         return finalList;
@@ -329,59 +369,61 @@
         let rightSide = 110;
         let leftY = 0;
         let rightY = 20;
-
+        
         let doc;
-
+        
         // wait that the searchQueary is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
             resolve();
         });
-
+        
         storeChartData();
         let sortedChartList = sortCanvases();
-
+        
         if (sortedChartList.length === 0) {
             alert("No selected charts");
             return;
         }
-
+        
         doc = new jsPDF("p", "mm");
-
+        let amountOfPages = 0;
+        
         for (let page in sortedChartList) {
-            const charts = sortedChartList[page];
+            const chartSet = sortedChartList[page];
+
+            amountOfPages++;
             leftY = 0;
-            rightY = 0;
-            
-            for (let i = 0; i < charts.length; i++) {
+            rightY = 20;
+
+            for (let i = 0; i < chartSet.length; i++) {
                 const img = new Image();
-                const imgURL = charts[i].toDataURL("image/png");
+                const imgURL = chartSet[i].toDataURL("image/png");
                 img.src = imgURL;
 
-                const { width, height } = await new Promise((resolve) => {
+                const { height } = await new Promise((resolve) => {
                     img.onload = () => {
-                        resolve({ width: img.width, height: img.height });
+                        resolve({ height: img.height });
                     };
                 });
 
                 if (height === 200) {
                     x = leftSide;
                     y = leftY;
-                    leftY += 120;
+                    leftY += 60;
                 } else {
                     x = rightSide;
                     y = rightY;
+                    leftY += 60;
                     rightY += 140;
                 }
                 doc.addImage(imgURL, "PNG", x, y);
             }
-            doc.addPage()
+
+            doc.addPage();
         }
-        // currently broken
-        const filename =
-            chartName && chartName.trim() !== ""
-                ? `${chartName}.pdf`
-                : "chart.pdf";
+
+        const filename = "chart.pdf";
         doc.save(filename);
     }
 
