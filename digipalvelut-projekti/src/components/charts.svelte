@@ -136,6 +136,7 @@
 
         let chartData = {
             id: chartId,
+            check: false,
             title: chartName,
             type: type,
             labels: labels,
@@ -232,14 +233,17 @@
 
     function toggleSelected(selected) {
         let tempStoreChild = storeChildComponents.filter(
-            (item) => item !== null
+            (item) => item !== null,
         );
 
         if (selected) {
             tempStoreChild.forEach((element) => {
                 element.checkAll();
-                let currentChart = lists.charts.find((item) => item.id === element.returnId());
+                let currentChart = lists.charts.find(
+                    (item) => item.id === element.returnId(),
+                );
                 if (currentChart) {
+                    currentChart.check = true;
                     element.check = true;
                 }
             });
@@ -247,8 +251,11 @@
         } else {
             tempStoreChild.forEach((element) => {
                 element.uncheckAll();
-                let currentChart = lists.charts.find((item) => item.id === element.returnId());
+                let currentChart = lists.charts.find(
+                    (item) => item.id === element.returnId(),
+                );
                 if (currentChart) {
+                    currentChart.check = false;
                     element.check = false;
                 }
             });
@@ -355,7 +362,8 @@
             }
             if (
                 count === 5 ||
-                (pieCount === 2 && combined[i+1].type === "pie" || [i].type === "doughnut")
+                (pieCount === 2 && combined[i + 1].type === "pie") ||
+                [i].type === "doughnut"
             ) {
                 page++;
                 count = 0;
@@ -372,31 +380,31 @@
         let rightSide = 110;
         let leftY = 0;
         let rightY = 20;
-        
+
         let doc;
-        
+
         // wait that the searchQueary is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
             resolve();
         });
-        
+
         storeChartData();
         let sortedChartList = sortCanvases();
-        
+
         if (sortedChartList.length === 0) {
             alert("No selected charts");
             return;
         }
-        
+
         doc = new jsPDF("p", "mm");
         let amountOfPages = 0;
 
-        let pageKeys = Object.keys(sortedChartList)
-        
+        let pageKeys = Object.keys(sortedChartList);
+
         // for (let page in sortedChartList) {
         for (let i = 0; i < pageKeys.length; i++) {
-            let page = pageKeys[i]
+            let page = pageKeys[i];
             let chartSet = sortedChartList[page];
 
             amountOfPages++;
