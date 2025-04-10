@@ -44,7 +44,10 @@
         // Store the parent container of this chart
         chartContainer = canvas.closest(".chartContainer");
 
-        checked = lists.charts[id - 1].check;
+        let currentChart = lists.charts.find((item) => item.id === id);
+        if (currentChart) {
+            checked = currentChart.check;
+        }
     });
 
     onDestroy(() => {

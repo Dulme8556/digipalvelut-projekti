@@ -232,19 +232,25 @@
 
     function toggleSelected(selected) {
         let tempStoreChild = storeChildComponents.filter(
-            (item) => item !== null,
+            (item) => item !== null
         );
 
         if (selected) {
             tempStoreChild.forEach((element) => {
                 element.checkAll();
-                lists.charts[element.returnId() - 1].check = true;
+                let currentChart = lists.charts.find((item) => item.id === element.returnId());
+                if (currentChart) {
+                    element.check = true;
+                }
             });
             allChecked = true;
         } else {
             tempStoreChild.forEach((element) => {
                 element.uncheckAll();
-                lists.charts[element.returnId() - 1].check = false;
+                let currentChart = lists.charts.find((item) => item.id === element.returnId());
+                if (currentChart) {
+                    element.check = false;
+                }
             });
             allChecked = false;
         }
@@ -377,7 +383,6 @@
         
         storeChartData();
         let sortedChartList = sortCanvases();
-        console.log(sortedChartList)
         
         if (sortedChartList.length === 0) {
             alert("No selected charts");
