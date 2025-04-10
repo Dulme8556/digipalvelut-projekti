@@ -2,6 +2,7 @@
     import { getContext, onDestroy, onMount } from "svelte";
     import Chart from "chart.js/auto";
     import { jsPDF } from "jspdf";
+    import ChartDataLabels from 'chartjs-plugin-datalabels';
 
     let lists = getContext("list");
 
@@ -22,6 +23,7 @@
             return;
         }
 
+        Chart.register(ChartDataLabels);
         id = data.id;
 
         if (data.title) {
@@ -38,6 +40,14 @@
                 maintainAspectRatio: false,
                 animations: false,
                 indexAxis: data.indexAxis,
+                plugins: {
+                  datalabels: {
+                    color: 'black',
+                    display: data.addInfo,
+                    align: 'center',
+                    formatter: (value) => {value},
+                  }
+                }
             },
         });
 
