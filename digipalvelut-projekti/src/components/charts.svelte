@@ -398,7 +398,6 @@
         }
 
         doc = new jsPDF("p", "mm");
-        let amountOfPages = 0;
 
         let pageKeys = Object.keys(sortedChartList);
 
@@ -407,7 +406,6 @@
             let page = pageKeys[i];
             let chartSet = sortedChartList[page];
 
-            amountOfPages++;
             leftY = 0;
             rightY = 20;
 
@@ -442,6 +440,32 @@
 
         const filename = "chart.pdf";
         doc.save(filename);
+    }
+
+    async function download1PerPage() {
+        storeChartData();
+
+        if (storeCanvases.length === 0) {
+            alert("No selected charts");
+            return;
+        }
+
+        let first = storeCanvases[0];
+        const doc = new jsPDF("l", "px", [first.width, first.height]);
+
+        for (let i = 0; i < storeCanvases.length; i++) {
+            let width = storeCanvases[i].width;
+            let height = storeCanvases[i].height;
+            const imgData = storeCanvases[i].toDataURL("image/png");
+
+            if (i > 0) {
+                doc.addPage([width, height], "l");
+            }
+
+            doc.addImage(imgData, "PNG", 0, 0, width, height);
+        }
+
+        doc.save("chart.pdf");
     }
 
     $: filteredCharts = JSON.parse(
@@ -482,9 +506,13 @@
         />
     </div>
     <div class="secondLine">
-        <button onclick={downloadPDF} style="margin: 5px 0;"
-            >Download chosen charts</button
-        >
+        <!-- the 2 buttons should be done in a way that there is only 1 button -->
+        <button onclick={downloadPDF} style="margin: 5px 0;">
+            Download chosen charts
+        </button>
+        <button onclick={download1PerPage} style="margin: 5px 0;">
+            Download 1 chart per page
+        </button>
         {#if allChecked}
             <button onclick={() => toggleSelected(false)}>Unselect all</button>
         {:else}
