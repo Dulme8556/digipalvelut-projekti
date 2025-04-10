@@ -93,7 +93,11 @@
 
     function checkboxClick() {
         checked = !checked;
-        lists.charts[id - 1].check = checked;
+
+        let currentChart = lists.charts.find((item) => item.id === id);
+        if (currentChart) {
+            currentChart.check = checked;
+        }
         checkSelected();
     }
 
@@ -103,7 +107,7 @@
     export function uncheckAll() {
         checked = false;
     }
-    
+
     // to give needed data to the parent
     export function returnCanvas() {
         return canvas;

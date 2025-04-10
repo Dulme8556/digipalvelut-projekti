@@ -136,6 +136,7 @@
 
         let chartData = {
             id: chartId,
+            check: false,
             title: chartName,
             type: type,
             labels: labels,
@@ -232,14 +233,17 @@
 
     function toggleSelected(selected) {
         let tempStoreChild = storeChildComponents.filter(
-            (item) => item !== null
+            (item) => item !== null,
         );
 
         if (selected) {
             tempStoreChild.forEach((element) => {
                 element.checkAll();
-                let currentChart = lists.charts.find((item) => item.id === element.returnId());
+                let currentChart = lists.charts.find(
+                    (item) => item.id === element.returnId(),
+                );
                 if (currentChart) {
+                    currentChart.check = true;
                     element.check = true;
                 }
             });
@@ -247,8 +251,11 @@
         } else {
             tempStoreChild.forEach((element) => {
                 element.uncheckAll();
-                let currentChart = lists.charts.find((item) => item.id === element.returnId());
+                let currentChart = lists.charts.find(
+                    (item) => item.id === element.returnId(),
+                );
                 if (currentChart) {
+                    currentChart.check = false;
                     element.check = false;
                 }
             });
@@ -355,7 +362,8 @@
             }
             if (
                 count === 5 ||
-                (pieCount === 2 && combined[i+1].type === "pie" || [i].type === "doughnut")
+                (pieCount === 2 && combined[i + 1].type === "pie") ||
+                [i].type === "doughnut"
             ) {
                 page++;
                 count = 0;
@@ -373,34 +381,32 @@
         let rightSide = 110;
         let leftY = 0;
         let rightY = 20;
-        
+
         let doc;
-        
+
         // wait that the searchQueary is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
             resolve();
         });
-        
+
         storeChartData();
         let sortedChartList = sortCanvases();
-        
+
         if (sortedChartList.length === 0) {
             alert("No selected charts");
             return;
         }
-        
-        doc = new jsPDF("p", "mm");
-        let amountOfPages = 0;
 
-        let pageKeys = Object.keys(sortedChartList)
-        
+        doc = new jsPDF("p", "mm");
+
+        let pageKeys = Object.keys(sortedChartList);
+
         // for (let page in sortedChartList) {
         for (let i = 0; i < pageKeys.length; i++) {
-            let page = pageKeys[i]
+            let page = pageKeys[i];
             let chartSet = sortedChartList[page];
 
-            amountOfPages++;
             leftY = 0;
             rightY = 20;
 
@@ -435,6 +441,32 @@
 
         const filename = "chart.pdf";
         doc.save(filename);
+    }
+
+    async function download1PerPage() {
+        storeChartData();
+
+        if (storeCanvases.length === 0) {
+            alert("No selected charts");
+            return;
+        }
+
+        let first = storeCanvases[0];
+        const doc = new jsPDF("l", "px", [first.width, first.height]);
+
+        for (let i = 0; i < storeCanvases.length; i++) {
+            let width = storeCanvases[i].width;
+            let height = storeCanvases[i].height;
+            const imgData = storeCanvases[i].toDataURL("image/png");
+
+            if (i > 0) {
+                doc.addPage([width, height], "l");
+            }
+
+            doc.addImage(imgData, "PNG", 0, 0, width, height);
+        }
+
+        doc.save("chart.pdf");
     }
 
     $: filteredCharts = JSON.parse(
@@ -475,9 +507,13 @@
         />
     </div>
     <div class="secondLine">
-        <button onclick={downloadPDF} style="margin: 5px 0;"
-            >Download chosen charts</button
-        >
+        <!-- the 2 buttons should be done in a way that there is only 1 button -->
+        <button onclick={downloadPDF} style="margin: 5px 0;">
+            Download chosen charts
+        </button>
+        <button onclick={download1PerPage} style="margin: 5px 0;">
+            Download 1 chart per page
+        </button>
         {#if allChecked}
             <button onclick={() => toggleSelected(false)}>Unselect all</button>
         {:else}
