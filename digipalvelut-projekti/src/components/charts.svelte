@@ -490,27 +490,29 @@
             <label style="align-content:center;" for="addInfo">Show exact values</label>
         </div>
     </div>
-    <div class="searchbar">
+    <div class="secondLine">
         <input
             type="search"
             style="margin-top: 5px;"
             placeholder="Search..."
             bind:value={searchQuery}
         />
-    </div>
-    <div class="secondLine">
-        <!-- the 2 buttons should be done in a way that there is only 1 button -->
-        <button onclick={downloadPDF} style="margin: 5px 0;">
-            Download chosen charts
-        </button>
-        <button onclick={download1PerPage} style="margin: 5px 0;">
-            Download 1 chart per page
-        </button>
         {#if allChecked}
-            <button onclick={() => toggleSelected(false)}>Unselect all</button>
+            <button class="toggleButton" onclick={() => toggleSelected(false)}>Unselect all</button>
         {:else}
-            <button onclick={() => toggleSelected(true)}>Select all</button>
+            <button class="toggleButton" onclick={() => toggleSelected(true)}>Select all</button>
         {/if}
+    </div>
+    <div class="thirdLine">
+        <!-- the 2 buttons should be done in a way that there is only 1 button -->
+        <div class="downloadButtons">
+            <button class="first_downloadButton" onclick={downloadPDF} style="margin: 5px 0; margin-right: 5px;">
+                Download chosen charts
+            </button>
+            <button onclick={download1PerPage} style="margin: 5px 0;">
+                Download 1 chart per page
+            </button>
+        </div>
     </div>
     {#key filteredCharts}
         <div>
@@ -554,5 +556,21 @@
 
     .chartButton__button:hover {
         cursor: pointer;
+    }
+
+    .secondLine {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .downloadButtons {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .toggleButton {
+        margin-top: 5px;
+        margin-left: 10px;
+        height: 20px;
     }
 </style>
