@@ -25,11 +25,9 @@
         filteredArray.forEach((element) => {
             element.checkAll();
         });
-        filteredArray.forEach((item) => {
-            if (item.values().id === lists.list[item.values().id-1].id) {
-                lists.list[item.values().id-1].check = true
-            }
-        })
+        lists.list.forEach((element) => {
+            element.check = true;
+        });
 
         checkSelected();
     }
@@ -43,11 +41,9 @@
             element.uncheckAll();
             
         });
-        filteredArray.forEach((item) => {
-            if (item.values().id === lists.list[item.values().id-1].id) {
-                lists.list[item.values().id-1].check = false
-            }
-        })
+        lists.list.forEach((element) => {
+            element.check = false;
+        });
 
         checkSelected();
     }
