@@ -386,7 +386,7 @@
 
         let doc;
 
-        // wait that the searchQueary is cleared so all charts are shown
+        // wait that the searchQuery is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
             resolve();
@@ -395,8 +395,8 @@
         storeChartData();
         let sortedChartList = sortCanvases();
 
-        if (sortedChartList.length === 0) {
-            alert("No selected charts");
+        if (storeCanvases.length === 0) {
+            alert("No charts selected");
             return;
         }
 
@@ -446,10 +446,16 @@
     }
 
     async function download1PerPage() {
-        storeChartData();
+        // wait that the searchQuery is cleared so all charts are shown
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
 
+        storeChartData();
+        
         if (storeCanvases.length === 0) {
-            alert("No selected charts");
+            alert("No charts selected");
             return;
         }
 
