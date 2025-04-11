@@ -123,78 +123,86 @@
     }
 
     function createNewChart() {
-    let checkedItems = lists.list.filter((item) => item.check);
-    let datasetDataEnd = checkedItems.map((item) => item.end);
-    let datasetDataTarget = checkedItems.map((item) => item.target);
-    let datasetDataStart = checkedItems.map((item) => item.start);
-    let labels = checkedItems.map((item) => item.name);
+        let checkedItems = lists.selectedValues;
+        let datasetDataEnd = checkedItems.map((item) => item.end);
+        let datasetDataTarget = checkedItems.map((item) => item.target);
+        let datasetDataStart = checkedItems.map((item) => item.start);
+        let labels = checkedItems.map((item) => item.name);
 
-    if (checkedItems.length === 0) {
-        alert("Error: No indicators selected.");
-        return;
+        if (checkedItems.length === 0) {
+            alert("Error: No indicators selected.");
+            return;
+        }
+
+        const { type, axis } = getTrimmedChartType();
+
+        let chartData = {
+            id: chartId,
+            check: false,
+            title: chartName,
+            type: type,
+            labels: labels,
+            indexAxis: axis,
+            datasets: [],
+            addInfo: addInfo, // Pass the addInfo flag here
+        };
+
+        // Create datasets based on chart type
+        if (type === "doughnut" || type === "pie") {
+            chartData.datasets = [
+                {
+                    label: "Values",
+                    data: datasetDataEnd,
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        "#4BC0C0",
+                        "#9966FF",
+                    ],
+                },
+            ];
+        } else if (type === "line") {
+            let line = new Line();
+            line.changeData(
+                datasetDataStart,
+                datasetDataEnd,
+                datasetDataTarget,
+                labels,
+            );
+            chartData.datasets = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).datasets;
+            chartData.labels = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).labels;
+        } else {
+            chartData.datasets = [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                    minBarLength: 4,
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                    minBarLength: 4,
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                    minBarLength: 4,
+                },
+            ];
+        }
+
+        listOfChartData = [chartData];
+        listOfChartData.forEach((element) => generateCharts(element));
+        lists.charts = [...lists.charts, chartData];
     }
-
-    const { type, axis } = getTrimmedChartType();
-
-    let chartData = {
-        id: chartId,
-        check: false,
-        title: chartName,
-        type: type,
-        labels: labels,
-        indexAxis: axis,
-        datasets: [],
-        addInfo: addInfo // Pass the addInfo flag here
-    };
-
-    // Create datasets based on chart type
-    if (type === "doughnut" || type === "pie") {
-        chartData.datasets = [
-            {
-                label: "Values",
-                data: datasetDataEnd,
-                backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#4BC0C0",
-                    "#9966FF",
-                ],
-            },
-        ];
-    } else if (type === "line") {
-        let line = new Line();
-        line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
-        chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
-        chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
-    } else {
-        chartData.datasets = [
-            {
-                label: "start",
-                data: datasetDataStart,
-                backgroundColor: "yellow",
-                minBarLength: 4,
-            },
-            {
-                label: "end",
-                data: datasetDataEnd,
-                backgroundColor: "blue",
-                minBarLength: 4,
-            },
-            {
-                label: "target",
-                data: datasetDataTarget,
-                backgroundColor: "red",
-                minBarLength: 4,
-            },
-        ];
-    }
-
-    listOfChartData = [chartData];
-    listOfChartData.forEach((element) => generateCharts(element));
-    lists.charts = [...lists.charts, chartData];
-}
-
 
     function loadOldCharts() {
         for (let i = 1; i < listOfChartData.length; i++) {
@@ -227,12 +235,16 @@
     };
 
     function toggleSelected(selected) {
-        let tempStoreChild = storeChildComponents.filter(item => item !== null);
+        let tempStoreChild = storeChildComponents.filter(
+            (item) => item !== null,
+        );
 
-        tempStoreChild.forEach(element => {
+        tempStoreChild.forEach((element) => {
             const chartId = element.returnId();
-            const currentChart = lists.charts.find(item => item.id === chartId);
-        
+            const currentChart = lists.charts.find(
+                (item) => item.id === chartId,
+            );
+
             if (selected) {
                 element.checkAll();
                 if (currentChart) {
@@ -302,6 +314,7 @@
 
         let combined = [];
 
+        // combine the two lists in a certain way
         while (small.length > 0 || big.length > 0) {
             let counter = 0;
 
@@ -333,6 +346,7 @@
             }
         }
 
+        // divide the list into pages
         let page = 1;
         let count = 0;
         let pieCount = 0;
@@ -351,16 +365,16 @@
             if (
                 count === 5 ||
                 (pieCount === 2 && combined[i + 1].type === "pie") ||
-                [i].type === "doughnut"
+                [i+1].type === "doughnut"
             ) {
                 page++;
                 count = 0;
                 pieCount = 0;
             }
         }
+
         return finalList;
     }
-
 
     async function downloadPDF() {
         let x = 0;
@@ -485,8 +499,13 @@
                 Create a chart
             </button>
         </div>
-        <div style='display:flex; align-items:flex-end; margin-left:10px;'>
-            <input style="width:15px; height:15px;" type="checkbox" id="addInfo" bind:checked={addInfo} />
+        <div style="display:flex; align-items:flex-end; margin-left:10px;">
+            <input
+                style="width:15px; height:15px;"
+                type="checkbox"
+                id="addInfo"
+                bind:checked={addInfo}
+            />
             <label style="align-content:center;" for="addInfo">Show exact values</label>
         </div>
     </div>
@@ -498,15 +517,23 @@
             bind:value={searchQuery}
         />
         {#if allChecked}
-            <button class="toggleButton" onclick={() => toggleSelected(false)}>Unselect all</button>
+            <button class="toggleButton" onclick={() => toggleSelected(false)}
+                >Unselect all</button
+            >
         {:else}
-            <button class="toggleButton" onclick={() => toggleSelected(true)}>Select all</button>
+            <button class="toggleButton" onclick={() => toggleSelected(true)}
+                >Select all</button
+            >
         {/if}
     </div>
     <div class="thirdLine">
         <!-- the 2 buttons should be done in a way that there is only 1 button -->
         <div class="downloadButtons">
-            <button class="first_downloadButton" onclick={downloadPDF} style="margin: 5px 0; margin-right: 5px;">
+            <button
+                class="first_downloadButton"
+                onclick={downloadPDF}
+                style="margin: 5px 0; margin-right: 5px;"
+            >
                 Download chosen charts
             </button>
             <button onclick={download1PerPage} style="margin: 5px 0;">
