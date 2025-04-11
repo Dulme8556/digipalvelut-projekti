@@ -20,13 +20,13 @@
     function selectAll() {
         allChecked = true;
 
-        let filteredArray = lines.filter(item => item !== null)
+        let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
             element.checkAll();
-        });
-        lists.list.forEach((element) => {
-            element.check = true;
+
+            let currentLine = lists.list.find((x) => x.id === element.values().id);
+            if (currentLine) currentLine.check = true;
         });
 
         checkSelected();
@@ -35,37 +35,51 @@
     function unselectAll() {
         allChecked = false;
 
-        let filteredArray = lines.filter(item => item !== null)
+        let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
             element.uncheckAll();
-            
-        });
-        lists.list.forEach((element) => {
-            element.check = false;
+
+            let currentLine = lists.list.find((x) => x.id === element.values().id);
+            if (currentLine) currentLine.check = false;
         });
 
         checkSelected();
     }
 
-    function checkSelected() {
+    async function checkSelected() {
+        let saveSearchQuery = searchQuery
+        let saveLength = filteredIndicators.length
+
+        console.log("functio done")
+
+        await new Promise((resolve) => {
+            // searchQuery = "";
+            resolve();
+        });
+
+
         let count = 0;
         selectedLines = [];
 
-        let filteredArray = lines.filter(item => item !== null)
+        let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
             if (element.selected()) {
                 count++;
                 selectedLines.push(element.values());
+                console.log("selected status: ", element.selected())
             }
         });
-        if (count !== filteredArray.length) {
+        if (count !== saveLength) {
             allChecked = false;
         } else {
             allChecked = true;
         }
         lists.selectedValues = selectedLines;
+
+        // return the searchQuery
+        // searchQuery = saveSearchQuery
     }
 
     function updateValues() {
@@ -80,22 +94,26 @@
         }, 1);
     }
 
-    $: filteredIndicators = JSON.parse(JSON.stringify(lists.list.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()))),
+    $: filteredIndicators = JSON.parse(
+        JSON.stringify(
+            lists.list.filter((item) =>
+                item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+            ),
+        ),
     );
 
     $: sortBy(sortByValue);
 
+
     function sortBy(value) {
         let sortedList = lists.list;
 
-        sortedList.forEach(element => {
+        sortedList.forEach((element) => {
             try {
                 let rawPercent = element.percent.toString().trim();
                 element.isRounded = rawPercent.startsWith("~");
                 element.percent = element.percent.replace("~", "").trim();
-            } catch {
-            }
+            } catch {}
             element.percent = Number(element.percent);
         });
 
@@ -110,20 +128,25 @@
         }
 
         // get '~' symbol back after sorting
-        sortedList.forEach(element => {
+        sortedList.forEach((element) => {
             if (element.isRounded) {
-                element.percent = `~${element.percent}`
+                element.percent = `~${element.percent}`;
             } else {
-                element.percent = `${element.percent}`
+                element.percent = `${element.percent}`;
             }
-        })
+        });
 
         // so that charts.svelte gets updated data
-        sortedList = lists.selectedValues
-        lists.selectedValues = []
-        setTimeout(() => (lists.selectedValues = sortedList), 1)
+        sortedList = lists.selectedValues;
+        lists.selectedValues = [];
+        setTimeout(() => (lists.selectedValues = sortedList), 1);
+    }
+
+    function debug() {
+        console.log(filteredIndicators)
     }
 </script>
+<button onclick={debug} style="height: 50px; margin-top: 300px">debug</button>
 <div class="active-lines">
     <h2>Active indicators</h2>
     <div class="actions-bar">
