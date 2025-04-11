@@ -54,7 +54,7 @@
         console.log("functio done")
 
         await new Promise((resolve) => {
-            // searchQuery = "";
+            searchQuery = "";
             resolve();
         });
 
@@ -79,7 +79,7 @@
         lists.selectedValues = selectedLines;
 
         // return the searchQuery
-        // searchQuery = saveSearchQuery
+        searchQuery = saveSearchQuery
     }
 
     function updateValues() {
@@ -103,7 +103,6 @@
     );
 
     $: sortBy(sortByValue);
-
 
     function sortBy(value) {
         let sortedList = lists.list;
