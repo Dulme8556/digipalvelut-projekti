@@ -6,7 +6,7 @@
 
     let searchQuery = "";
     let lines = [];
-    let allChecked = false
+    let allChecked = false;
 
     let selectedLines = [];
 
@@ -25,8 +25,11 @@
         filteredArray.forEach((element) => {
             element.checkAll();
 
-            let currentLine = lists.list.find((x) => x.id === element.values().id);
+            let currentLine = lists.list.find(
+                (x) => x.id === element.values().id,
+            );
             if (currentLine) currentLine.check = true;
+            lists.list = [...lists.list];
         });
 
         checkSelected();
@@ -40,34 +43,37 @@
         filteredArray.forEach((element) => {
             element.uncheckAll();
 
-            let currentLine = lists.list.find((x) => x.id === element.values().id);
+            let currentLine = lists.list.find(
+                (x) => x.id === element.values().id,
+            );
             if (currentLine) currentLine.check = false;
+            lists.list = [...lists.list];
         });
 
         checkSelected();
     }
 
     async function checkSelected() {
-        let saveLength = filteredIndicators.length
-
-        console.log("functio active")
+        let saveSearchQuery = searchQuery;
+        let saveLength = filteredIndicators.length;
 
         let count = 0;
         selectedLines = [];
 
-        let filteredArray = lines.filter((item) => item !== null);
-
-        filteredArray.forEach((element) => {
-            if (element.selected()) {
+        for (let i = 0; i < filteredIndicators.length; i++) {
+            let current = filteredIndicators[i];
+            if (current.check) {
+                selectedLines.push(current);
                 count++;
-                selectedLines.push(element.values());
             }
-        });
-        if (count !== saveLength) {
+        }
+
+        if (count !== filteredIndicators.length) {
             allChecked = false;
         } else {
             allChecked = true;
         }
+
         lists.selectedValues = selectedLines;
     }
 
@@ -83,12 +89,8 @@
         }, 1);
     }
 
-    $: filteredIndicators = JSON.parse(
-        JSON.stringify(
-            lists.list.filter((item) =>
-                item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-            ),
-        ),
+    $: filteredIndicators = lists.list.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
     $: sortBy(sortByValue);
@@ -130,37 +132,43 @@
         setTimeout(() => (lists.selectedValues = sortedList), 1);
     }
 
-    function debug() {
-        console.log(filteredIndicators)
+    async function saveSelectedLines() {
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
+        checkSelected()
     }
 </script>
-<button onclick={debug} style="height: 50px; margin-top: 300px">debug</button>
+
 <div class="active-lines">
     <h2>Active indicators</h2>
     <div class="actions-bar">
         <div class="button-group">
             {#if allChecked}
-                <button class="select__button" onclick={unselectAll}>
-                    Unselect all
-                </button>
+            <button class="select__button" onclick={unselectAll}>
+                Unselect all
+            </button>
             {:else}
-                <button class="select__button" onclick={selectAll}>
-                    Select all
-                </button>
+            <button class="select__button" onclick={selectAll}>
+                Select all
+            </button>
             {/if}
         </div>
         <input
-            id="searchbar"
-            class="searchbar"
-            bind:value={searchQuery}
-            placeholder="Search indicators..."
-            type="text"
+        id="searchbar"
+        class="searchbar"
+        bind:value={searchQuery}
+        placeholder="Search indicators..."
+        type="text"
         />
         <select bind:value={sortByValue} class="selectList">
             {#each sortingOptions as s, i}
-                <option value={sortingOptions[i]}>{sortingOptions[i]}</option>
+            <option value={sortingOptions[i]}>{sortingOptions[i]}</option>
             {/each}
         </select>
+        <!-- don't know how to fix without save button -->
+        <button onclick={saveSelectedLines} style="height: 30px; margin-left: 10px">Save</button>
     </div>
     {#key `${sortByValue}-${filteredIndicators}`}
         {#if filteredIndicators.length === 0}
@@ -205,7 +213,7 @@
     .actions-bar {
         display: flex;
         flex-direction: row;
-        width: 600px;
+        width: 650px;
     }
 
     .button-group {
