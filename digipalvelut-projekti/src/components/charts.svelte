@@ -8,6 +8,8 @@
     let lists = getContext("list");
     let selected = lists.selectedValues;
 
+
+
     let addInfo = false;
 
     let chartsData = [];
@@ -123,7 +125,7 @@
     }
 
     function createNewChart() {
-        let checkedItems = lists.selectedValues;
+        let checkedItems = selected;
         let datasetDataEnd = checkedItems.map((item) => item.end);
         let datasetDataTarget = checkedItems.map((item) => item.target);
         let datasetDataStart = checkedItems.map((item) => item.start);
@@ -417,13 +419,13 @@
                 const imgURL = chartSet[i].toDataURL("image/png");
                 img.src = imgURL;
 
-                const { height } = await new Promise((resolve) => {
+                const { width, height } = await new Promise((resolve) => {
                     img.onload = () => {
-                        resolve({ height: img.height });
+                        resolve({ width: img.width, height: img.height });
                     };
                 });
 
-                if (height === 200) {
+                if (height === width / 2) {
                     x = leftSide;
                     y = leftY;
                     leftY += 60;
