@@ -6,7 +6,7 @@
 
     let searchQuery = "";
     let lines = [];
-    let allChecked = false;
+    let allChecked = false
 
     let selectedLines = [];
 
@@ -48,16 +48,9 @@
     }
 
     async function checkSelected() {
-        let saveSearchQuery = searchQuery
         let saveLength = filteredIndicators.length
 
-        console.log("functio done")
-
-        await new Promise((resolve) => {
-            searchQuery = "";
-            resolve();
-        });
-
+        console.log("functio active")
 
         let count = 0;
         selectedLines = [];
@@ -68,7 +61,6 @@
             if (element.selected()) {
                 count++;
                 selectedLines.push(element.values());
-                console.log("selected status: ", element.selected())
             }
         });
         if (count !== saveLength) {
@@ -77,9 +69,6 @@
             allChecked = true;
         }
         lists.selectedValues = selectedLines;
-
-        // return the searchQuery
-        searchQuery = saveSearchQuery
     }
 
     function updateValues() {
