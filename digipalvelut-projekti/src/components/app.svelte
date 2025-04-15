@@ -27,7 +27,6 @@
             {#key lists.list.length}
                 <Lines />
             {/key}
-            <!-- Weird bug with charts element where create toolbaar duplicates itelf randomly-->
             {#key `${lists.selectedValues.length}-${lists.charts.length}`}
                 <Charts />
             {/key}
