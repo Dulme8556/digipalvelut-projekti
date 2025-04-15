@@ -7,7 +7,6 @@
     let lists = getContext("list");
 
     export let data;
-    export let chartMade;
     export let checkSelected;
     let id;
     let chartName;
@@ -70,7 +69,6 @@
         if (chartInstance) {
             chartInstance.destroy();
             chartInstance = null;
-            chartMade = false;
 
             // Remove the parent container of the chart (the div that contains the canvas)
             if (chartContainer) {
@@ -83,7 +81,7 @@
     }
 
     function downloadPDF() {
-        if (!chartMade || !canvas) {
+        if (!canvas) {
             console.error("No chart available for download");
             return;
         }
@@ -135,7 +133,6 @@
     }
 </script>
 
-{#if chartMade}
     <div class="chartContainer">
         <div class="actionBar">
             <div class="chartName">
@@ -179,7 +176,6 @@
             </canvas>
         </div>
     </div>
-{/if}
 
 <style>
     .chartContainer {

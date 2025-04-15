@@ -16,7 +16,6 @@
         : 1;
 
     let chartName = "";
-    let chartMade = false;
     let indexAxis = "";
 
     let datasetDataEnd = [];
@@ -225,7 +224,6 @@
             },
         ];
 
-        chartMade = true;
         chartName = "";
         indexAxis = "x";
 
@@ -568,7 +566,6 @@
                 <div>
                     <Chart
                         {data}
-                        {chartMade}
                         {checkSelected}
                         bind:this={storeChildComponents[i]}
                     />
