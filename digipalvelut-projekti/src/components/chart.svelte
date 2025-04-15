@@ -45,7 +45,9 @@
                         color: "black",
                         display: data.addInfo,
                         align: "center",
-                        formatter: (value) => {value},
+                        formatter: (value) => {
+                            value;
+                        },
                     },
                 },
             },
@@ -135,24 +137,21 @@
 
 {#if chartMade}
     <div class="chartContainer">
-        <div style="display:flex; justify-content:space-between">
-            <div
-                class="buttonContainer__chartName"
-                style="display:flex; font-size:larger; font-weight:700;"
-            >
-                {#if chartName == ""}
-                    <p>*UNNAMED CHART*</p>
-                {:else}
-                    {chartName}
-                {/if}
-            </div>
-            <div class="buttonContainer">
+        <div class="actionBar">
+            <div class="chartName">
                 <input
                     type="checkbox"
-                    class="chart-button"
+                    class="CheckBox"
                     onclick={checkboxClick}
                     {checked}
                 />
+                {#if chartName == ""}
+                    <div class="chartTitle">*UNNAMED CHART*</div>
+                {:else}
+                    <div class="chartTitle">{chartName}</div>
+                {/if}
+            </div>
+            <div class="buttonContainer">
                 <button
                     class="chart-button pdf-download__button"
                     onclick={downloadPDF}
@@ -186,6 +185,28 @@
     .chartContainer {
         width: 400px;
         margin-bottom: 55px;
+        border: 1px rgba(0,0,0,0.4) solid;
+    }
+
+    .actionBar {
+        display:flex;
+        justify-content:space-between;
+        background-color: #D9D9D9;
+        border-bottom: 1px rgba(0,0,0,0.3) solid;
+    }
+
+    .chartName {
+        display:flex;
+        font-weight:700;
+    }
+
+    .CheckBox {
+        width: 17px;
+        margin-right: 5px;
+    }
+
+    .chartTitle {
+        margin: 5px 0;
     }
 
     .chartContainer:first-child {
@@ -195,8 +216,8 @@
     .chart-button {
         display: flex;
         background-color: grey;
-        height: 30px;
-        width: 30px;
+        height: 25px;
+        width: 25px;
         justify-self: flex-end;
         border: 1px solid black;
         border-radius: 3px;
@@ -214,14 +235,14 @@
 
     .pdf-download__image {
         display: flex;
-        width: 28px;
-        height: 27px;
+        width: 24px;
+        height: 24px;
         filter: brightness(0) saturate(100%) invert(96%) sepia(8%) saturate(7%)
             hue-rotate(314deg) brightness(89%) contrast(93%);
     }
 
     .buttonContainer {
-        margin-right: 13px;
+        margin-right: 5px;
         display: flex;
         flex-direction: row;
         justify-content: end;
@@ -239,9 +260,8 @@
 
     .chart-delete__image {
         display: flex;
-        align-self: center;
-        justify-self: center;
-        padding: 3px;
+        width: 24px;
+        height: 24px;
     }
 
     .chart-delete__image:hover {
