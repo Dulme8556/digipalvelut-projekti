@@ -499,7 +499,7 @@
     );
 </script>
 
-<div>
+<div class="chartsSection">
     <div class="toolbar">
         <div class="chartName">
             <input
@@ -579,6 +579,11 @@
 </div>
 
 <style>
+    .chartsSection {
+        margin-top: 200px;
+        margin-left: 60px;
+    }
+
     .toolbar {
         display: flex;
         flex-direction: row;

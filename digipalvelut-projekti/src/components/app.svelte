@@ -27,11 +27,11 @@
             {#key lists.list.length}
                 <Lines />
             {/key}
+            <!-- Weird bug with charts element where create toolbaar duplicates itelf randomly-->
+            {#key `${lists.selectedValues.length}-${lists.charts.length}`}
+                <Charts />
+            {/key}
         </div>
-        <!-- Weird bug with charts element where create toolbaar duplicates itelf randomly-->
-        {#key `${lists.selectedValues.length}-${lists.charts.length}`}
-            <Charts />
-        {/key}
     </div>
     <DownloadFile />
 </div>
@@ -84,7 +84,4 @@
       object-fit: cover;
       aspect-ratio: 448.63/100;
     }
-
-
-
 </style>
