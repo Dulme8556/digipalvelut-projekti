@@ -44,7 +44,6 @@
     let searchQuery = "";
 
     onMount(async () => {
-        let filteredCharts = lists.charts;
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
 
         if (lists.charts.length > 0) {
@@ -123,84 +122,91 @@
     }
 
     function createNewChart() {
-    let checkedItems = lists.list.filter((item) => item.check);
-    let datasetDataEnd = checkedItems.map((item) => item.end);
-    let datasetDataTarget = checkedItems.map((item) => item.target);
-    let datasetDataStart = checkedItems.map((item) => item.start);
-    let labels = checkedItems.map((item) => item.name);
+        let checkedItems = selected;
+        let datasetDataEnd = checkedItems.map((item) => item.end);
+        let datasetDataTarget = checkedItems.map((item) => item.target);
+        let datasetDataStart = checkedItems.map((item) => item.start);
+        let labels = checkedItems.map((item) => item.name);
 
-    if (checkedItems.length === 0) {
-        alert("Error: No indicators selected.");
-        return;
+        if (checkedItems.length === 0) {
+            alert("Error: No indicators selected.");
+            return;
+        }
+
+        const { type, axis } = getTrimmedChartType();
+
+        let chartData = {
+            id: chartId,
+            check: false,
+            title: chartName,
+            type: type,
+            labels: labels,
+            indexAxis: axis,
+            datasets: [],
+            addInfo: addInfo, // Pass the addInfo flag here
+        };
+
+        // Create datasets based on chart type
+        if (type === "doughnut" || type === "pie") {
+            chartData.datasets = [
+                {
+                    label: "Values",
+                    data: datasetDataEnd,
+                    backgroundColor: [
+                        "#FF6384",
+                        "#36A2EB",
+                        "#FFCE56",
+                        "#4BC0C0",
+                        "#9966FF",
+                    ],
+                },
+            ];
+        } else if (type === "line") {
+            let line = new Line();
+            line.changeData(
+                datasetDataStart,
+                datasetDataEnd,
+                datasetDataTarget,
+                labels,
+            );
+            chartData.datasets = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).datasets;
+            chartData.labels = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).labels;
+        } else {
+            chartData.datasets = [
+                {
+                    label: "start",
+                    data: datasetDataStart,
+                    backgroundColor: "yellow",
+                    minBarLength: 4,
+                },
+                {
+                    label: "end",
+                    data: datasetDataEnd,
+                    backgroundColor: "blue",
+                    minBarLength: 4,
+                },
+                {
+                    label: "target",
+                    data: datasetDataTarget,
+                    backgroundColor: "red",
+                    minBarLength: 4,
+                },
+            ];
+        }
+
+        listOfChartData = [chartData];
+        listOfChartData.forEach((element) => generateCharts(element));
+        lists.charts = [...lists.charts, chartData];
     }
-
-    const { type, axis } = getTrimmedChartType();
-
-    let chartData = {
-        id: chartId,
-        check: false,
-        title: chartName,
-        type: type,
-        labels: labels,
-        indexAxis: axis,
-        datasets: [],
-        addInfo: addInfo // Pass the addInfo flag here
-    };
-
-    // Create datasets based on chart type
-    if (type === "doughnut" || type === "pie") {
-        chartData.datasets = [
-            {
-                label: "Values",
-                data: datasetDataEnd,
-                backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#4BC0C0",
-                    "#9966FF",
-                ],
-            },
-        ];
-    } else if (type === "line") {
-        let line = new Line();
-        line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, labels);
-        chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
-        chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
-    } else {
-        chartData.datasets = [
-            {
-                label: "start",
-                data: datasetDataStart,
-                backgroundColor: "yellow",
-                minBarLength: 4,
-            },
-            {
-                label: "end",
-                data: datasetDataEnd,
-                backgroundColor: "blue",
-                minBarLength: 4,
-            },
-            {
-                label: "target",
-                data: datasetDataTarget,
-                backgroundColor: "red",
-                minBarLength: 4,
-            },
-        ];
-    }
-
-    listOfChartData = [chartData];
-    listOfChartData.forEach((element) => generateCharts(element));
-    lists.charts = [...lists.charts, chartData];
-}
-
 
     function loadOldCharts() {
-        for (let i = 1; i < listOfChartData.length; i++) {
-            let element = listOfChartData[i];
+        listOfChartData.forEach((element) => {
             generateCharts(element);
-        }
+        });
         listOfChartData = defaultValues;
     }
 
@@ -227,23 +233,23 @@
     };
 
     function toggleSelected(selected) {
-        let tempStoreChild = storeChildComponents.filter(item => item !== null);
+        let tempStoreChild = storeChildComponents.filter(
+            (item) => item !== null,
+        );
 
-        tempStoreChild.forEach(element => {
-            const chartId = element.returnId();
-            const currentChart = lists.charts.find(item => item.id === chartId);
-        
+        tempStoreChild.forEach((element) => {
+            let chartId = element.returnId();
+            let currentChart = lists.charts.find((item) => item.id === chartId);
+
             if (selected) {
                 element.checkAll();
                 if (currentChart) {
                     currentChart.check = true;
-                    element.check = true;
                 }
             } else {
                 element.uncheckAll();
                 if (currentChart) {
                     currentChart.check = false;
-                    element.check = false;
                 }
             }
         });
@@ -252,6 +258,7 @@
     }
 
     function checkSelected() {
+        console.log("function");
         let tempStoreChild = storeChildComponents.filter(
             (item) => item !== null,
         );
@@ -302,6 +309,7 @@
 
         let combined = [];
 
+        // combine the two lists in a certain way
         while (small.length > 0 || big.length > 0) {
             let counter = 0;
 
@@ -313,12 +321,12 @@
                 counter++;
             }
 
-            let nextIsNarrow = false;
+            let nextIsSmall = false;
             while (counter < 5 && (small.length > 0 || big.length > 0)) {
-                if (nextIsNarrow && small.length > 0) {
+                if (nextIsSmall && small.length > 0) {
                     combined.push(small.shift());
                     counter++;
-                } else if (!nextIsNarrow && big.length > 0) {
+                } else if (!nextIsSmall && big.length > 0) {
                     combined.push(big.shift());
                     counter++;
                 } else if (small.length > 0) {
@@ -329,10 +337,11 @@
                     counter++;
                 }
 
-                nextIsNarrow = !nextIsNarrow;
+                nextIsSmall = !nextIsSmall;
             }
         }
 
+        // divide the list into pages
         let page = 1;
         let count = 0;
         let pieCount = 0;
@@ -351,16 +360,16 @@
             if (
                 count === 5 ||
                 (pieCount === 2 && combined[i + 1].type === "pie") ||
-                [i].type === "doughnut"
+                [i + 1].type === "doughnut" // should be combined[i+1].type but for some reason it breaks
             ) {
                 page++;
                 count = 0;
                 pieCount = 0;
             }
         }
+
         return finalList;
     }
-
 
     async function downloadPDF() {
         let x = 0;
@@ -370,9 +379,17 @@
         let leftY = 0;
         let rightY = 20;
 
+        let imgScaling = 0.26;
+        let imageWidth = 400
+        let smallImageHeight = 200
+        let BigImageHeight = 400
+
+        let lefSpacing = 60;
+        let rightSpacing = 140;
+
         let doc;
 
-        // wait that the searchQueary is cleared so all charts are shown
+        // wait that the searchQuery is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
             resolve();
@@ -381,16 +398,14 @@
         storeChartData();
         let sortedChartList = sortCanvases();
 
-        if (sortedChartList.length === 0) {
-            alert("No selected charts");
+        if (storeCanvases.length === 0) {
+            alert("No charts selected");
             return;
         }
 
         doc = new jsPDF("p", "mm");
-
         let pageKeys = Object.keys(sortedChartList);
 
-        // for (let page in sortedChartList) {
         for (let i = 0; i < pageKeys.length; i++) {
             let page = pageKeys[i];
             let chartSet = sortedChartList[page];
@@ -403,23 +418,35 @@
                 const imgURL = chartSet[i].toDataURL("image/png");
                 img.src = imgURL;
 
-                const { height } = await new Promise((resolve) => {
+                let { width, height } = await new Promise((resolve) => {
                     img.onload = () => {
-                        resolve({ height: img.height });
+                        resolve({ width: img.width, height: img.height });
                     };
                 });
 
-                if (height === 200) {
+                // image size supposed to be 200x400 or 400x400
+                // make sure sizes are divisible by 200 and account for 600
+                if (height % 200 !== 0 || height % 300 === 0) {
+                    if (height === width / 2) {
+                        width = imageWidth;
+                        height = smallImageHeight;
+                    } else {
+                        width = imageWidth;
+                        height = BigImageHeight;
+                    }
+                }
+
+                if (height === width / 2) {
                     x = leftSide;
                     y = leftY;
-                    leftY += 60;
+                    leftY += lefSpacing;
                 } else {
                     x = rightSide;
                     y = rightY;
-                    leftY += 60;
-                    rightY += 140;
+                    leftY += lefSpacing;
+                    rightY += rightSpacing;
                 }
-                doc.addImage(imgURL, "PNG", x, y);
+                doc.addImage(imgURL, "PNG", x, y, width * imgScaling, height * imgScaling);
             }
 
             if (i < pageKeys.length - 1) {
@@ -432,10 +459,16 @@
     }
 
     async function download1PerPage() {
+        // wait that the searchQuery is cleared so all charts are shown
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
+
         storeChartData();
 
         if (storeCanvases.length === 0) {
-            alert("No selected charts");
+            alert("No charts selected");
             return;
         }
 
@@ -454,7 +487,7 @@
             doc.addImage(imgData, "PNG", 0, 0, width, height);
         }
 
-        doc.save("chart.pdf");
+        doc.save("charts.pdf");
     }
 
     $: filteredCharts = JSON.parse(
@@ -485,9 +518,16 @@
                 Create a chart
             </button>
         </div>
-        <div style='display:flex; align-items:flex-end; margin-left:10px;'>
-            <input style="width:15px; height:15px;" type="checkbox" id="addInfo" bind:checked={addInfo} />
-            <label style="align-content:center;" for="addInfo">Show exact values</label>
+        <div style="display:flex; align-items:flex-end; margin-left:10px;">
+            <input
+                style="width:15px; height:15px;"
+                type="checkbox"
+                id="addInfo"
+                bind:checked={addInfo}
+            />
+            <label style="align-content:center;" for="addInfo"
+                >Show exact values</label
+            >
         </div>
     </div>
     <div class="secondLine">
@@ -498,15 +538,23 @@
             bind:value={searchQuery}
         />
         {#if allChecked}
-            <button class="toggleButton" onclick={() => toggleSelected(false)}>Unselect all</button>
+            <button class="toggleButton" onclick={() => toggleSelected(false)}
+                >Unselect all</button
+            >
         {:else}
-            <button class="toggleButton" onclick={() => toggleSelected(true)}>Select all</button>
+            <button class="toggleButton" onclick={() => toggleSelected(true)}
+                >Select all</button
+            >
         {/if}
     </div>
     <div class="thirdLine">
         <!-- the 2 buttons should be done in a way that there is only 1 button -->
         <div class="downloadButtons">
-            <button class="first_downloadButton" onclick={downloadPDF} style="margin: 5px 0; margin-right: 5px;">
+            <button
+                class="first_downloadButton"
+                onclick={downloadPDF}
+                style="margin: 5px 0; margin-right: 5px;"
+            >
                 Download chosen charts
             </button>
             <button onclick={download1PerPage} style="margin: 5px 0;">

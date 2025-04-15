@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount } from "svelte";
+    import { getContext } from "svelte";
     import Line from "./line.svelte";
 
     let lists = getContext("list");
@@ -13,62 +13,56 @@
     let sortByValue = "oldest";
     let sortingOptions = ["oldest", "newest", "highest", "lowest"];
 
-    onMount(() => {
-        let filteredIndicators = lists.list;
-    });
-
     function selectAll() {
-        allChecked = true;
-
-        let filteredArray = lines.filter(item => item !== null)
+        let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
             element.checkAll();
+
+            let currentLine = lists.list.find(
+                (x) => x.id === element.values().id,
+            );
+            if (currentLine) currentLine.check = true;
+            lists.list = [...lists.list];
         });
-        filteredArray.forEach((item) => {
-            if (item.values().id === lists.list[item.values().id-1].id) {
-                lists.list[item.values().id-1].check = true
-            }
-        })
 
         checkSelected();
     }
 
     function unselectAll() {
-        allChecked = false;
-
-        let filteredArray = lines.filter(item => item !== null)
+        let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
             element.uncheckAll();
-            
+
+            let currentLine = lists.list.find(
+                (x) => x.id === element.values().id,
+            );
+            if (currentLine) currentLine.check = false;
+            lists.list = [...lists.list];
         });
-        filteredArray.forEach((item) => {
-            if (item.values().id === lists.list[item.values().id-1].id) {
-                lists.list[item.values().id-1].check = false
-            }
-        })
 
         checkSelected();
     }
 
-    function checkSelected() {
+    async function checkSelected() {
         let count = 0;
         selectedLines = [];
 
-        let filteredArray = lines.filter(item => item !== null)
-
-        filteredArray.forEach((element) => {
-            if (element.selected()) {
+        for (let i = 0; i < filteredIndicators.length; i++) {
+            let current = filteredIndicators[i];
+            if (current.check) {
+                selectedLines.push(current);
                 count++;
-                selectedLines.push(element.values());
             }
-        });
-        if (count !== filteredArray.length) {
+        }
+
+        if (count !== filteredIndicators.length) {
             allChecked = false;
         } else {
             allChecked = true;
         }
+
         lists.selectedValues = selectedLines;
     }
 
@@ -84,8 +78,8 @@
         }, 1);
     }
 
-    $: filteredIndicators = JSON.parse(JSON.stringify(lists.list.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()))),
+    $: filteredIndicators = lists.list.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
     $: sortBy(sortByValue);
@@ -93,13 +87,12 @@
     function sortBy(value) {
         let sortedList = lists.list;
 
-        sortedList.forEach(element => {
+        sortedList.forEach((element) => {
             try {
                 let rawPercent = element.percent.toString().trim();
                 element.isRounded = rawPercent.startsWith("~");
                 element.percent = element.percent.replace("~", "").trim();
-            } catch {
-            }
+            } catch {}
             element.percent = Number(element.percent);
         });
 
@@ -114,46 +107,57 @@
         }
 
         // get '~' symbol back after sorting
-        sortedList.forEach(element => {
+        sortedList.forEach((element) => {
             if (element.isRounded) {
-                element.percent = `~${element.percent}`
+                element.percent = `~${element.percent}`;
             } else {
-                element.percent = `${element.percent}`
+                element.percent = `${element.percent}`;
             }
-        })
+        });
 
         // so that charts.svelte gets updated data
-        sortedList = lists.selectedValues
-        lists.selectedValues = []
-        setTimeout(() => (lists.selectedValues = sortedList), 1)
+        sortedList = lists.selectedValues;
+        lists.selectedValues = [];
+        setTimeout(() => (lists.selectedValues = sortedList), 1);
+    }
+
+    async function saveSelectedLines() {
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
+        checkSelected()
     }
 </script>
+
 <div class="active-lines">
     <h2>Active indicators</h2>
     <div class="actions-bar">
         <div class="button-group">
             {#if allChecked}
-                <button class="select__button" onclick={unselectAll}>
-                    Unselect all
-                </button>
+            <button class="select__button" onclick={unselectAll}>
+                Unselect all
+            </button>
             {:else}
-                <button class="select__button" onclick={selectAll}>
-                    Select all
-                </button>
+            <button class="select__button" onclick={selectAll}>
+                Select all
+            </button>
             {/if}
         </div>
         <input
-            id="searchbar"
-            class="searchbar"
-            bind:value={searchQuery}
-            placeholder="Search indicators..."
-            type="text"
+        id="searchbar"
+        class="searchbar"
+        bind:value={searchQuery}
+        placeholder="Search indicators..."
+        type="text"
         />
         <select bind:value={sortByValue} class="selectList">
             {#each sortingOptions as s, i}
-                <option value={sortingOptions[i]}>{sortingOptions[i]}</option>
+            <option value={sortingOptions[i]}>{sortingOptions[i]}</option>
             {/each}
         </select>
+        <!-- don't know how to fix without save button -->
+        <button onclick={saveSelectedLines} style="height: 30px; margin-left: 10px">Save</button>
     </div>
     {#key `${sortByValue}-${filteredIndicators}`}
         {#if filteredIndicators.length === 0}
@@ -198,7 +202,7 @@
     .actions-bar {
         display: flex;
         flex-direction: row;
-        width: 600px;
+        width: 650px;
     }
 
     .button-group {

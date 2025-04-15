@@ -2,7 +2,7 @@
     import { getContext, onDestroy, onMount } from "svelte";
     import Chart from "chart.js/auto";
     import { jsPDF } from "jspdf";
-    import ChartDataLabels from 'chartjs-plugin-datalabels';
+    import ChartDataLabels from "chartjs-plugin-datalabels";
 
     let lists = getContext("list");
 
@@ -41,13 +41,13 @@
                 animations: false,
                 indexAxis: data.indexAxis,
                 plugins: {
-                  datalabels: {
-                    color: 'black',
-                    display: data.addInfo,
-                    align: 'center',
-                    formatter: (value) => {value},
-                  }
-                }
+                    datalabels: {
+                        color: "black",
+                        display: data.addInfo,
+                        align: "center",
+                        formatter: (value) => {value},
+                    },
+                },
             },
         });
 
@@ -176,8 +176,8 @@
             </div>
         </div>
         <div id="content" style="width:400px; max-height:300px;">
-            <canvas style="width: 400px; max-height:300px;" bind:this={canvas}
-            ></canvas>
+            <canvas style="width: 400px; max-height:300px;" bind:this={canvas}>
+            </canvas>
         </div>
     </div>
 {/if}
