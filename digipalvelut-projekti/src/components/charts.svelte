@@ -419,11 +419,21 @@
                 const imgURL = chartSet[i].toDataURL("image/png");
                 img.src = imgURL;
 
-                const { width, height } = await new Promise((resolve) => {
+                let { width, height } = await new Promise((resolve) => {
                     img.onload = () => {
                         resolve({ width: img.width, height: img.height });
                     };
                 });
+                
+                if (height % 200 !== 0 || height % 300 === 0) {
+                    if (height === width / 2) {
+                        width = 400
+                        height = 200
+                    } else {
+                        width = 400
+                        height = 400
+                    }
+                }
 
                 if (height === width / 2) {
                     x = leftSide;
@@ -435,7 +445,7 @@
                     leftY += 60;
                     rightY += 140;
                 }
-                doc.addImage(imgURL, "PNG", x, y);
+                doc.addImage(imgURL, "PNG", x, y, width * 0.26, height * 0.26);
             }
 
             if (i < pageKeys.length - 1) {
