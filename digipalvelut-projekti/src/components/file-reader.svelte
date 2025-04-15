@@ -30,7 +30,7 @@
                 percent = "~" + percent;
             }
 
-            let newId = lists.list.length? Math.max(...lists.list.map((t) => t.id)) + 1: 1;
+            let newId = lists.list.length? Math.max(...lists.list.map((t) => t.id)) + 1 : 1;
             lists.list = [
                 ...lists.list,
                 {
@@ -45,8 +45,6 @@
                 },
             ];
         });
-
-        lists.selectedValues = lists.list;
     }
 
     function handleFileInput(event) {

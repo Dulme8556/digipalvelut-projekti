@@ -15,12 +15,12 @@
     function percentCalculation() {
         if (!newEnd || !newTarget) return;
 
-    let rawValue = (newEnd / newTarget) * 100;
-    let roundedValue = rawValue.toFixed(0);
-    let preciseValue = rawValue.toFixed(3);
+        let rawValue = (newEnd / newTarget) * 100;
+        let roundedValue = rawValue.toFixed(0);
+        let preciseValue = rawValue.toFixed(3);
 
-    newPercent = preciseValue % 1 !== 0 ? `~${roundedValue}` : roundedValue;
-}
+        newPercent = preciseValue % 1 !== 0 ? `~${roundedValue}` : roundedValue;
+    }
 
     function addNew() {
         percentCalculation();
@@ -43,20 +43,18 @@
             alert("Can't add empty");
             newStart = "";
         } else {
-            let updatedList = lists.list.map((item) => ({ ...item })); 
+            let updatedList = lists.list.map((item) => ({ ...item }));
 
-            updatedList.push(
-                {
-                    id: newId,
-                    check:false,
-                    name: newName,
-                    target: newTarget,
-                    start: newStart,
-                    end: newEnd,
-                    percent: newPercent,
-                    unit: newUnit,
-                },
-            );
+            updatedList.push({
+                id: newId,
+                check: false,
+                name: newName,
+                target: newTarget,
+                start: newStart,
+                end: newEnd,
+                percent: newPercent,
+                unit: newUnit,
+            });
 
             lists.list = updatedList;
 
@@ -66,8 +64,6 @@
             newEnd = "";
             newPercent = "";
             newUnit = "";
-
-            lists.selectedValues = lists.list.filter((item) => item.check);
         }
     }
 </script>

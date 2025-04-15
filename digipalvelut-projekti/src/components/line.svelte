@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount } from "svelte";
+    import { getContext } from "svelte";
 
     let {
         function: parentFunction,
@@ -18,14 +18,7 @@
 
     let editing = $state(false);
     let checked = $state(check);
-    
-    onMount(() => {
-        let indicator = lists.list.find((item) => item.id === id);
-        if (indicator) {
-            checked = indicator.check;
-        }
-    });
-    
+        
     export function checkAll() {
         checked = true;
     }

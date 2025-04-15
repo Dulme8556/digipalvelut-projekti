@@ -44,7 +44,6 @@
     let searchQuery = "";
 
     onMount(async () => {
-        let filteredCharts = lists.charts;
         lists.charts = lists.charts.filter((item) => !Array.isArray(item));
 
         if (lists.charts.length > 0) {
@@ -205,10 +204,9 @@
     }
 
     function loadOldCharts() {
-        for (let i = 1; i < listOfChartData.length; i++) {
-            let element = listOfChartData[i];
+        listOfChartData.forEach((element) => {
             generateCharts(element);
-        }
+        });
         listOfChartData = defaultValues;
     }
 
@@ -240,22 +238,18 @@
         );
 
         tempStoreChild.forEach((element) => {
-            const chartId = element.returnId();
-            const currentChart = lists.charts.find(
-                (item) => item.id === chartId,
-            );
+            let chartId = element.returnId();
+            let currentChart = lists.charts.find((item) => item.id === chartId);
 
             if (selected) {
                 element.checkAll();
                 if (currentChart) {
                     currentChart.check = true;
-                    element.check = true;
                 }
             } else {
                 element.uncheckAll();
                 if (currentChart) {
                     currentChart.check = false;
-                    element.check = false;
                 }
             }
         });
@@ -264,6 +258,7 @@
     }
 
     function checkSelected() {
+        console.log("function");
         let tempStoreChild = storeChildComponents.filter(
             (item) => item !== null,
         );
@@ -326,12 +321,12 @@
                 counter++;
             }
 
-            let nextIsNarrow = false;
+            let nextIsSmall = false;
             while (counter < 5 && (small.length > 0 || big.length > 0)) {
-                if (nextIsNarrow && small.length > 0) {
+                if (nextIsSmall && small.length > 0) {
                     combined.push(small.shift());
                     counter++;
-                } else if (!nextIsNarrow && big.length > 0) {
+                } else if (!nextIsSmall && big.length > 0) {
                     combined.push(big.shift());
                     counter++;
                 } else if (small.length > 0) {
@@ -342,7 +337,7 @@
                     counter++;
                 }
 
-                nextIsNarrow = !nextIsNarrow;
+                nextIsSmall = !nextIsSmall;
             }
         }
 
@@ -365,7 +360,7 @@
             if (
                 count === 5 ||
                 (pieCount === 2 && combined[i + 1].type === "pie") ||
-                combined[i + 1].type === "doughnut"
+                [i + 1].type === "doughnut" // should be combined[i+1].type but for some reason it breaks
             ) {
                 page++;
                 count = 0;
@@ -401,10 +396,8 @@
         }
 
         doc = new jsPDF("p", "mm");
-
         let pageKeys = Object.keys(sortedChartList);
 
-        // for (let page in sortedChartList) {
         for (let i = 0; i < pageKeys.length; i++) {
             let page = pageKeys[i];
             let chartSet = sortedChartList[page];
@@ -484,7 +477,7 @@
             doc.addImage(imgData, "PNG", 0, 0, width, height);
         }
 
-        doc.save("chart.pdf");
+        doc.save("charts.pdf");
     }
 
     $: filteredCharts = JSON.parse(

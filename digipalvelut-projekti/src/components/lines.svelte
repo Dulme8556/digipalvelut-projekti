@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount } from "svelte";
+    import { getContext } from "svelte";
     import Line from "./line.svelte";
 
     let lists = getContext("list");
@@ -13,13 +13,7 @@
     let sortByValue = "oldest";
     let sortingOptions = ["oldest", "newest", "highest", "lowest"];
 
-    onMount(() => {
-        let filteredIndicators = lists.list;
-    });
-
     function selectAll() {
-        allChecked = true;
-
         let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
@@ -36,8 +30,6 @@
     }
 
     function unselectAll() {
-        allChecked = false;
-
         let filteredArray = lines.filter((item) => item !== null);
 
         filteredArray.forEach((element) => {
@@ -54,9 +46,6 @@
     }
 
     async function checkSelected() {
-        let saveSearchQuery = searchQuery;
-        let saveLength = filteredIndicators.length;
-
         let count = 0;
         selectedLines = [];
 
