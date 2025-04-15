@@ -18,19 +18,19 @@
 
     let editing = $state(false);
     let checked = $state(check);
-        
+
     export function checkAll() {
         checked = true;
     }
-    
+
     export function uncheckAll() {
         checked = false;
     }
-    
+
     export function selected() {
         return checked;
     }
-    
+
     export function values() {
         return {
             id: id,
@@ -42,7 +42,7 @@
             unit: unit,
         };
     }
-    
+
     function checkboxClick(event) {
         checked = !checked;
 
@@ -78,7 +78,7 @@
 
     function onSave(event) {
         editing = !editing;
-        
+
         percentCalculation();
 
         lists.list.forEach((element) => {
@@ -100,74 +100,91 @@
     <!-- editing on -->
     {#if editing}
         <div class="line">
-            <div class="component long">
-                <h3>indicator:</h3>
-                <input
-                    class="input input__long"
-                    type="text"
-                    bind:value={name}
-                />
+            <input
+                class="checkbox"
+                type="checkbox"
+                {checked}
+                onclick={checkboxClick}
+            />
+            <div class="data__container">
+                <div class="component long">
+                    <h3>indicator:</h3>
+                    <input
+                        class="input input__long"
+                        type="text"
+                        bind:value={name}
+                    />
+                </div>
+                <div class="column">
+                    <div class="component">
+                        <h3>target:</h3>
+                        <input class="input" type="text" bind:value={target} />
+                    </div>
+                    <div class="component">
+                        <h3>percent:</h3>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="component">
+                        <h3>start:</h3>
+                        <input class="input" type="text" bind:value={start} />
+                    </div>
+                    <div class="component long">
+                        <h3>unit:</h3>
+                        <input
+                            class="input input__long"
+                            type="text"
+                            bind:value={unit}
+                        />
+                    </div>
+                </div>
+                <div class="component">
+                    <h3>end:</h3>
+                    <input class="input" type="text" bind:value={end} />
+                </div>
             </div>
-            <div class="component">
-                <h3>target:</h3>
-                <input class="input" type="text" bind:value={target} />
-            </div>
-            <div class="component">
-                <h3>start:</h3>
-                <input class="input" type="text" bind:value={start} />
-            </div>
-            <div class="component">
-                <h3>end:</h3>
-                <input class="input" type="text" bind:value={end} />
-            </div>
-            <div class="component">
-                <h3>percent:</h3>
-            </div>
-            <div class="component long">
-                <h3>unit:</h3>
-                <input
-                    class="input input__long"
-                    type="text"
-                    bind:value={unit}
-                />
-            </div>
+
             <button class="button button__save" onclick={onSave}>Save</button>
         </div>
         <!-- editing off -->
     {:else}
         <div class="line">
+            <input
+                class="checkbox"
+                type="checkbox"
+                {checked}
+                onclick={checkboxClick}
+            />
             <div class="data__container">
-                <input
-                    class="checkbox"
-                    type="checkbox"
-                    {checked}
-                    onclick={checkboxClick}
-                />
                 <div class="component long">
                     <h3>indicator:</h3>
                     <div>{name}</div>
                 </div>
-                <div class="component">
-                    <h3>target:</h3>
-                    <div>{target}</div>
+                <div class="column">
+                    <div class="component">
+                        <h3>target:</h3>
+                        <div>{target}</div>
+                    </div>
+                    <div class="component">
+                        <h3>percent:</h3>
+                        {#if percent !== "placeholder"}
+                            <div>{percent}%</div>
+                        {/if}
+                    </div>
                 </div>
-                <div class="component">
-                    <h3>start:</h3>
-                    <div>{start}</div>
+                <div class="column">
+                    <div class="component">
+                        <h3>start:</h3>
+                        <div>{start}</div>
+                    </div>
+                    <div class="component long">
+                        <h3>unit:</h3>
+                        <div>{unit}</div>
+                    </div>
                 </div>
-                <div class="component">
+                <div class="component component__last">
                     <h3>end:</h3>
                     <div>{end}</div>
-                </div>
-                <div class="component">
-                    <h3>percent:</h3>
-                    {#if percent !== "placeholder"}
-                        <div>{percent}%</div>
-                    {/if}
-                </div>
-                <div class="component long">
-                    <h3>unit:</h3>
-                    <div>{unit}</div>
                 </div>
             </div>
             <div class="button__container">
@@ -193,47 +210,69 @@
 <style>
     h3 {
         padding-right: 10px;
+        margin: 0;
+    }
+
+    input {
+        max-height: 16px;
     }
 
     .line {
         display: flex;
-        flex-direction: row;
-        max-width: 1400px;
-        min-width: 850px;
+        justify-content: space-between;
+        max-width: 800px;
+        min-width: 800px;
         font-size: 15px;
         padding-top: 10px;
+        margin: 5px 0;
+        border: 1px rgba(0, 0, 0, 0.3) solid;
     }
 
-    .component {
+    .checkbox {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-right: 10px;
-        flex: 1;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        margin: 8px 8px;
     }
 
     .data__container {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+
+    .component {
+        display: flex;
+        flex-direction: row;
+        margin-right: 10px;
+        padding: 5px 0;
+        flex: 1;
+    }
+
+    .component__last {
+        flex: 0.5;
+    }
+
+    .long {
+        display: flex;
+        flex: 1.5;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
         flex: 1;
     }
 
     .button__container {
         display: flex;
         flex-direction: row;
-    }
-
-    .long {
-        display: flex;
-        flex: 2.5;
-    }
-
-    .checkbox {
-        cursor: pointer;
-        width: 20px;
-        height: 20px;
-        margin: 0 8px;
-        margin-top: 20px;
+        justify-self: end;
+        align-self: start;
+        margin-right: 5px;
     }
 
     .button {
@@ -278,7 +317,7 @@
         font-size: 14px;
         padding: 3px 5px;
         color: black;
-        width: 50px;
+        width: 40px;
     }
 
     .input__long {
@@ -287,5 +326,8 @@
 
     .button__save {
         width: 40px;
+        display: flex;
+        align-self: start;
+        margin-right: 5px;
     }
 </style>
