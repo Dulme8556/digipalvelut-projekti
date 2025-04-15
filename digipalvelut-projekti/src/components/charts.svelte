@@ -379,6 +379,14 @@
         let leftY = 0;
         let rightY = 20;
 
+        let imgScaling = 0.26;
+        let imageWidth = 400
+        let smallImageHeight = 200
+        let BigImageHeight = 400
+
+        let lefSpacing = 60;
+        let rightSpacing = 140;
+
         let doc;
 
         // wait that the searchQuery is cleared so all charts are shown
@@ -416,27 +424,29 @@
                     };
                 });
 
+                // image size supposed to be 200x400 or 400x400
+                // make sure sizes are divisible by 200 and account for 600
                 if (height % 200 !== 0 || height % 300 === 0) {
                     if (height === width / 2) {
-                        width = 400;
-                        height = 200;
+                        width = imageWidth;
+                        height = smallImageHeight;
                     } else {
-                        width = 400;
-                        height = 400;
+                        width = imageWidth;
+                        height = BigImageHeight;
                     }
                 }
 
                 if (height === width / 2) {
                     x = leftSide;
                     y = leftY;
-                    leftY += 60;
+                    leftY += lefSpacing;
                 } else {
                     x = rightSide;
                     y = rightY;
-                    leftY += 60;
-                    rightY += 140;
+                    leftY += lefSpacing;
+                    rightY += rightSpacing;
                 }
-                doc.addImage(imgURL, "PNG", x, y, width * 0.26, height * 0.26);
+                doc.addImage(imgURL, "PNG", x, y, width * imgScaling, height * imgScaling);
             }
 
             if (i < pageKeys.length - 1) {
