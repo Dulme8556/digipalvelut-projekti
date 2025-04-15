@@ -8,8 +8,6 @@
     let lists = getContext("list");
     let selected = lists.selectedValues;
 
-
-
     let addInfo = false;
 
     let chartsData = [];
@@ -367,7 +365,7 @@
             if (
                 count === 5 ||
                 (pieCount === 2 && combined[i + 1].type === "pie") ||
-                [i+1].type === "doughnut"
+                combined[i + 1].type === "doughnut"
             ) {
                 page++;
                 count = 0;
@@ -424,14 +422,14 @@
                         resolve({ width: img.width, height: img.height });
                     };
                 });
-                
+
                 if (height % 200 !== 0 || height % 300 === 0) {
                     if (height === width / 2) {
-                        width = 400
-                        height = 200
+                        width = 400;
+                        height = 200;
                     } else {
-                        width = 400
-                        height = 400
+                        width = 400;
+                        height = 400;
                     }
                 }
 
@@ -465,7 +463,7 @@
         });
 
         storeChartData();
-        
+
         if (storeCanvases.length === 0) {
             alert("No charts selected");
             return;
@@ -524,7 +522,9 @@
                 id="addInfo"
                 bind:checked={addInfo}
             />
-            <label style="align-content:center;" for="addInfo">Show exact values</label>
+            <label style="align-content:center;" for="addInfo"
+                >Show exact values</label
+            >
         </div>
     </div>
     <div class="secondLine">
