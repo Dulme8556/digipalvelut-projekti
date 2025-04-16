@@ -577,7 +577,7 @@
 <style>
     .chartsSection {
         margin-top: 10px;
-        margin-left: 60px;
+        margin-left: 40px;
         min-width:537px;
     }
 

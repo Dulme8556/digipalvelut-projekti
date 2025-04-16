@@ -212,7 +212,6 @@
     .active-lines {
         margin-top: 20px;
         margin-left: 40px;
-        border: 2px solid #b4b4b4;
         border-radius: 10px;
         min-height: 130px;
         display: flex;
@@ -220,6 +219,7 @@
     }
 
     .toolbar {
+        border: 2px solid #b4b4b4;
         padding: 20px;
     }
 
