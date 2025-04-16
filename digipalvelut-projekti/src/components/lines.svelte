@@ -263,9 +263,4 @@
         cursor: pointer;
         font-size: 15px;
     }
-
-    .empty {
-        padding: 20px;
-        color: gray;
-    }
 </style>
