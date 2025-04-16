@@ -22,7 +22,6 @@
         <img class="vr4vet_logo" src="./images/VR4VET_LOGO_DOTS_trnsprnt_Turquoise.png" alt="VR4VET">
         <img class="eu_union" src="./images/EN_FundedbytheEU_RGB_POS.png" alt="Funded by the European Union">
     </div>
-
     <div class="content">
         <div class="main__functions">
             <div style='display:flex; justify-content: space-between;'>
@@ -54,13 +53,11 @@
     .content {
         display: flex;
         flex: 1;
-        overflow: hidden;
     }
 
     .main__functions {
         flex: 1;
         padding: 16px;
-        overflow-y: auto;
         display: flex;
         justify-content: space-between;
     }
@@ -74,8 +71,9 @@
     .credit * {
         box-sizing: border-box;
     }
-
+    
     .credit {
+        width: 100%;
         display: flex;
         align-items: center;
         background: linear-gradient(
