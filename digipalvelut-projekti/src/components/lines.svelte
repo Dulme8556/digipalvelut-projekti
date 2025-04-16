@@ -202,6 +202,7 @@
 
     h2 {
         margin-top: 0;
+        min-width: 202px;
     }
 
     li:first-child {
@@ -209,9 +210,8 @@
     }
 
     .active-lines {
-        margin-top: 10px;
+        margin-top: 20px;
         margin-left: 40px;
-        padding: 20px;
         border: 2px solid #b4b4b4;
         border-radius: 10px;
         min-height: 130px;
@@ -240,7 +240,7 @@
         height: 25px;
         padding: 5px 3px;
         font-size: 15px;
-        margin-left: 40px;
+        margin-left: 20px;
     }
 
     .button-group {
