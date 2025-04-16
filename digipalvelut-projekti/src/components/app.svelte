@@ -41,6 +41,8 @@
     .website {
         display: flex;
         flex-direction: column;
+        width:100%;
+        box-sizing:border-box;
         justify-content: space-between;
     }
 
