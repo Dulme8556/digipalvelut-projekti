@@ -97,7 +97,7 @@
         justify-self: center;
         padding: 5px 20px;
         margin-bottom: 10px;
-        background-color: #639fc4;
+        background-color: #30B2B3;
         color: white;
         border-radius: 100px;
         border-style: solid;

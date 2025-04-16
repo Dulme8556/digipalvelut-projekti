@@ -136,7 +136,7 @@
         padding: 5px 10px;
         margin-bottom: 10px;
         margin-right: 10px;
-        background: var(--schemes-primary, #639fc4);
+        background: var(--schemes-primary, #30B2B3);
         color: white;
         border-radius: 100px;
         border-style: solid;
