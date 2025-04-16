@@ -14,7 +14,7 @@
     .container {
         pointer-events: none;
         position: absolute;
-        top: 15px;
+        top: 150px;
         right: 20px;
     }
 

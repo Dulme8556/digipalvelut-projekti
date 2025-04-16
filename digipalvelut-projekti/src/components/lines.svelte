@@ -130,6 +130,7 @@
     }
 </script>
 
+<div>
 <div class="active-lines">
     <h2>Active indicators</h2>
     <div class="actions-bar">
@@ -186,7 +187,7 @@
         {/if}
     {/key}
 </div>
-
+</div>  
 <style>
     ul {
         list-style: none;
@@ -201,7 +202,14 @@
     .active-lines {
         margin-top: 160px;
         margin-left: 40px;
+        padding: 20px;
+        border: 2px solid #b4b4b4;
+        border-radius: 10px;
+        min-height: 130px;
+        display: flex;
+        flex-direction: column;
     }
+
 
     .actions-bar {
         display: flex;
