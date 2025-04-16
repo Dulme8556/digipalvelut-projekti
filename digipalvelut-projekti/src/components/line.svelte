@@ -172,7 +172,7 @@
                         <div class="long">{target}</div>
                     </div>
                     <div class="component">
-                        <h3 class="long">percent:</h3>
+                        <h3>percent:</h3>
                         {#if percent !== "placeholder"}
                             <div class="long">{percent}%</div>
                         {/if}
@@ -245,10 +245,9 @@
     }
     
     .data__container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        flex-wrap: nowrap;
+        display: grid;
+        grid-template-columns: 200px 150px 150px 1fr 1fr;
+        gap: 10px;
         width: 100%;
     }
     
