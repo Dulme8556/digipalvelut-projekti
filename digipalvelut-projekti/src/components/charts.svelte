@@ -511,6 +511,12 @@
             ),
         ),
     );
+
+    let showOptions = false;
+
+    function toggleExtraOptions() {
+        showOptions = !showOptions;
+    }
 </script>
 
 <div class="chartsSection">
@@ -528,21 +534,28 @@
                 <option value={chartTypes[i]}>{chartTypes[i]}</option>
             {/each}
         </select>
+        <div style="position:relative; display:flex; flex-direction:column; align-items:center;">
+            <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
+                &#x25BC; <!-- Down arrow icon -->
+            </div>
+    
+            {#if showOptions}
+            <div class="dropdownOptions">
+                <label for="addInfo">
+                    <input
+                        type="checkbox"
+                        id="addInfo"
+                        bind:checked={addInfo}
+                    />
+                    Show exact values
+                </label>
+            </div>
+        {/if}
+        </div>
         <div class="chartButton">
             <button class="chartButton__button" onclick={createNewChart}>
                 Create a chart
             </button>
-        </div>
-        <div style="display:flex; align-items:flex-end; margin-left:10px;">
-            <input
-                style="width:15px; height:15px;"
-                type="checkbox"
-                id="addInfo"
-                bind:checked={addInfo}
-            />
-            <label style="align-content:center;" for="addInfo"
-                >Show exact values</label
-            >
         </div>
     </div>
     <div class="secondLine">
@@ -593,10 +606,32 @@
 </div>
 
 <style>
+    .extraOptionsToggle {
+    	cursor: pointer;
+    	font-size: 16px;
+    	padding: 4px;
+        margin-left:4px;
+        margin-right:4px;
+        padding-top:7px;
+    	user-select: none;
+    }
+
+    .dropdownOptions {
+    	position: absolute;
+    	top: 35px;
+    	left: 0;
+    	background-color: white;
+    	border: 1px solid #ccc;
+    	border-radius: 4px;
+    	padding: 5px 10px;
+    	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    	z-index: 10;
+    	white-space: nowrap;
+    }
     .chartsSection {
         margin-top: 10px;
         margin-left: 40px;
-        min-width: 537px;
+        min-width: 470px;
     }
 
     .title {
@@ -623,7 +658,6 @@
     .chartButton {
         width: auto;
         height: auto;
-        margin-left: 10px;
         margin-top: 10px;
     }
 

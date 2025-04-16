@@ -229,7 +229,7 @@
     .line {
         display: flex;
         justify-content: space-between;
-        width: 800px;
+        width: 770px;
         font-size: 15px;
         padding-top: 10px;
         margin: 5px 0;

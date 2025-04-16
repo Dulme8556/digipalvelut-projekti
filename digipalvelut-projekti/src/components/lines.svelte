@@ -213,13 +213,16 @@
         margin-top: 20px;
         margin-left: 40px;
         border-radius: 10px;
+        min-width: 770px;
         min-height: 130px;
+        padding-left: 5px;
+        padding-right: 5px;
+        border: 2px solid #b4b4b4;
         display: flex;
         flex-direction: column;
     }
 
     .toolbar {
-        border: 2px solid #b4b4b4;
         padding: 20px;
     }
 
