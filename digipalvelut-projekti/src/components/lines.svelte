@@ -126,68 +126,73 @@
             searchQuery = "";
             resolve();
         });
-        checkSelected()
+        checkSelected();
     }
 </script>
 
 <div>
 <div class="active-lines">
-    <h2>Active indicators</h2>
-    <div class="actions-bar">
-        <div class="button-group">
-            {#if allChecked}
-            <button class="select__button" onclick={unselectAll}>
-                Unselect all
-            </button>
-            {:else}
-            <button class="select__button" onclick={selectAll}>
-                Select all
-            </button>
-            {/if}
+    <div class="toolbar">
+        <div class="top">
+            <h2>Active indicators</h2>
+            <input
+                id="searchbar"
+                class="searchbar"
+                bind:value={searchQuery}
+                placeholder="Search indicators..."
+                type="text"
+            />
         </div>
-        <input
-        id="searchbar"
-        class="searchbar"
-        bind:value={searchQuery}
-        placeholder="Search indicators..."
-        type="text"
-        />
-        <select bind:value={sortByValue} class="selectList">
-            {#each sortingOptions as s, i}
-            <option value={sortingOptions[i]}>{sortingOptions[i]}</option>
-            {/each}
-        </select>
-        <!-- don't know how to fix without save button -->
-        <button onclick={saveSelectedLines} style="height: 30px; margin-left: 10px">Save</button>
+        <div class="actions-bar">
+            <div class="button-group">
+                {#if allChecked}
+                    <button class="select__button" onclick={unselectAll}>
+                        Unselect all
+                    </button>
+                {:else}
+                    <button class="select__button" onclick={selectAll}>
+                        Select all
+                    </button>
+                {/if}
+            </div>
+            <select bind:value={sortByValue} class="selectList">
+                {#each sortingOptions as s, i}
+                    <option value={sortingOptions[i]}
+                        >{sortingOptions[i]}</option
+                    >
+                {/each}
+            </select>
+            <!-- don't know how to fix without save button -->
+            <button
+                onclick={saveSelectedLines}
+                style="height: 30px; margin-left: 10px">Save</button
+            >
+        </div>
     </div>
     {#key `${sortByValue}-${filteredIndicators}`}
-        {#if filteredIndicators.length === 0}
-            <div class="empty">No data found</div>
-        {:else}
-            <ul>
-                {#each filteredIndicators as line, i}
-                    <li>
-                        <Line
-                            bind:this={lines[i]}
-                            function={checkSelected}
-                            update={updateValues}
-                            check={line.check}
-                            id={line.id}
-                            name={line.name}
-                            target={line.target}
-                            start={line.start}
-                            end={line.end}
-                            percent={line.percent}
-                            unit={line.unit}
-                            on:remove={(e) => removeLine(e.detail)}
-                        />
-                    </li>
-                {/each}
-            </ul>
-        {/if}
+        <ul>
+            {#each filteredIndicators as line, i}
+                <li>
+                    <Line
+                        bind:this={lines[i]}
+                        function={checkSelected}
+                        update={updateValues}
+                        check={line.check}
+                        id={line.id}
+                        name={line.name}
+                        target={line.target}
+                        start={line.start}
+                        end={line.end}
+                        percent={line.percent}
+                        unit={line.unit}
+                        on:remove={(e) => removeLine(e.detail)}
+                    />
+                </li>
+            {/each}
+        </ul>
     {/key}
 </div>
-</div>  
+</div>
 <style>
     ul {
         list-style: none;
@@ -195,12 +200,16 @@
         padding: 0;
     }
 
+    h2 {
+        margin-top: 0;
+    }
+
     li:first-child {
         margin-top: 25px;
     }
 
     .active-lines {
-        margin-top: 167px;
+        margin-top: 10px;
         margin-left: 40px;
         padding: 20px;
         border: 2px solid #b4b4b4;
@@ -210,11 +219,28 @@
         flex-direction: column;
     }
 
+    .toolbar {
+        padding: 20px;
+    }
 
     .actions-bar {
         display: flex;
         flex-direction: row;
-        width: 650px;
+    }
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .searchbar {
+        display: flex;
+        width: 200px;
+        height: 25px;
+        padding: 5px 3px;
+        font-size: 15px;
+        margin-left: 40px;
     }
 
     .button-group {
@@ -228,14 +254,6 @@
         justify-content: center;
         cursor: pointer;
         font-size: 15px;
-    }
-
-    .searchbar {
-        padding: 5px 3px;
-        font-size: 15px;
-        margin-left: 10px;
-        display: flex;
-        flex: 4;
     }
 
     .selectList {

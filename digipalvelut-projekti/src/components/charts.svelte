@@ -381,7 +381,7 @@
         let smallImageHeight = 200
         let BigImageHeight = 400
 
-        let lefSpacing = 60;
+        let leftSpacing = 60;
         let rightSpacing = 140;
 
         let doc;
@@ -436,11 +436,11 @@
                 if (height === width / 2) {
                     x = leftSide;
                     y = leftY;
-                    leftY += lefSpacing;
+                    leftY += leftSpacing;
                 } else {
                     x = rightSide;
                     y = rightY;
-                    leftY += lefSpacing;
+                    leftY += leftSpacing;
                     rightY += rightSpacing;
                 }
                 doc.addImage(imgURL, "PNG", x, y, width * imgScaling, height * imgScaling);
@@ -497,6 +497,7 @@
 </script>
 
 <div class="chartsSection">
+    <h2 class="title">Active charts</h2>
     <div class="toolbar">
         <div class="chartName">
             <input
@@ -575,9 +576,13 @@
 
 <style>
     .chartsSection {
-        margin-top: 200px;
+        margin-top: 10px;
         margin-left: 60px;
         min-width:537px;
+    }
+
+    .title {
+        margin-bottom: 5px;
     }
 
     .toolbar {
