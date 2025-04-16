@@ -381,7 +381,7 @@
         let smallImageHeight = 200
         let BigImageHeight = 400
 
-        let lefSpacing = 60;
+        let leftSpacing = 60;
         let rightSpacing = 140;
 
         let doc;
@@ -436,11 +436,11 @@
                 if (height === width / 2) {
                     x = leftSide;
                     y = leftY;
-                    leftY += lefSpacing;
+                    leftY += leftSpacing;
                 } else {
                     x = rightSide;
                     y = rightY;
-                    leftY += lefSpacing;
+                    leftY += leftSpacing;
                     rightY += rightSpacing;
                 }
                 doc.addImage(imgURL, "PNG", x, y, width * imgScaling, height * imgScaling);
