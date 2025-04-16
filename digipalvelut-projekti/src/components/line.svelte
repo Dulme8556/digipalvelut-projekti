@@ -164,17 +164,17 @@
             <div class="data__container">
                 <div class="component">
                     <h3>indicator:</h3>
-                    <div class="long" title={name}>{name}</div>
+                    <div class="long1" title={name}>{name}</div>
                 </div>
                 <div class="column">
                     <div class="component">
                         <h3>target:</h3>
-                        <div>{target}</div>
+                        <div class="long">{target}</div>
                     </div>
                     <div class="component">
-                        <h3>percent:</h3>
+                        <h3 class="long">percent:</h3>
                         {#if percent !== "placeholder"}
-                            <div>{percent}%</div>
+                            <div class="long">{percent}%</div>
                         {/if}
                     </div>
                 </div>
@@ -182,16 +182,16 @@
                     <div class="start_end__group">
                         <div class="component">
                             <h3>start:</h3>
-                            <div>{start}</div>
+                            <div class="long">{start}</div>
                         </div>
                         <div class="component component__last">
                             <h3>end:</h3>
-                            <div>{end}</div>
+                            <div class="long">{end}</div>
                         </div>
                     </div>
                     <div class="component">
                         <h3>unit:</h3>
-                        <div class="long" title={unit}>{unit}</div>
+                        <div title={unit}>{unit}</div>
                     </div>
                 </div>
             </div>
@@ -229,7 +229,7 @@
     .line {
         display: flex;
         justify-content: space-between;
-        width: 720px;
+        width: 800px;
         font-size: 15px;
         padding-top: 10px;
         margin: 5px 0;
@@ -266,8 +266,16 @@
     .long {
         overflow: hidden;
         text-overflow: ellipsis;
-        /* white-space: nowrap; */
-        width: 150px;
+        white-space: nowrap;
+        width: 80px;
+    }
+
+    .long1{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        word-wrap: break-word;
+        max-width: 150px;
     }
     
     .column {

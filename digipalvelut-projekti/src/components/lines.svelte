@@ -200,7 +200,7 @@
     }
 
     .active-lines {
-        margin-top: 160px;
+        margin-top: 167px;
         margin-left: 40px;
         padding: 20px;
         border: 2px solid #b4b4b4;
