@@ -256,7 +256,6 @@
     }
 
     function checkSelected() {
-        console.log("function");
         let tempStoreChild = storeChildComponents.filter(
             (item) => item !== null,
         );
@@ -549,7 +548,6 @@
         <!-- the 2 buttons should be done in a way that there is only 1 button -->
         <div class="downloadButtons">
             <button
-                class="first_downloadButton"
                 onclick={downloadPDF}
                 style="margin: 5px 0; margin-right: 5px;"
             >
