@@ -578,6 +578,7 @@
     .chartsSection {
         margin-top: 10px;
         margin-left: 60px;
+        min-width:537px;
     }
 
     .title {
@@ -591,6 +592,7 @@
 
     .selectList {
         width: 120px;
+        max-height:21px;
         margin-top: 12px;
         margin-left: 10px;
     }
