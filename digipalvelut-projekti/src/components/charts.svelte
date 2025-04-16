@@ -40,6 +40,8 @@
     let storeTypes = [];
     let allChecked = false;
 
+    let downloadOptionsVisible = false;
+
     let searchQuery = "";
 
     onMount(async () => {
@@ -368,7 +370,13 @@
         return finalList;
     }
 
+    function toggleDownloadOptions() {
+        downloadOptionsVisible = !downloadOptionsVisible;
+    }
+
     async function downloadPDF() {
+        downloadOptionsVisible = false;
+
         let x = 0;
         let y = 0;
         let leftSide = 0;
@@ -377,9 +385,9 @@
         let rightY = 20;
 
         let imgScaling = 0.26;
-        let imageWidth = 400
-        let smallImageHeight = 200
-        let BigImageHeight = 400
+        let imageWidth = 400;
+        let smallImageHeight = 200;
+        let BigImageHeight = 400;
 
         let leftSpacing = 60;
         let rightSpacing = 140;
@@ -443,7 +451,14 @@
                     leftY += leftSpacing;
                     rightY += rightSpacing;
                 }
-                doc.addImage(imgURL, "PNG", x, y, width * imgScaling, height * imgScaling);
+                doc.addImage(
+                    imgURL,
+                    "PNG",
+                    x,
+                    y,
+                    width * imgScaling,
+                    height * imgScaling,
+                );
             }
 
             if (i < pageKeys.length - 1) {
@@ -456,6 +471,8 @@
     }
 
     async function download1PerPage() {
+        downloadOptionsVisible = false;
+
         // wait that the searchQuery is cleared so all charts are shown
         await new Promise((resolve) => {
             searchQuery = "";
@@ -536,27 +553,28 @@
             bind:value={searchQuery}
         />
         {#if allChecked}
-            <button class="toggleButton" onclick={() => toggleSelected(false)}
-                >Unselect all</button
-            >
+            <button class="toggleButton" onclick={() => toggleSelected(false)}>
+                Unselect all
+            </button>
         {:else}
-            <button class="toggleButton" onclick={() => toggleSelected(true)}
-                >Select all</button
-            >
+            <button class="toggleButton" onclick={() => toggleSelected(true)}>
+                Select all
+            </button>
         {/if}
     </div>
     <div class="thirdLine">
-        <!-- the 2 buttons should be done in a way that there is only 1 button -->
         <div class="downloadButtons">
-            <button
-                onclick={downloadPDF}
-                style="margin: 5px 0; margin-right: 5px;"
-            >
-                Download chosen charts
+            <button onclick={toggleDownloadOptions} class="showSpanButton">
+                Download
             </button>
-            <button onclick={download1PerPage} style="margin: 5px 0;">
-                Download 1 chart per page
-            </button>
+            <span class={downloadOptionsVisible ? "showOptions" : "hideOptions"}>
+                <button onclick={downloadPDF} class="downloadButton">
+                    Download chosen charts
+                </button>
+                <button onclick={download1PerPage} class="downloadButton">
+                    Download 1 chart per page
+                </button>
+            </span>
         </div>
     </div>
     {#key filteredCharts}
@@ -578,7 +596,7 @@
     .chartsSection {
         margin-top: 10px;
         margin-left: 40px;
-        min-width:537px;
+        min-width: 537px;
     }
 
     .title {
@@ -592,7 +610,7 @@
 
     .selectList {
         width: 120px;
-        max-height:21px;
+        max-height: 21px;
         margin-top: 12px;
         margin-left: 10px;
     }
@@ -621,6 +639,31 @@
     .downloadButtons {
         display: flex;
         flex-direction: row;
+    }
+
+    .showSpanButton {
+        margin: 5px 0;
+        margin-right: 5px;
+        padding: 6px 3px;
+    }
+
+    .showOptions {
+        display: flex;
+        background-color: #dadada;
+        border: 1px solid gray;
+        margin: 5px 0;
+        width: 355px;
+    }
+
+    .hideOptions {
+        display: none;
+    }
+
+    .downloadButton {
+        margin: 5px 5px;
+        border: 1px solid #000000;
+        border-radius: 5px;
+        cursor: pointer;
     }
 
     .toggleButton {

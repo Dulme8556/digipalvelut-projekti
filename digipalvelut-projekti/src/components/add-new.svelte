@@ -124,15 +124,6 @@
         margin-bottom: 0;
     }
 
-    .title {
-        text-transform: uppercase;
-    }
-
-    .import-button {
-        display: flex;
-        justify-content: center;
-    }
-
     .add-button {
         display: flex;
         padding-bottom: 10px;

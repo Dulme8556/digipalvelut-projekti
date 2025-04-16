@@ -24,15 +24,13 @@
     </div>
     <div class="content">
         <div class="main__functions">
-            <div style='display:flex; justify-content: space-between;'>
-                <AddNew />
-                {#key lists.list.length}
-                    <Lines />
-                {/key}
-                {#key `${lists.selectedValues.length}-${lists.charts.length}`}
-                    <Charts />
-                {/key}
-            </div>
+            <AddNew />
+            {#key lists.list.length}
+                <Lines />
+            {/key}
+            {#key `${lists.selectedValues.length}-${lists.charts.length}`}
+                <Charts />
+            {/key}
         </div>
         <div class="sidebar">
             <DownloadFile />
@@ -71,7 +69,7 @@
     .credit * {
         box-sizing: border-box;
     }
-    
+
     .credit {
         width: 100%;
         display: flex;
