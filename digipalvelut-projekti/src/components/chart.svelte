@@ -132,7 +132,6 @@
         return id;
     }
 </script>
-
     <div class="chartContainer">
         <div class="actionBar">
             <div class="chartName">

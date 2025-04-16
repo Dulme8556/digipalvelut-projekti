@@ -2,7 +2,7 @@
 </script>
 
 <div class="container">
-    <h3>Excel template:</h3>
+    <h3 class="title">Download the excel template:</h3>
     <div class="link__container">
         <a href="impact_tool.xlsx">
             <img class="download" src="./images/download-icon.svg" alt="" />
@@ -13,9 +13,15 @@
 <style>
     .container {
         pointer-events: none;
-        position: absolute;
-        top: 15px;
-        right: 20px;
+        margin-bottom: 100px;
+    }
+
+    .title {
+        display: flex;
+        justify-self: center;
+        text-align: center;
+        width: 200px;
+        font-weight: 600;
     }
 
     .link__container {
