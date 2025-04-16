@@ -194,6 +194,10 @@
         padding: 0;
     }
 
+    li:first-child {
+        margin-top: 25px;
+    }
+
     .active-lines {
         margin-top: 160px;
         margin-left: 40px;

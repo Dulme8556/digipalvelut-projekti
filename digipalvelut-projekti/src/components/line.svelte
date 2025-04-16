@@ -107,10 +107,10 @@
                 onclick={checkboxClick}
             />
             <div class="data__container">
-                <div class="component long">
+                <div class="component">
                     <h3>indicator:</h3>
                     <input
-                        class="input input__long"
+                        class="input input__long long"
                         type="text"
                         bind:value={name}
                     />
@@ -125,22 +125,28 @@
                     </div>
                 </div>
                 <div class="column">
-                    <div class="component">
-                        <h3>start:</h3>
-                        <input class="input" type="text" bind:value={start} />
+                    <div class="start_end__group">
+                        <div class="component">
+                            <h3>start:</h3>
+                            <input
+                                class="input"
+                                type="text"
+                                bind:value={start}
+                            />
+                        </div>
+                        <div class="component">
+                            <h3>end:</h3>
+                            <input class="input" type="text" bind:value={end} />
+                        </div>
                     </div>
-                    <div class="component long">
+                    <div class="component">
                         <h3>unit:</h3>
                         <input
-                            class="input input__long"
+                            class="input input__long long"
                             type="text"
                             bind:value={unit}
                         />
                     </div>
-                </div>
-                <div class="component">
-                    <h3>end:</h3>
-                    <input class="input" type="text" bind:value={end} />
                 </div>
             </div>
 
@@ -156,9 +162,9 @@
                 onclick={checkboxClick}
             />
             <div class="data__container">
-                <div class="component long">
+                <div class="component">
                     <h3>indicator:</h3>
-                    <div>{name}</div>
+                    <div class="long" title={name}>{name}</div>
                 </div>
                 <div class="column">
                     <div class="component">
@@ -173,18 +179,20 @@
                     </div>
                 </div>
                 <div class="column">
+                    <div class="start_end__group">
+                        <div class="component">
+                            <h3>start:</h3>
+                            <div>{start}</div>
+                        </div>
+                        <div class="component component__last">
+                            <h3>end:</h3>
+                            <div>{end}</div>
+                        </div>
+                    </div>
                     <div class="component">
-                        <h3>start:</h3>
-                        <div>{start}</div>
-                    </div>
-                    <div class="component long">
                         <h3>unit:</h3>
-                        <div>{unit}</div>
+                        <div class="long" title={unit}>{unit}</div>
                     </div>
-                </div>
-                <div class="component component__last">
-                    <h3>end:</h3>
-                    <div>{end}</div>
                 </div>
             </div>
             <div class="button__container">
@@ -217,17 +225,17 @@
         max-height: 16px;
     }
 
+    
     .line {
         display: flex;
         justify-content: space-between;
-        max-width: 800px;
-        min-width: 800px;
+        width: 720px;
         font-size: 15px;
         padding-top: 10px;
         margin: 5px 0;
         border: 1px rgba(0, 0, 0, 0.3) solid;
     }
-
+    
     .checkbox {
         display: flex;
         cursor: pointer;
@@ -235,7 +243,7 @@
         height: 20px;
         margin: 8px 8px;
     }
-
+    
     .data__container {
         display: flex;
         flex-direction: row;
@@ -243,28 +251,35 @@
         flex-wrap: nowrap;
         width: 100%;
     }
-
+    
     .component {
         display: flex;
         flex-direction: row;
         margin-right: 10px;
         padding: 5px 0;
-        flex: 1;
     }
-
+    
     .component__last {
         flex: 0.5;
     }
-
+    
     .long {
-        display: flex;
-        flex: 1.5;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* white-space: nowrap; */
+        width: 150px;
     }
-
+    
     .column {
         display: flex;
         flex-direction: column;
         flex: 1;
+    }
+
+    .start_end__group {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
     }
 
     .button__container {
