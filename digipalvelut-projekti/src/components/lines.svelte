@@ -199,7 +199,7 @@
     }
 
     .active-lines {
-        margin-top: 160px;
+        margin-top: 10px;
         margin-left: 40px;
     }
 

@@ -497,6 +497,7 @@
 </script>
 
 <div class="chartsSection">
+    <h2 class="title">Active charts</h2>
     <div class="toolbar">
         <div class="chartName">
             <input
@@ -575,8 +576,12 @@
 
 <style>
     .chartsSection {
-        margin-top: 200px;
+        margin-top: 10px;
         margin-left: 60px;
+    }
+
+    .title {
+        margin-bottom: 5px;
     }
 
     .toolbar {
