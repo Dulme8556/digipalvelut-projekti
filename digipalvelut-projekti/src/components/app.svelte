@@ -18,11 +18,11 @@
 
 <div class="website">
     <div class="credit">
-        <img class="vr4vet_logo" src="./images/VR4VET_LOGO_DOTS_trnsprnt_Turquoise.png">
-        <img class="eu_union" src="./images/EN_FundedbytheEU_RGB_POS.png">
+        <img class="vr4vet_logo" src="./images/VR4VET_LOGO_DOTS_trnsprnt_Turquoise.png" alt="VR4VET">
+        <img class="eu_union" src="./images/EN_FundedbytheEU_RGB_POS.png" alt="Funded by the European Union">
     </div>
     <div class="main__functions">
-        <div style='display:flex;'>
+        <div style='display:flex; justify-content: space-between;'>
             <AddNew />
             {#key lists.list.length}
                 <Lines />
