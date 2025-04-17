@@ -70,7 +70,7 @@
     }
 </script>
 
-<div>
+<div style="text-align: center;">
     <h3 class="title">Read existing data</h3>
     <input
         type="file"
@@ -78,8 +78,13 @@
         bind:this={fileInput}
         onchange={handleFileInput}
     />
-    <button onclick={fileDialog}>Open file</button>
+
+    <div class="tooltip-container">
+        <button onclick={fileDialog}>Open file</button>
+        <span class="tooltip-text">Click to upload an Excel file</span>
+    </div>
 </div>
+
 
 <style>
     .title {
@@ -117,5 +122,33 @@
 
     button:hover {
         cursor: pointer;
+    }
+
+    .tooltip-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 8px;
+        border-radius: 4px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 12px;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 </style>
