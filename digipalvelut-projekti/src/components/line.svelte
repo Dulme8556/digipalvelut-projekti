@@ -271,7 +271,7 @@
     }
 
     .long1{
-        max-width: 150px;
+        max-width: 120px;
         overflow-wrap: break-word;
         word-break: normal;
         white-space: normal;
