@@ -129,7 +129,7 @@
         padding-bottom: 10px;
         padding-left: 10px;
         padding-top: 10px;
-        justify-self: center;
+        justify-content: center;
     }
 
     .add-button__button {
@@ -186,5 +186,9 @@
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
+    }
+    
+    input[type=number] {
+        -moz-appearance:textfield;
     }
 </style>
