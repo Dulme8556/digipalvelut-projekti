@@ -343,7 +343,7 @@
     }
 
     .input__long {
-        width: 140px;
+        width: 100px;
     }
 
     .button__save {
