@@ -374,6 +374,12 @@
         downloadOptionsVisible = !downloadOptionsVisible;
     }
 
+    function hideDownloadOptions() {
+        setTimeout(() => {
+            downloadOptionsVisible = false;
+        }, 100)
+    }
+
     async function downloadPDF() {
         downloadOptionsVisible = false;
 
@@ -576,7 +582,7 @@
         {/if}
     </div>
     <div class="thirdLine">
-        <div class="downloadButtons">
+        <div class="downloadButtons" onfocusout={hideDownloadOptions}>
             <button onclick={toggleDownloadOptions} class="showSpanButton">
                 Download
             </button>
