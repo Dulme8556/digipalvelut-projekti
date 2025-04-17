@@ -157,12 +157,11 @@
             </div>
             <select bind:value={sortByValue} class="selectList">
                 {#each sortingOptions as s, i}
-                    <option value={sortingOptions[i]}
-                        >{sortingOptions[i]}</option
-                    >
+                    <option value={sortingOptions[i]}>
+                        {sortingOptions[i]}
+                    </option>
                 {/each}
             </select>
-            <!-- don't know how to fix without save button -->
             <button onclick={saveSelectedLines} class="saveButton">
                 Save
             </button>
