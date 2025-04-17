@@ -685,6 +685,7 @@
         margin: 5px 0;
         margin-right: 5px;
         padding: 6px 3px;
+        cursor: pointer;
     }
 
     .showOptions {
@@ -710,5 +711,6 @@
         margin-top: 5px;
         margin-left: 10px;
         height: 20px;
+        cursor: pointer;
     }
 </style>

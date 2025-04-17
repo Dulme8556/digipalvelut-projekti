@@ -163,10 +163,9 @@
                 {/each}
             </select>
             <!-- don't know how to fix without save button -->
-            <button
-                onclick={saveSelectedLines}
-                style="height: 30px; margin-left: 10px">Save</button
-            >
+            <button onclick={saveSelectedLines} class="saveButton">
+                Save
+            </button>
         </div>
     </div>
     {#key `${sortByValue}-${filteredIndicators}`}
@@ -266,5 +265,11 @@
         margin-left: 10px;
         cursor: pointer;
         font-size: 15px;
+    }
+
+    .saveButton {
+        height: 30px;
+        margin-left: 10px;
+        cursor: pointer;
     }
 </style>

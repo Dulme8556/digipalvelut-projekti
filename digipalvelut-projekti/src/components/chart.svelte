@@ -179,7 +179,7 @@
 <style>
     .chartContainer {
         width: 400px;
-        margin-bottom: 50px;
+        margin-bottom: 25px;
         border: 1px rgba(0,0,0,0.4) solid;
     }
 
@@ -198,6 +198,7 @@
     .CheckBox {
         width: 17px;
         margin-right: 5px;
+        cursor: pointer;
     }
 
     .chartTitle {
