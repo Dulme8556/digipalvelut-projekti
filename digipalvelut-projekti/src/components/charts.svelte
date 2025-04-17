@@ -544,9 +544,15 @@
             <div
                 style="position:relative; display:flex; flex-direction:column; align-items:center;"
             >
-                <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
-                    &#x25BC; <!-- Down arrow icon -->
-                </div>
+                {#if !showOptions}
+                    <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
+                        &#x25BC; <!-- Down arrow icon -->
+                    </div>
+                {:else}
+                    <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
+                        &#x25b2; <!-- Up arrow icon -->
+                    </div>
+                {/if}
 
                 {#if showOptions}
                     <div class="dropdownOptions">
