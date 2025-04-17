@@ -191,7 +191,7 @@
                     </div>
                     <div class="component">
                         <h3>unit:</h3>
-                        <div title={unit}>{unit}</div>
+                        <div class="long1" title={unit}>{unit}</div>
                     </div>
                 </div>
             </div>
@@ -263,6 +263,7 @@
     }
     
     .long {
+        padding-top:2.5px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
