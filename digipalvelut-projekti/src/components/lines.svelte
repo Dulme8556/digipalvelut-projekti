@@ -223,6 +223,7 @@
 
     .toolbar {
         padding: 20px;
+        padding-top: 15px;
     }
 
     .actions-bar {
