@@ -377,7 +377,7 @@
     function hideDownloadOptions() {
         setTimeout(() => {
             downloadOptionsVisible = false;
-        }, 100)
+        }, 100);
     }
 
     async function downloadPDF() {
@@ -526,78 +526,92 @@
 </script>
 
 <div class="chartsSection">
-    <h2 class="title">Active charts</h2>
     <div class="toolbar">
-        <div class="chartName">
+        <h2 class="title">Active charts</h2>
+        <div class="firstLine">
+            <div class="chartName">
+                <input
+                    style="width: 120px;"
+                    placeholder="Chart Name"
+                    bind:value={chartName}
+                />
+            </div>
+            <select bind:value={typeOfChart} class="selectList">
+                {#each chartTypes as s, i}
+                    <option value={chartTypes[i]}>{chartTypes[i]}</option>
+                {/each}
+            </select>
+            <div
+                style="position:relative; display:flex; flex-direction:column; align-items:center;"
+            >
+                <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
+                    &#x25BC; <!-- Down arrow icon -->
+                </div>
+
+                {#if showOptions}
+                    <div class="dropdownOptions">
+                        <label for="addInfo">
+                            <input
+                                type="checkbox"
+                                id="addInfo"
+                                bind:checked={addInfo}
+                            />
+                            Show exact values
+                        </label>
+                    </div>
+                {/if}
+            </div>
+            <div class="chartButton">
+                <button class="chartButton__button" onclick={createNewChart}>
+                    Create a chart
+                </button>
+            </div>
+        </div>
+        <div class="secondLine">
             <input
-                style="width: 120px;"
-                placeholder="Chart Name"
-                bind:value={chartName}
+                type="search"
+                style="margin-top: 5px;"
+                placeholder="Search..."
+                bind:value={searchQuery}
             />
-        </div>
-        <select bind:value={typeOfChart} class="selectList">
-            {#each chartTypes as s, i}
-                <option value={chartTypes[i]}>{chartTypes[i]}</option>
-            {/each}
-        </select>
-        <div style="position:relative; display:flex; flex-direction:column; align-items:center;">
-            <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
-                &#x25BC; <!-- Down arrow icon -->
-            </div>
-    
-            {#if showOptions}
-            <div class="dropdownOptions">
-                <label for="addInfo">
-                    <input
-                        type="checkbox"
-                        id="addInfo"
-                        bind:checked={addInfo}
-                    />
-                    Show exact values
-                </label>
-            </div>
-        {/if}
-        </div>
-        <div class="chartButton">
-            <button class="chartButton__button" onclick={createNewChart}>
-                Create a chart
-            </button>
-        </div>
-    </div>
-    <div class="secondLine">
-        <input
-            type="search"
-            style="margin-top: 5px;"
-            placeholder="Search..."
-            bind:value={searchQuery}
-        />
-        {#if allChecked}
-            <button class="toggleButton" onclick={() => toggleSelected(false)}>
-                Unselect all
-            </button>
-        {:else}
-            <button class="toggleButton" onclick={() => toggleSelected(true)}>
-                Select all
-            </button>
-        {/if}
-    </div>
-    <div class="thirdLine">
-        <div class="downloadButtons" onfocusout={hideDownloadOptions}>
-            <button onclick={toggleDownloadOptions} class="showSpanButton">
-                Download
-            </button>
-            <span class={downloadOptionsVisible ? "showOptions" : "hideOptions"}>
-                <button onclick={downloadPDF} class="downloadButton">
-                    Download chosen charts
+            {#if allChecked}
+                <button
+                    class="toggleButton"
+                    onclick={() => toggleSelected(false)}
+                >
+                    Unselect all
                 </button>
-                <button onclick={download1PerPage} class="downloadButton">
-                    Download 1 chart per page
+            {:else}
+                <button
+                    class="toggleButton"
+                    onclick={() => toggleSelected(true)}
+                >
+                    Select all
                 </button>
-            </span>
+            {/if}
+        </div>
+        <div class="thirdLine">
+            <div class="downloadButtons" onfocusout={hideDownloadOptions}>
+                <button onclick={toggleDownloadOptions} class="showSpanButton">
+                    Download
+                </button>
+                <span
+                    class={downloadOptionsVisible
+                        ? "showOptions"
+                        : "hideOptions"}
+                >
+                    <button onclick={downloadPDF} class="downloadButton">
+                        Download chosen charts
+                    </button>
+                    <button onclick={download1PerPage} class="downloadButton">
+                        Download 1 chart per page
+                    </button>
+                </span>
+            </div>
         </div>
     </div>
     {#key filteredCharts}
-        <div>
+        <div class="chartList">
             {#each filteredCharts as data, i}
                 <div>
                     <Chart
@@ -613,38 +627,45 @@
 
 <style>
     .extraOptionsToggle {
-    	cursor: pointer;
-    	font-size: 16px;
-    	padding: 4px;
-        margin-left:4px;
-        margin-right:4px;
-        padding-top:7px;
-    	user-select: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 4px;
+        margin-left: 4px;
+        margin-right: 4px;
+        padding-top: 7px;
+        user-select: none;
     }
 
     .dropdownOptions {
-    	position: absolute;
-    	top: 35px;
-    	left: 0;
-    	background-color: white;
-    	border: 1px solid #ccc;
-    	border-radius: 4px;
-    	padding: 5px 10px;
-    	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    	z-index: 10;
-    	white-space: nowrap;
+        position: absolute;
+        top: 35px;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+        white-space: nowrap;
     }
     .chartsSection {
-        margin-top: 10px;
+        margin-top: 20px;
         margin-left: 40px;
         min-width: 470px;
     }
-
+    
     .title {
         margin-bottom: 5px;
+        margin: 0;
+    }
+    
+    .toolbar {
+        border: 2px solid #b4b4b4;
+        border-radius: 10px;
+        padding: 10px 15px;
     }
 
-    .toolbar {
+    .firstLine {
         display: flex;
         flex-direction: row;
     }
@@ -712,5 +733,11 @@
         margin-left: 10px;
         height: 20px;
         cursor: pointer;
+    }
+
+    .chartList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>
