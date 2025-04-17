@@ -240,7 +240,7 @@
         display: flex;
         cursor: pointer;
         width: 20px;
-        height: 20px;
+        transform:scale(1.2);
         margin: 8px 8px;
     }
     
