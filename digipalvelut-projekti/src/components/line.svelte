@@ -271,11 +271,10 @@
     }
 
     .long1{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-        word-wrap: break-word;
         max-width: 150px;
+        overflow-wrap: break-word;
+        word-break: normal;
+        white-space: normal;
     }
     
     .column {
