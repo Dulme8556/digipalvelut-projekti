@@ -3,35 +3,64 @@
 
 <div class="container">
     <h3 class="title">Download the excel template:</h3>
-    <div class="link__container">
-        <a href="impact_tool.xlsx">
+    <div class="tooltip-container">
+        <a href="impact_tool.xlsx" class="link__container">
             <img class="download" src="./images/download-icon.svg" alt="" />
         </a>
+        <span class="tooltip-text">Download a premade<br>excel template</span>
     </div>
 </div>
 
 <style>
     .container {
-        pointer-events: none;
-        margin-bottom: 100px;
+    text-align: center;
+    margin-bottom: 100px;
+    pointer-events: none;
     }
 
     .title {
-        display: flex;
-        justify-self: center;
-        text-align: center;
-        width: 200px;
         font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .tooltip-container {
+        position: relative;
+        display: inline-block;
+        pointer-events: auto;
+    }
+
+    .tooltip-text {
+        visibility: hidden;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 8px;
+        border-radius: 4px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 12px;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 
     .link__container {
-        display: flex;
-        justify-self: center;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         border: #3B3B3B solid 2px;
         border-radius: 5px;
         background-color: #757575;
-        pointer-events: auto;
         width: 45px;
+        height: 45px;
     }
 
     .link__container:hover {

@@ -81,7 +81,7 @@
 
     <div class="tooltip-container">
         <button onclick={fileDialog}>Open file</button>
-        <span class="tooltip-text">Click to upload an Excel file</span>
+        <span class="tooltip-text">Click to upload<br>an Excel file</span>
     </div>
 </div>
 
