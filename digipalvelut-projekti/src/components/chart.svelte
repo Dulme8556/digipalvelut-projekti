@@ -179,7 +179,6 @@
 <style>
     .chartContainer {
         width: 400px;
-        margin-bottom: 25px;
         border: 1px rgba(0,0,0,0.4) solid;
     }
 
