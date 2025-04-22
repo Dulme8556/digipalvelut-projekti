@@ -70,8 +70,8 @@
     }
 </script>
 
-<div style="text-align: center;">
-    <h3 class="title">Read existing data</h3>
+<div style="text-align: center; padding: 0 10px;">
+    <!-- <h3 class="title">Read existing data</h3> -->
     <input
         type="file"
         accept=".xlsx"
