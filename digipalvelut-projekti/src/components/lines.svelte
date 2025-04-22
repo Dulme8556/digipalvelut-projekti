@@ -134,7 +134,10 @@
 <div class="active-lines">
     <div class="toolbar">
         <div class="top">
-            <h2>Active indicators</h2>
+            <div>
+            <h2>Indicators</h2>
+            <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
+            </div>
             <input
                 id="searchbar"
                 class="searchbar"
@@ -200,6 +203,7 @@
 
     h2 {
         margin-top: 0;
+        margin-bottom:0;
         min-width: 202px;
     }
 
