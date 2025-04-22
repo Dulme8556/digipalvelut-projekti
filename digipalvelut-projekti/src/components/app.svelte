@@ -57,7 +57,6 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        height: 120px;
     }
 
     .title {
@@ -68,7 +67,6 @@
     .titleText {
         font-size: 50px;
         font-weight: 600;
-        padding-bottom: 5px;
         padding-top: 5px;
     }
 
