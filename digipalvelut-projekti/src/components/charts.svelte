@@ -17,6 +17,7 @@
 
     let chartName = "";
     let indexAxis = "";
+    let chartUnit = "";
 
     let datasetDataEnd = [];
     let datasetDataTarget = [];
@@ -58,6 +59,7 @@
                         title: element.title,
                         type: element.type,
                         labels: element.labels,
+                        chartUnit: element.unit,
                         indexAxis: element.indexAxis,
                         datasets: element.datasets,
                     },
@@ -83,6 +85,7 @@
             type: typeOfChart,
             labels: labels,
             indexAxis: indexAxis,
+            unit: chartUnit,
             datasets: [
                 {
                     label: "start",
@@ -128,9 +131,10 @@
         let datasetDataTarget = checkedItems.map((item) => item.target);
         let datasetDataStart = checkedItems.map((item) => item.start);
         let labels = checkedItems.map((item) => item.name);
+        let datasetUnit = checkedItems.map((item) => item.unit);
 
         if (checkedItems.length === 0) {
-            alert("Error: No indicators selected.");
+            alert('Error: No indicators selected. \nPressing the "Save" button may fix this issue.');
             return;
         }
 
@@ -142,6 +146,7 @@
             title: chartName,
             type: type,
             labels: labels,
+            unit: datasetUnit,
             indexAxis: axis,
             datasets: [],
             addInfo: addInfo, // Pass the addInfo flag here
@@ -153,6 +158,7 @@
                 {
                     label: "Values",
                     data: datasetDataEnd,
+                    unit: datasetUnit,
                     backgroundColor: [
                         "#FF6384",
                         "#36A2EB",
@@ -168,6 +174,7 @@
                 datasetDataStart,
                 datasetDataEnd,
                 datasetDataTarget,
+                datasetUnit,
                 labels,
             );
             chartData.datasets = JSON.parse(
@@ -182,18 +189,21 @@
                     label: "start",
                     data: datasetDataStart,
                     backgroundColor: "yellow",
+                    unit: datasetUnit,
                     minBarLength: 4,
                 },
                 {
                     label: "end",
                     data: datasetDataEnd,
                     backgroundColor: "blue",
+                    unit: datasetUnit,
                     minBarLength: 4,
                 },
                 {
                     label: "target",
                     data: datasetDataTarget,
                     backgroundColor: "red",
+                    unit: datasetUnit,
                     minBarLength: 4,
                 },
             ];
