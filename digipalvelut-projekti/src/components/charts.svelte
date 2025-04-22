@@ -665,9 +665,11 @@
         white-space: nowrap;
     }
     .chartsSection {
-        margin-top: 20px;
+        margin-top: 50px;
         margin-left: 40px;
+        margin-right: 50px;
         min-width: 470px;
+        transform: scale(1.1);
     }
     
     .title {

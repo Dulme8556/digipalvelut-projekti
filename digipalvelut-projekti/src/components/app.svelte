@@ -19,14 +19,18 @@
 
 <div class="website">
     <div class="credit">
-        <img class="eu_union" src="./images/EN_FundedbytheEU_RGB_POS.png" alt="Funded by the European Union">
+        <img class="eu_union" src="./images/EN_FundedbytheEU_RGB_POS.png" alt="Funded by the European Union"/>
     </div>
-    <div class="s">
-        <div class="t">
-            <img class="vr4vet_logo" src="./images/VR4VET_LOGO_DOTS_trnsprnt_Turquoise.png" alt="VR4VET">
-            <div class="a">impact tool</div>
+    <div class="titleBar">
+        <div class="title">
+            <img
+                class="vr4vet_logo"
+                src="./images/VR4VET_LOGO_DOTS_trnsprnt_Turquoise.png"
+                alt="VR4VET"
+            />
+            <div class="titleText">Impact tool</div>
         </div>
-        <div class="h">
+        <div class="buttonGroup">
             <DownloadFile />
             <FileReader />
         </div>
@@ -41,25 +45,13 @@
                 <Charts />
             {/key}
         </div>
-        <div class="sidebar">
-        </div>
     </div>
 </div>
 
 <GlobalStyles />
 
 <style>
-    .h {
-        display: flex;
-        align-items: center;
-    }
-    .t {
-        display: flex;
-        flex-direction: row;
-        /* padding-top: 30px; */
-    }
-
-    .s {
+    .titleBar {
         border-bottom: 1px solid black;
         display: flex;
         flex-direction: row;
@@ -67,24 +59,29 @@
         justify-content: space-between;
         height: 120px;
     }
-    .a {
+
+    .title {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .titleText {
         font-size: 50px;
         font-weight: 600;
         padding-bottom: 5px;
         padding-top: 5px;
-        /* background: linear-gradient(
-            90deg,
-            rgba(41, 168, 175, 1) 0%,
-            rgba(17, 70, 73, 1) 100%
-            ); */
-            
-        }
-        .website {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            /* background-color: rgba(0, 0, 0, 0.1) */
-        }
+    }
+
+    .buttonGroup {
+        display: flex;
+        align-items: center;
+    }
+
+    .website {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
 
     .content {
         display: flex;
@@ -98,14 +95,11 @@
         justify-content: space-between;
     }
 
-    .sidebar {
-        border-left: 1px solid gray;
-        height: 100%;
-    }
-
     .credit,
     .credit * {
         box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
     }
 
     .credit {
@@ -118,14 +112,12 @@
             rgba(17, 70, 73, 1) 100%
         );
         border-bottom: solid 1px black;
-        /* height: 130px; */
         position: relative;
         flex-shrink: 0;
     }
 
     .vr4vet_logo {
         width: 220px;
-        /* margin-right: 50px; */
         height: 100px;
         object-fit: cover;
         aspect-ratio: 220 / 100;

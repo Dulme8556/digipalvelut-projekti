@@ -71,7 +71,6 @@
 </script>
 
 <div style="text-align: center; padding: 0 10px;">
-    <!-- <h3 class="title">Read existing data</h3> -->
     <input
         type="file"
         accept=".xlsx"
@@ -87,12 +86,6 @@
 
 
 <style>
-    .title {
-        display: flex;
-        justify-content: center;
-        font-weight: 600;
-    }
-
     input {
         display: none;
     }

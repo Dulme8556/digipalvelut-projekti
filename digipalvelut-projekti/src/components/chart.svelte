@@ -193,6 +193,8 @@
     .chartContainer {
         width: 400px;
         border: 1px rgba(0, 0, 0, 0.4) solid;
+        transform: scale(1.1);
+        margin-bottom: 10px;
     }
 
     .actionBar {

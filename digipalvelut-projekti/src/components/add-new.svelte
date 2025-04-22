@@ -68,7 +68,7 @@
     }
 </script>
 
-<div style="min-width:350px; max-width:350px;">
+<div style="min-width:350px; max-width:350px; margin-left: 20px">
     <div class="create-dataset">
         <h2 class="create-dataset__title">CREATE A NEW INDICATOR</h2>
         <div class="input__container">
@@ -113,7 +113,7 @@
 
 <style>
     .create-dataset {
-        background-color: rgba(128, 128, 128, 0.289);
+        background-color: rgba(128, 128, 128, 0.17);
         border-radius: 12px;
     }
 

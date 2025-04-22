@@ -18,11 +18,6 @@
     pointer-events: none;
     }
 
-    .title {
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-
     .tooltip-container {
         position: relative;
         display: inline-block;
