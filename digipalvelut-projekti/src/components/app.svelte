@@ -28,7 +28,7 @@
                 src="./images/VR4VET_LOGO_DOTS_trnsprnt_Turquoise.png"
                 alt="VR4VET"
             />
-            <div class="titleText">Impact tool</div>
+            <h1 class="titleText">Impact tool</h1>
         </div>
         <div class="buttonGroup">
             <DownloadFile />
@@ -65,9 +65,10 @@
     }
 
     .titleText {
-        font-size: 50px;
+        margin: 0;
+        font-size: 40px;
         font-weight: 600;
-        padding-top: 5px;
+        padding-top: 14px;
     }
 
     .buttonGroup {
