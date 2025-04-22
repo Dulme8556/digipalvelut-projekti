@@ -642,6 +642,13 @@
 </div>
 
 <style>
+    .chartsSection {
+        margin-top: 30px;
+        margin-right: 20px;
+        min-width: 470px;
+        transform: scale(1.1);
+    }
+
     .extraOptionsToggle {
         cursor: pointer;
         font-size: 16px;
@@ -663,13 +670,6 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         z-index: 10;
         white-space: nowrap;
-    }
-    .chartsSection {
-        margin-top: 50px;
-        margin-left: 40px;
-        margin-right: 50px;
-        min-width: 470px;
-        transform: scale(1.1);
     }
     
     .title {

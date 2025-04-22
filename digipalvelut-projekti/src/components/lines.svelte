@@ -213,7 +213,6 @@
     }
 
     .active-lines {
-        margin-top: 20px;
         border-radius: 10px;
         min-width: 770px;
         min-height: 130px;

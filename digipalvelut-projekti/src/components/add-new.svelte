@@ -68,7 +68,7 @@
     }
 </script>
 
-<div style="min-width:350px; max-width:350px; margin-left: 20px">
+<div class="add-new-section">
     <div class="create-dataset">
         <h2 class="create-dataset__title">CREATE A NEW INDICATOR</h2>
         <div class="input__container">
@@ -112,6 +112,9 @@
 </div>
 
 <style>
+    .add-new-section {
+        width: 350px;
+    }
     .create-dataset {
         background-color: rgba(128, 128, 128, 0.17);
         border-radius: 12px;
@@ -121,7 +124,7 @@
         display: flex;
         justify-content: center;
         padding-top: 15px;
-        margin-bottom: 0;
+        margin: 0;
     }
 
     .add-button {

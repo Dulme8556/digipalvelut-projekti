@@ -86,11 +86,14 @@
         flex: 1;
     }
 
+    /* if positioning is changed charts.svelte needs to be changed too since it has transform: scale() */
     .main__functions {
-        flex: 1;
-        padding: 16px;
         display: flex;
         justify-content: space-between;
+        flex: 1;
+        padding: 15px;
+        margin: 0 1vw;
+        margin-top: 20px;
     }
 
     .credit,
