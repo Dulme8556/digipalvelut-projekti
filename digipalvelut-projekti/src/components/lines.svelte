@@ -242,7 +242,7 @@
 
     .searchbar {
         display: flex;
-        width: 200px;
+        width: 250px;
         height: 25px;
         padding: 5px 3px;
         font-size: 15px;
@@ -263,12 +263,13 @@
     }
 
     .selectList {
-        display: flex;
-        flex: 1;
-        font-size: 15px;
+        width: 180px;
+        font-size: 12px;
+        padding: 2px 4px;
+        height: 30px;
         margin-left: 10px;
         cursor: pointer;
-        font-size: 15px;
+        box-sizing: border-box;
     }
 
     .saveButton {
