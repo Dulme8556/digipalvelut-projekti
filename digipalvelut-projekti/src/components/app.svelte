@@ -113,7 +113,6 @@
             rgba(41, 168, 175, 1) 0%,
             rgba(17, 70, 73, 1) 100%
         );
-        border-bottom: solid 1px black;
         position: relative;
         flex-shrink: 0;
     }
