@@ -5,7 +5,7 @@
     <!-- <h3 class="title">Download the excel template:</h3> -->
     <div class="tooltip-container">
         <a href="impact_tool.xlsx" class="link__container">
-            <img class="download" src="./images/download-icon.svg" alt="" />
+            <img class="download" src="./images/download-icon.svg" alt="Download excel template" />
         </a>
         <span class="tooltip-text">Download a premade<br>excel template</span>
     </div>
