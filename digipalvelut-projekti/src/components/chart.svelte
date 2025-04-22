@@ -40,6 +40,18 @@
                 animations: false,
                 indexAxis: data.indexAxis,
                 plugins: {
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            title: function (context) {
+                                let dataIndex = context[0].dataIndex;
+                                let unitArray = context[0].dataset.unit;
+                                let unit = unitArray[dataIndex];
+
+                                return unit;
+                            },
+                        },
+                    },
                     datalabels: {
                         color: "black",
                         display: data.addInfo,
@@ -132,66 +144,67 @@
         return id;
     }
 </script>
-    <div class="chartContainer">
-        <div class="actionBar">
-            <div class="chartName">
-                <input
-                    type="checkbox"
-                    class="CheckBox"
-                    onclick={checkboxClick}
-                    {checked}
-                />
-                {#if chartName == ""}
-                    <div class="chartTitle">*UNNAMED CHART*</div>
-                {:else}
-                    <div class="chartTitle">{chartName}</div>
-                {/if}
-            </div>
-            <div class="buttonContainer">
-                <button
-                    class="chart-button pdf-download__button"
-                    onclick={downloadPDF}
-                >
-                    <img
-                        class="pdf-download__image"
-                        src="./images/download-icon.svg"
-                        alt=""
-                    />
-                </button>
-                <button
-                    class="chart-button chart-delete__button"
-                    onclick={deleteChart}
-                >
-                    <img
-                        class="chart-delete__image"
-                        src="./images/delete-icon.svg"
-                        alt=""
-                    />
-                </button>
-            </div>
+
+<div class="chartContainer">
+    <div class="actionBar">
+        <div class="chartName">
+            <input
+                type="checkbox"
+                class="CheckBox"
+                onclick={checkboxClick}
+                {checked}
+            />
+            {#if chartName == ""}
+                <div class="chartTitle">*UNNAMED CHART*</div>
+            {:else}
+                <div class="chartTitle">{chartName}</div>
+            {/if}
         </div>
-        <div id="content" style="width:400px; max-height:300px;">
-            <canvas style="width: 400px; max-height:300px;" bind:this={canvas}>
-            </canvas>
+        <div class="buttonContainer">
+            <button
+                class="chart-button pdf-download__button"
+                onclick={downloadPDF}
+            >
+                <img
+                    class="pdf-download__image"
+                    src="./images/download-icon.svg"
+                    alt=""
+                />
+            </button>
+            <button
+                class="chart-button chart-delete__button"
+                onclick={deleteChart}
+            >
+                <img
+                    class="chart-delete__image"
+                    src="./images/delete-icon.svg"
+                    alt=""
+                />
+            </button>
         </div>
     </div>
+    <div id="content" style="width:400px; max-height:300px;">
+        <canvas style="width: 400px; max-height:300px;" bind:this={canvas}>
+        </canvas>
+    </div>
+</div>
 
 <style>
     .chartContainer {
         width: 400px;
-        border: 1px rgba(0,0,0,0.4) solid;
+        border: 1px rgba(0, 0, 0, 0.4) solid;
     }
 
     .actionBar {
-        display:flex;
-        justify-content:space-between;
-        background-color: #D9D9D9;
-        border-bottom: 1px rgba(0,0,0,0.3) solid;
+        display: flex;
+        justify-content: space-between;
+        background-color: #d9d9d9;
+        border-bottom: 1px rgba(0, 0, 0, 0.3) solid;
     }
 
     .chartName {
-        display:flex;
-        font-weight:700;
+        display: flex;
+        font-weight: 700;
     }
 
     .CheckBox {
