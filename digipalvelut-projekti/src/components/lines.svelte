@@ -134,7 +134,10 @@
 <div class="active-lines">
     <div class="toolbar">
         <div class="top">
-            <h2>Active indicators</h2>
+            <div>
+            <h2>Indicators</h2>
+            <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
+            </div>
             <input
                 id="searchbar"
                 class="searchbar"
@@ -201,6 +204,7 @@
 
     h2 {
         margin-top: 0;
+        margin-bottom:0;
         min-width: 202px;
     }
 
@@ -239,7 +243,7 @@
 
     .searchbar {
         display: flex;
-        width: 200px;
+        width: 250px;
         height: 25px;
         padding: 5px 3px;
         font-size: 15px;
@@ -260,12 +264,13 @@
     }
 
     .selectList {
-        display: flex;
-        flex: 1;
-        font-size: 15px;
+        width: 180px;
+        font-size: 12px;
+        padding: 2px 4px;
+        height: 30px;
         margin-left: 10px;
         cursor: pointer;
-        font-size: 15px;
+        box-sizing: border-box;
     }
 
     .saveButton {

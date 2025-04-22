@@ -133,6 +133,7 @@
     }
 
     .add-button__button {
+        font-size:14px;
         padding: 5px 10px;
         margin-bottom: 10px;
         margin-right: 10px;
@@ -148,8 +149,8 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        width: 120px;
-        height: 50px;
+        width: 220px;
+        height: 45px;
         position: relative;
         overflow: hidden;
     }
