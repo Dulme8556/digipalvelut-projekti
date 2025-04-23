@@ -1,8 +1,17 @@
 <script>
     import { getContext } from "svelte";
     import Line from "./line.svelte";
+    import { downloadIndicatorsToExcel } from "./download-toexcel.js"
 
     let lists = getContext("list");
+
+    function handleExcelDownload() {
+        if (lists.selectedValues.length === 0) {
+            alert("Error: Please select atleast one indicator to download")
+        } else{
+        downloadIndicatorsToExcel(lists.selectedValues.length > 0 ? lists.selectedValues : lists.list);
+        }
+    }
 
     let searchQuery = "";
     let lines = [];
@@ -136,6 +145,11 @@
         <div class="top">
             <div>
             <h2>Indicators</h2>
+            <div>
+                <button style="width:80px;" onclick={handleExcelDownload}>
+                    download excel temporary button
+                </button>
+            </div>
             <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
             </div>
             <input
