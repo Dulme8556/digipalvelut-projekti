@@ -44,12 +44,21 @@
                         enabled: true,
                         callbacks: {
                             title: function (context) {
-                                let dataIndex = context[0].dataIndex;
-                                let unitArray = context[0].dataset.unit;
-                                let unit = unitArray[dataIndex];
-
-                                return unit;
+                                if (data.type === "line") {
+                                    for (let i = 0; i < data.datasets.length; i++) {
+                                        if (context[0].dataset.label === data.datasets[i].label) {
+                                            return data.unit[i];
+                                        }
+                                    }
+                                    return "Unit not found";
+                                } else {
+                                    let dataIndex = context[0].dataIndex;
+                                    let unitArray = context[0].dataset.unit;
+                                    let unit = unitArray[dataIndex];
+                                    return unit;
+                                }
                             },
+
                         },
                     },
                     datalabels: {
