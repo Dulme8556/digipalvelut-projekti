@@ -537,7 +537,16 @@
 
 <div class="chartsSection">
     <div class="toolbar">
-        <h2 class="title">Active charts</h2>
+        <div style="display:flex;">
+            <h2 class="title">Active charts</h2>
+            <div class="info__wrapper">
+                <img class="info__icon" alt="info_icon" src="./images/info.png">
+                <div class="info__content">
+                    Info Test
+                    Component info or a small tutorial will be placed here
+                </div>
+            </div>
+        </div>
         <div class="firstLine">
             <div class="chartName">
                 <input
@@ -642,6 +651,44 @@
 </div>
 
 <style>
+
+    .info__wrapper{
+        position:relative;
+        display:inline-block;
+    }
+
+
+    .info__content{
+        visibility: hidden;
+        opacity: 0;
+        width: 220px;
+        background-color: #f9f9f9;
+        color: #000;
+        text-align: left;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        top: 35px;
+        left: 0;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease;
+    }
+
+    .info__icon{
+        width:28px;
+        height:28px;
+        padding-top:4px;
+        margin-left:10px;
+    }
+
+    .info__wrapper:hover .info__content {
+        visibility:visible;
+        opacity: 1;
+    }
+
+
     .chartsSection {
         min-width: 470px;
     }
