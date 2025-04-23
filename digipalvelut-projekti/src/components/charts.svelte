@@ -656,7 +656,7 @@
         position:relative;
         display:inline-block;
     }
-
+    
 
     .info__content{
         visibility: hidden;
