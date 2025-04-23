@@ -145,11 +145,6 @@
         <div class="top">
             <div>
             <h2>Indicators</h2>
-            <div>
-                <button style="width:80px;" onclick={handleExcelDownload}>
-                    download excel temporary button
-                </button>
-            </div>
             <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
             </div>
             <input
@@ -183,6 +178,14 @@
                 Save
             </button>
         </div>
+        {#if filteredIndicators.length > 0}
+            <div>
+                <p style="font-size:14px; margin-bottom:5px;">Download selected indicators to an excel</p>
+                <button style="width:120px;" onclick={handleExcelDownload}>
+                    Download
+                </button>
+            </div>
+        {/if}    
     </div>
     {#key `${sortByValue}-${filteredIndicators}`}
         <ul>
@@ -239,6 +242,7 @@
 
     .toolbar {
         padding: 20px;
+        padding-bottom:10px;
         padding-top: 15px;
     }
 
