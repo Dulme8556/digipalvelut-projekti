@@ -643,10 +643,7 @@
 
 <style>
     .chartsSection {
-        margin-top: 30px;
-        margin-right: 20px;
         min-width: 470px;
-        transform: scale(1.1);
     }
 
     .extraOptionsToggle {
