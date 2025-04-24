@@ -98,26 +98,15 @@
     }
     
     button {
-        display: flex;
-        justify-self: center;
         padding: 5px 20px;
         margin-bottom: 10px;
         background-color: #30B2B3;
         color: white;
         border-radius: 100px;
-        border-style: solid;
-        border-color: #000000;
-        border-width: 1px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+        border: 1px solid #000000;
         width: 150px;
         height: 50px;
-        position: relative;
-        overflow: hidden;
+        font-size: 16px;
     }
 
     button:hover {
@@ -138,16 +127,17 @@
         border-radius: 4px;
         position: absolute;
         z-index: 1;
-        bottom: 125%;
+        bottom: 60px;
         left: 50%;
         transform: translateX(-50%);
         white-space: nowrap;
         opacity: 0;
         transition: opacity 0.3s;
-        font-size: 12px;
+        font-size: 16px;
     }
 
-    .tooltip-container:hover .tooltip-text {
+    .tooltip-container:hover .tooltip-text,
+    .tooltip-text:hover {
         visibility: visible;
         opacity: 1;
     }
