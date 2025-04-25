@@ -149,7 +149,7 @@
     .createnew__info__icon{
         width:28px;
         height:28px;
-        padding-top:18px;
+        padding-top:19px;
         margin-left:10px;
     }
 

@@ -656,7 +656,7 @@
         position:relative;
         display:inline-block;
     }
-    
+
 
     .info__content{
         visibility: hidden;
@@ -755,6 +755,7 @@
     }
 
     .secondLine {
+        margin: 10px 0;
         display: flex;
         flex-direction: row;
     }
