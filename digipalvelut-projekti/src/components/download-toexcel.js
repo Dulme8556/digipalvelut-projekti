@@ -2,9 +2,7 @@
 
 export function downloadIndicatorsToExcel(list) {
     const data = list.map((item) => ({
-        ID: item.id,
-        Name: item.name,
-        Checked: item.check,
+        Title: item.name,
         Target: item.target,
         Start: item.start,
         End: item.end,
