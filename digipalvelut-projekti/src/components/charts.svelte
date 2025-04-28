@@ -579,6 +579,7 @@
                             <input
                                 type="checkbox"
                                 id="addInfo"
+                                class="addInfoCheckbox"
                                 bind:checked={addInfo}
                             />
                             Show exact values
@@ -656,7 +657,7 @@
         position:relative;
         display:inline-block;
     }
-
+    
 
     .info__content{
         visibility: hidden;
@@ -688,6 +689,9 @@
         opacity: 1;
     }
 
+    .addInfoCheckbox {
+        cursor: pointer;
+    }
 
     .chartsSection {
         min-width: 470px;
@@ -737,6 +741,7 @@
         max-height: 21px;
         margin-top: 12px;
         margin-left: 10px;
+        cursor: pointer;
     }
 
     .chartName {
@@ -755,7 +760,6 @@
     }
 
     .secondLine {
-        margin: 10px 0;
         display: flex;
         flex-direction: row;
     }
