@@ -88,7 +88,6 @@
         flex: 1;
     }
 
-    /* if positioning is changed charts.svelte needs to be changed too since it has transform: scale() */
     .main__functions {
         display: flex;
         justify-content: space-between;

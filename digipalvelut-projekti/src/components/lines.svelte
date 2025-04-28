@@ -228,7 +228,7 @@
     li:first-child {
         margin-top: 25px;
     }
-    
+
     .active-lines {
         min-width: 770px;
         min-height: 130px;
@@ -237,14 +237,13 @@
         display: flex;
         flex-direction: column;
     }
-    
+
     .toolbar {
         border: 2px solid #b4b4b4;
         border-radius: 10px;
         padding: 20px;
         padding-bottom:10px;
         padding-top: 15px;
-	
     }
 
     .actions-bar {
