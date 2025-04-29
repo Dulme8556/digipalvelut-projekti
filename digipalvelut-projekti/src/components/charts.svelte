@@ -434,9 +434,9 @@
             leftY = 0;
             rightY = 20;
 
-            for (let i = 0; i < chartSet.length; i++) {
+            for (let j = 0; j < chartSet.length; j++) {
                 const img = new Image();
-                const imgURL = chartSet[i].toDataURL("image/png");
+                const imgURL = chartSet[j].toDataURL("image/png");
                 img.src = imgURL;
 
                 let { width, height } = await new Promise((resolve) => {

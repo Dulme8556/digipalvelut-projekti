@@ -281,7 +281,7 @@
 
     .selectList {
         width: 180px;
-        font-size: 12px;
+        font-size: 15px;
         padding: 2px 4px;
         height: 30px;
         margin-left: 10px;
