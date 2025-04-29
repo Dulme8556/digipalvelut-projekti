@@ -234,13 +234,13 @@
         min-height: 130px;
         padding-left: 5px;
         padding-right: 5px;
+        border: 2px solid #b4b4b4;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
     }
 
     .toolbar {
-        border: 2px solid #b4b4b4;
-        border-radius: 10px;
         padding: 20px;
         padding-bottom:10px;
         padding-top: 15px;
