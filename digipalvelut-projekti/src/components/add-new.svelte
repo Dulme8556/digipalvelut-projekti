@@ -75,8 +75,11 @@
             <div class="createnew__info__wrapper">
                 <img class="createnew__info__icon" alt="info_icon" src="./images/info.png">
                 <div class="createnew__info__content">
-                    Info Test
-                    Component info or a small tutorial will be placed here
+                    <p><strong>Name</strong>: Enter the name for the indicator.</p>
+                    <p><strong>Target Value</strong>: Set your target value for the indicator.</p>
+                    <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
+                    <p><strong>End Value</strong>: Enter the end value you want to measure against the target. This could be the final goal or current progress.</p>
+                    <p><strong>Unit</strong>: Define the unit for the indicator.</p>
                 </div>
             </div>
         </div>
@@ -131,7 +134,7 @@
     .createnew__info__content{
         visibility: hidden;
         opacity: 0;
-        width: 220px;
+        width: 320px;
         background-color: #f9f9f9;
         color: #000;
         text-align: left;
