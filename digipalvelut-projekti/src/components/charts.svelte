@@ -626,10 +626,10 @@
                         ? "showOptions"
                         : "hideOptions"}
                 >
-                    <button onclick={downloadPDF} class="downloadButton">
+                    <button onpointerdown={downloadPDF} class="downloadButton">
                         Download chosen charts
                     </button>
-                    <button onclick={download1PerPage} class="downloadButton">
+                    <button onpointerdown={download1PerPage} class="downloadButton">
                         Download 1 chart per page
                     </button>
                 </span>
