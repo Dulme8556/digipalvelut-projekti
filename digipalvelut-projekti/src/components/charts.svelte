@@ -440,8 +440,7 @@
                 let height = canvas.height;
                 let imgURL = canvas.toDataURL("image/png");
 
-                // image size supposed to be 200x400 or 400x400
-                // make sure sizes are divisible by 200 and account for 600
+
                 if (height % 200 !== 0 || height % 300 === 0) {
                     if (height === width / 2) {
                         width = imageWidth;
@@ -480,6 +479,44 @@
         const filename = "chart.pdf";
         doc.save(filename);
     }
+
+    async function downloadIMG() {
+        downloadOptionsVisible = false;
+
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
+
+        storeChartData();
+
+        if (storeCanvases.length === 0) {
+            alert("No charts selected");
+            return;
+        }
+
+        for (let i = 0; i < storeCanvases.length; i++) {
+            const canvas = storeCanvases[i];
+            const ctx = canvas.getContext("2d");
+
+            // Tekee temporary canvasin että ei joudu muokkaamaan alkuperästä
+            const tempCanvas = document.createElement("canvas");
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tempCtx = tempCanvas.getContext("2d");
+            tempCtx.fillStyle = "#FFFFFF";
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.drawImage(canvas, 0, 0);
+
+            const imageType = "image/jpeg";
+            const imgData = tempCanvas.toDataURL(imageType);
+            const link = document.createElement("a");
+            link.href = imgData;
+            link.download = `chart-${i + 1}.jpg`;
+            link.click();
+        }
+    }
+
 
     async function download1PerPage() {
         downloadOptionsVisible = false;
@@ -622,10 +659,13 @@
                         : "hideOptions"}
                 >
                     <button onclick={downloadPDF} class="downloadButton">
-                        Download chosen charts
+                        Download chosen charts (pdf)
                     </button>
                     <button onclick={download1PerPage} class="downloadButton">
-                        Download 1 chart per page
+                        Download 1 chart per page (pdf)
+                    </button>
+                    <button onclick={downloadIMG} class="downloadButton">
+                        Download charts images
                     </button>
                 </span>
             </div>
@@ -785,6 +825,7 @@
 
     .downloadButton {
         margin: 5px 5px;
+        font-size:12px;
         border: 1px solid #000000;
         border-radius: 5px;
         cursor: pointer;
