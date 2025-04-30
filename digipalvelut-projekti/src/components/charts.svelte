@@ -134,7 +134,7 @@
         let datasetUnit = checkedItems.map((item) => item.unit);
 
         if (checkedItems.length === 0) {
-            alert('Error: No indicators selected. \nPressing the "Save" button may fix this issue.');
+            alert('Error: No indicators selected. \nIf otherwise pressing the "Save" button may fix this issue.');
             return;
         }
 
