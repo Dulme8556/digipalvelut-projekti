@@ -435,15 +435,10 @@
             rightY = 20;
 
             for (let j = 0; j < chartSet.length; j++) {
-                const img = new Image();
-                const imgURL = chartSet[j].toDataURL("image/png");
-                img.src = imgURL;
-
-                let { width, height } = await new Promise((resolve) => {
-                    img.onload = () => {
-                        resolve({ width: img.width, height: img.height });
-                    };
-                });
+                let canvas = chartSet[j];
+                let width = canvas.width;
+                let height = canvas.height;
+                let imgURL = canvas.toDataURL("image/png");
 
                 // image size supposed to be 200x400 or 400x400
                 // make sure sizes are divisible by 200 and account for 600
