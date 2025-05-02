@@ -517,7 +517,6 @@
         }
     }
 
-
     async function download1PerPage() {
         downloadOptionsVisible = false;
 

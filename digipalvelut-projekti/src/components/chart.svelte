@@ -102,24 +102,27 @@
     }
 
     function downloadPDF() {
-        if (!canvas) {
-            console.error("No chart available for download");
-            return;
-        }
+        const ctx = canvas.getContext("2d");
 
-        const chartWidth = canvas.width;
-        const chartHeight = canvas.height;
-        const doc = new jsPDF("l", "mm", [chartWidth, chartHeight]);
-        const imgData = canvas.toDataURL("image/png");
-
-        doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext("2d");
+        tempCtx.fillStyle = "#FFFFFF";
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(canvas, 0, 0);
+        const imageType = "image/jpeg";
+        const imgData = tempCanvas.toDataURL(imageType);
+        const link = document.createElement("a");
 
         const filename =
             chartName && chartName.trim() !== ""
-                ? `${chartName}.pdf`
-                : "chart.pdf";
+                ? `${chartName}.jpg`
+                : "chart.jpg";
 
-        doc.save(filename);
+        link.href = imgData;
+        link.download = filename;
+        link.click();
     }
 
     function checkboxClick() {
