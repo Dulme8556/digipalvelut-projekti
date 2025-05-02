@@ -6,7 +6,6 @@ export function downloadIndicatorsToExcel(list) {
         Target: item.target,
         Start: item.start,
         End: item.end,
-        Percent: item.percent,
         Unit: item.unit,
     }));
 
