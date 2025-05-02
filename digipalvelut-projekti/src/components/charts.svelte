@@ -404,6 +404,7 @@
         let imageWidth = 400;
         let smallImageHeight = 200;
         let BigImageHeight = 400;
+        let marginOfError = 5;
 
         let leftSpacing = 60;
         let rightSpacing = 140;
@@ -433,21 +434,24 @@
 
             leftY = 0;
             rightY = 20;
-
+            
             for (let j = 0; j < chartSet.length; j++) {
                 let canvas = chartSet[j];
                 let width = canvas.width;
                 let height = canvas.height;
                 let imgURL = canvas.toDataURL("image/png");
-
-
+                
+                // image size supposed to be 200x400 or 400x400
+                // make sure sizes are divisible by 200 and account for 600
                 if (height % 200 !== 0 || height % 300 === 0) {
-                    if (height === width / 2) {
+                    if (Math.abs(height - width / 2) <= marginOfError) {
                         width = imageWidth;
                         height = smallImageHeight;
-                    } else {
+                    } else  if (height === width) {
                         width = imageWidth;
                         height = BigImageHeight;
+                    } else {
+                        console.error("Error: Something went wrong while calculating charts sizes")
                     }
                 }
 
