@@ -4,6 +4,7 @@
 
     import Chart from "./chart.svelte";
     import Line from "./chart-config/line.js";
+    import Pie from "./chart-config/pie";
 
     let lists = getContext("list");
     let selected = lists.selectedValues;
@@ -154,20 +155,27 @@
 
         // Create datasets based on chart type
         if (type === "doughnut" || type === "pie") {
-            chartData.datasets = [
-                {
-                    label: "Values",
-                    data: datasetDataEnd,
-                    unit: datasetUnit,
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#4BC0C0",
-                        "#9966FF",
-                    ],
-                },
-            ];
+            let pie = new Pie();
+            if (selected.length > 1) {
+                pie.defaultData(datasetDataEnd, datasetUnit);
+            } else {
+                pie.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, datasetUnit, labels)
+            }
+            chartData.datasets = pie.getData();
+            // chartData.datasets = [
+            //     {
+            //         label: "Values",
+            //         data: datasetDataEnd,
+            //         unit: datasetUnit,
+            //         backgroundColor: [
+            //             "#FF6384",
+            //             "#36A2EB",
+            //             "#FFCE56",
+            //             "#4BC0C0",
+            //             "#9966FF",
+            //         ],
+            //     },
+            // ];
         } else if (type === "line") {
             let line = new Line();
             line.changeData(
