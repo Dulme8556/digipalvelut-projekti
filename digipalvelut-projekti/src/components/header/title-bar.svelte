@@ -1,6 +1,6 @@
 <script>
-    import FileReader from "./file-reader.svelte";
-    import DownloadTemplate from "./download-template.svelte";
+    import FileReader from "../file-reader.svelte";
+    import DownloadTemplate from "../download-template.svelte";
 </script>
 
 <div class="titleBar">

@@ -335,10 +335,6 @@
         min-height: 24px;
     }
     
-    .component__last {
-        flex: 0.5;
-    }
-    
     .long {
         padding-top: 2.5px;
         overflow: hidden;

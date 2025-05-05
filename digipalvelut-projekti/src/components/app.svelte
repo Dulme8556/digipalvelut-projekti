@@ -5,8 +5,8 @@
     import Lines from "./lines.svelte";
     import Charts from "./charts.svelte";
     import GlobalStyles from "./global-styles.svelte";
-    import Credit from "./credit.svelte";
-    import TitleBar from "./title-bar.svelte";
+    import Credit from "./header/credit.svelte";
+    import TitleBar from "./header/title-bar.svelte";
 
     let lists = $state({
         list: [],
