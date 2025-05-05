@@ -1,5 +1,5 @@
 <script>
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
 
     let {
         function: parentFunction,
@@ -13,12 +13,28 @@
         percent = "placeholder",
         unit,
         deadline,
+        responsibility,
     } = $props();
 
     let lists = getContext("list");
 
     let editing = $state(false);
     let checked = $state(check);
+
+    let extraData = $state(false);
+
+    onMount(() => {
+        let today = new Date().toISOString().split('T')[0]
+        // to detect when excel is opened
+        if (deadline && responsibility) {
+            // to detect when indicator made manually and values are empty
+            if (deadline !== today || deadline !== "" && responsibility !== "") {
+                extraData = true
+            } else {
+                extraData = false
+            }
+        }
+    });
 
     let reached = $state("No");
 
@@ -97,7 +113,8 @@
                 element.end = end;
                 element.percent = percent;
                 element.unit = unit;
-                element.deadline = deadline
+                element.deadline = deadline;
+                element.responsibility = responsibility;
             }
         });
         calculateReached();
@@ -135,14 +152,17 @@
                         bind:value={name}
                         />
                     </div>
+                    <div class="component"></div>
+                    {#if extraData}
                     <div class="component">
                         <h3>deadline:</h3>
                         <input
-                            class="input input__long long"
-                            type="date"
-                            bind:value={deadline}
+                        class="input input__long long"
+                        type="date"
+                        bind:value={deadline}
                         />
                     </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="component">
@@ -152,6 +172,12 @@
                     <div class="component">
                         <h3>percent:</h3>
                     </div>
+                    {#if extraData}
+                    <div class="component">
+                        <h3>Resp:</h3>
+                        <input class="input input__long-responsibility" type="text" bind:value={responsibility}/>
+                    </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="start_end__group">
@@ -196,10 +222,13 @@
                         <h3>indicator:</h3>
                         <div class="long1" title={name}>{name}</div>
                     </div>
+                    {#if extraData}
+                    <div class="component"></div>
                     <div class="component">
                         <h3>deadline:</h3>
-                        <div class="long1">{formattedDeadline}</div>
+                        <div class="long">{formattedDeadline}</div>
                     </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="component">
@@ -212,6 +241,12 @@
                             <div class="long">{percent}%</div>
                         {/if}
                     </div>
+                    {#if extraData}
+                    <div class="component">
+                        <h3>Responsibility:</h3>
+                        <div class="long long__responsibility">{responsibility}</div>
+                    </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="start_end__group">
@@ -267,7 +302,6 @@
         max-height: 16px;
     }
 
-    
     .line {
         display: flex;
         justify-content: space-between;
@@ -298,6 +332,7 @@
         flex-direction: row;
         margin-right: 10px;
         padding: 5px 0;
+        min-height: 24px;
     }
     
     .component__last {
@@ -305,14 +340,19 @@
     }
     
     .long {
-        padding-top:2.5px;
+        padding-top: 2.5px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 80px;
     }
 
+    .long__responsibility {
+        overflow: visible;
+    }
+
     .long1{
+        padding-top: 2.5px;
         max-width: 120px;
         overflow-wrap: break-word;
         word-break: normal;
@@ -386,6 +426,10 @@
 
     .input__long {
         width: 100px;
+    }
+
+    .input__long-responsibility {
+        width: 200px;
     }
 
     .button__save {

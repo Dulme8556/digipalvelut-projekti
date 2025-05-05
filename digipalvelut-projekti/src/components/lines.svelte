@@ -204,6 +204,7 @@
                         percent={line.percent}
                         unit={line.unit}
                         deadline={line.deadline}
+                        responsibility={line.responsibility}
                         on:remove={(e) => removeLine(e.detail)}
                     />
                 </li>

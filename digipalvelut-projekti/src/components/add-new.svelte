@@ -12,6 +12,7 @@
     let newPercent;
     let newUnit = $state("");
     let newDeadline = $state(new Date().toISOString().split('T')[0]);
+    let newResponsibility = $state("");
 
     function percentCalculation() {
         if (!newEnd || !newTarget) return;
@@ -56,6 +57,7 @@
                 percent: newPercent,
                 unit: newUnit,
                 deadline: newDeadline,
+                responsibility: newResponsibility,
             });
 
             lists.list = updatedList;
@@ -67,6 +69,7 @@
             newPercent = "";
             newUnit = "";
             newDeadline = "";
+            newResponsibility = "";
         }
     }
 </script>
@@ -83,7 +86,8 @@
                     <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
                     <p><strong>End Value</strong>: Enter the end value you want to measure against the target. This could be the final goal or current progress.</p>
                     <p><strong>Unit</strong>: Define the unit for the indicator.</p>
-                    <p><strong>Deadline</strong>: Enter the deadline for your indicator.</p>
+                    <p><strong>Deadline</strong>: Enter the deadline for your indicator. (optional)</p>
+                    <p><strong>Responsibility</strong>: Add the persons details (email?) who are responsible for this task. (optional)</p>
                 </div>
             </div>
         </div>
@@ -125,6 +129,13 @@
                 placeholder="Deadline"
                 bind:value={newDeadline}
             />
+            <input
+                class="input"
+                type="text"
+                placeholder="Responsibility"
+                bind:value={newResponsibility}
+            />
+
         </div>
         <div class="add-button">
             <button class="add-button__button" onclick={addNew}>
