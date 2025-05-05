@@ -12,6 +12,7 @@
         end,
         percent = "placeholder",
         unit,
+        deadline,
     } = $props();
 
     let lists = getContext("list");
@@ -90,9 +91,19 @@
                 element.end = end;
                 element.percent = percent;
                 element.unit = unit;
+                element.deadline = deadline
             }
         });
+        updateFormattedDeadline();
         updateEditedValues();
+    }
+
+    let formattedDeadline = $state(deadline
+		? new Date(deadline).toLocaleDateString('fi-FI')
+		: '');
+    
+    function updateFormattedDeadline() {
+        formattedDeadline = new Date(deadline).toLocaleDateString('fi-FI')
     }
 </script>
 
@@ -107,13 +118,23 @@
                 onclick={checkboxClick}
             />
             <div class="data__container">
-                <div class="component">
-                    <h3>indicator:</h3>
-                    <input
+                <div class="column">
+                    <div class="component">
+                        <h3>indicator:</h3>
+                        <input
                         class="input input__long long"
                         type="text"
                         bind:value={name}
-                    />
+                        />
+                    </div>
+                    <div class="component">
+                        <h3>deadline:</h3>
+                        <input
+                            class="input input__long long"
+                            type="date"
+                            bind:value={deadline}
+                        />
+                    </div>
                 </div>
                 <div class="column">
                     <div class="component">
@@ -162,9 +183,15 @@
                 onclick={checkboxClick}
             />
             <div class="data__container">
-                <div class="component">
-                    <h3>indicator:</h3>
-                    <div class="long1" title={name}>{name}</div>
+                <div class="column">
+                    <div class="component">
+                        <h3>indicator:</h3>
+                        <div class="long1" title={name}>{name}</div>
+                    </div>
+                    <div class="component">
+                        <h3>deadline:</h3>
+                        <div class="long1">{formattedDeadline}</div>
+                    </div>
                 </div>
                 <div class="column">
                     <div class="component">

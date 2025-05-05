@@ -690,7 +690,6 @@
 </div>
 
 <style>
-
     .info__wrapper{
         position:relative;
         display:inline-block;

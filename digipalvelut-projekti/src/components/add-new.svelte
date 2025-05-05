@@ -11,6 +11,7 @@
     let newEnd = $state("");
     let newPercent;
     let newUnit = $state("");
+    let newDeadline = $state(new Date().toISOString().split('T')[0]);
 
     function percentCalculation() {
         if (!newEnd || !newTarget) return;
@@ -54,6 +55,7 @@
                 end: newEnd,
                 percent: newPercent,
                 unit: newUnit,
+                deadline: newDeadline,
             });
 
             lists.list = updatedList;
@@ -64,6 +66,7 @@
             newEnd = "";
             newPercent = "";
             newUnit = "";
+            newDeadline = "";
         }
     }
 </script>
@@ -80,6 +83,7 @@
                     <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
                     <p><strong>End Value</strong>: Enter the end value you want to measure against the target. This could be the final goal or current progress.</p>
                     <p><strong>Unit</strong>: Define the unit for the indicator.</p>
+                    <p><strong>Deadline</strong>: Enter the deadline for your indicator.</p>
                 </div>
             </div>
         </div>
@@ -114,22 +118,27 @@
                 placeholder="Unit"
                 bind:value={newUnit}
             />
+            <div class="subtitle">Deadline:</div>
+            <input
+                class="input input__date"
+                type="date"
+                placeholder="Deadline"
+                bind:value={newDeadline}
+            />
         </div>
         <div class="add-button">
-            <button class="add-button__button" onclick={addNew}
-                >Create indicator</button
-            >
+            <button class="add-button__button" onclick={addNew}>
+                Create indicator
+            </button>
         </div>
     </div>
 </div>
 
 <style>
-    
     .createnew__info__wrapper{
         position:relative;
         display:inline-block;
     }
-    
 
     .createnew__info__content{
         visibility: hidden;
@@ -206,7 +215,7 @@
         position: relative;
         overflow: hidden;
     }
-
+    
     .add-button__button:hover {
         cursor: pointer;
     }
@@ -215,7 +224,7 @@
         display: flex;
         flex-direction: column;
     }
-
+    
     .input::placeholder {
         padding-left: 2px;
     }
@@ -230,15 +239,24 @@
         color: black;
         max-width: 396px;
     }
-
+    
     .input:first-child {
         margin: 15px 15px;
         margin-top: 35px;
     }
-
+    
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         -moz-appearance: none;
+    }
+
+    .subtitle {
+        margin-left: 15px;
+        margin-bottom: 0;
+    }
+
+    .input__date {
+        margin-top: 5px;
     }
 </style>

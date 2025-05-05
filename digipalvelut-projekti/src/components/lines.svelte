@@ -54,7 +54,7 @@
         checkSelected();
     }
 
-    async function checkSelected() {
+    function checkSelected() {
         let count = 0;
         selectedLines = [];
 
@@ -203,6 +203,7 @@
                         end={line.end}
                         percent={line.percent}
                         unit={line.unit}
+                        deadline={line.deadline}
                         on:remove={(e) => removeLine(e.detail)}
                     />
                 </li>
