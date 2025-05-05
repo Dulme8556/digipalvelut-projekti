@@ -36,10 +36,16 @@
         }
     });
 
-    let reached = $state("No");
+    let reached = $state("");
 
     function calculateReached() {
-    reached = +end >= +target ? "Target reached" : "Target not reached";
+    if(end == target){
+        reached = "Target reached"
+    } else if(end > target) {
+        reached = "Target exceeded"
+    } else if (end < target){
+        reached = "Target not reached"
+    }
     }
 
     export function checkAll() {
