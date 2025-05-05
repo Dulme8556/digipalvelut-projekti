@@ -1,5 +1,5 @@
 <script>
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
 
     let {
         function: parentFunction,
@@ -20,6 +20,17 @@
 
     let editing = $state(false);
     let checked = $state(check);
+
+    let extraData = $state(false);
+
+    onMount(() => {
+        let today = new Date().toISOString().split('T')[0]
+        if (deadline !== today && responsibility !== "") {
+            extraData = true
+        } else {
+            extraData = false
+        }
+    });
 
     export function checkAll() {
         checked = true;
@@ -130,14 +141,16 @@
                         />
                     </div>
                     <div class="component"></div>
+                    {#if extraData}
                     <div class="component">
                         <h3>deadline:</h3>
                         <input
-                            class="input input__long long"
-                            type="date"
-                            bind:value={deadline}
+                        class="input input__long long"
+                        type="date"
+                        bind:value={deadline}
                         />
                     </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="component">
@@ -147,10 +160,12 @@
                     <div class="component">
                         <h3>percent:</h3>
                     </div>
+                    {#if extraData}
                     <div class="component">
                         <h3>Resp:</h3>
                         <input class="input input__long-responsibility" type="text" bind:value={responsibility}/>
                     </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="start_end__group">
@@ -195,11 +210,13 @@
                         <h3>indicator:</h3>
                         <div class="long1" title={name}>{name}</div>
                     </div>
+                    {#if extraData}
                     <div class="component"></div>
                     <div class="component">
                         <h3>deadline:</h3>
                         <div class="long">{formattedDeadline}</div>
                     </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="component">
@@ -212,10 +229,12 @@
                             <div class="long">{percent}%</div>
                         {/if}
                     </div>
+                    {#if extraData}
                     <div class="component">
                         <h3>Responsibility:</h3>
                         <div class="long long__responsibility">{responsibility}</div>
                     </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="start_end__group">
