@@ -20,6 +20,12 @@
     let editing = $state(false);
     let checked = $state(check);
 
+    let reached = $state("No");
+
+    function calculateReached() {
+    reached = +end >= +target ? "Target reached" : "Target not reached";
+    }
+
     export function checkAll() {
         checked = true;
     }
@@ -94,6 +100,7 @@
                 element.deadline = deadline
             }
         });
+        calculateReached();
         updateFormattedDeadline();
         updateEditedValues();
     }
@@ -105,6 +112,7 @@
     function updateFormattedDeadline() {
         formattedDeadline = new Date(deadline).toLocaleDateString('fi-FI')
     }
+    calculateReached();
 </script>
 
 <div>
@@ -211,14 +219,21 @@
                             <h3>start:</h3>
                             <div class="long">{start}</div>
                         </div>
-                        <div class="component component__last">
+                        <div class="component">
                             <h3>end:</h3>
                             <div class="long">{end}</div>
                         </div>
                     </div>
+                    <div class="start_end__group">
                     <div class="component">
                         <h3>unit:</h3>
-                        <div class="long1" title={unit}>{unit}</div>
+                        <div class="long" title={unit}>{unit}</div>
+                    </div>
+                    <div style="padding-left:6px;" class="component">
+                        <!-- temp padding -->
+                        <h3>status:</h3>
+                        <div style="display:flex; flex-direction:row; width:120px;">{reached}</div>
+                    </div>
                     </div>
                 </div>
             </div>
