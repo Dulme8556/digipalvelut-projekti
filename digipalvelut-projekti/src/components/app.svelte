@@ -1,9 +1,9 @@
 <script>
     import { setContext } from "svelte";
 
-    import AddNew from "./add-new.svelte";
-    import Lines from "./lines.svelte";
-    import Charts from "./charts.svelte";
+    import AddNew from "./add-new-section/add-new.svelte";
+    import Lines from "./lines-section/lines.svelte";
+    import Charts from "./charts-section/charts.svelte";
     import GlobalStyles from "./global-styles.svelte";
     import Credit from "./header/credit.svelte";
     import TitleBar from "./header/title-bar.svelte";

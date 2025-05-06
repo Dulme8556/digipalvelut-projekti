@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import FileReader from "./file-reader.svelte";
+    import FileReader from "../header/file-reader.svelte";
 
     let lists = getContext("list");
 
