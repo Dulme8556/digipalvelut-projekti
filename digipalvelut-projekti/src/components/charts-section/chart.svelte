@@ -47,18 +47,41 @@
                                 if (data.type === "line") {
                                     for (let i = 0; i < data.datasets.length; i++) {
                                         if (context[0].dataset.label === data.datasets[i].label) {
-                                            return data.unit[i];
+                                            return data.datasets[i].label;
+                                        }
+                                    }
+                                } else {
+                                    return context[0].label;
+                                }
+                            },
+                            label: function (context) {
+                                if (data.type === "line") {
+                                    for (let i = 0; i < data.datasets.length; i++) {
+                                        let dataIndex = context.dataIndex;
+                                        let dataArray = context.dataset.data;
+                                        let values = dataArray[dataIndex];
+
+                                        if (context.dataset.label === data.datasets[i].label) {
+                                            return `${data.unit[i]}: ${values}`;
                                         }
                                     }
                                     return "Unit not found";
                                 } else {
-                                    let dataIndex = context[0].dataIndex;
-                                    let unitArray = context[0].dataset.unit;
+                                    let dataIndex = context.dataIndex;
+                                    let unitArray = context.dataset.unit;
                                     let unit = unitArray[dataIndex];
 
-                                    return unit;
+                                    let dataArray = context.dataset.data;
+                                    let values = dataArray[dataIndex];
+
+                                    for (let i = 0; i < data.datasets.length; i++) {
+                                        if (context.dataset.label === data.datasets[i].label) {
+                                            return `${unit}: ${values}`;
+                                        }
+                                    }
                                 }
                             },
+
                         },
                     },
                     datalabels: {
