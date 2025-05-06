@@ -27,8 +27,8 @@
         let today = new Date().toISOString().split('T')[0]
         // to detect when excel is opened
         if (deadline && responsibility) {
-            // to detect when indicator made manually and values are empty
-            if (deadline !== today || deadline !== "" && responsibility !== "") {
+            // to detect when indicator made manually and if values are empty
+            if (deadline !== today && deadline !== "" && responsibility !== "") {
                 extraData = true
             } else {
                 extraData = false
