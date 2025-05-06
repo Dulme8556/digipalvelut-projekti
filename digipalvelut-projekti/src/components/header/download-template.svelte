@@ -1,5 +1,5 @@
 <script>
-    import * as XLSX from "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/xlsx.mjs";
+    import * as XLSX from "xlsx";
 
     window.downloadTemplate = () => {
         const headers = [{ Title: "", Target: "", Start: "", End: "", Unit: "" }];
