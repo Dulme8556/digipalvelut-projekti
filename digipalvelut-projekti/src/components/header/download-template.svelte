@@ -1,7 +1,7 @@
 <script>
     import * as XLSX from "xlsx";
 
-    downloadTemplate = () => {
+     function downloadTemplate() {
         const headers = [{ Title: "", Target: "", Start: "", End: "", Unit: "" }];
         const worksheet = XLSX.utils.json_to_sheet(headers, { skipHeader: false });
         const workbook = XLSX.utils.book_new();
