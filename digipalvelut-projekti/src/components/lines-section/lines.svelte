@@ -1,8 +1,17 @@
 <script>
     import { getContext } from "svelte";
     import Line from "./line.svelte";
+    import { downloadIndicatorsToExcel } from "./download-toexcel.js"
 
     let lists = getContext("list");
+
+    function handleExcelDownload() {
+        if (lists.selectedValues.length === 0) {
+            alert("Error: Please select atleast one indicator to download")
+        } else{
+        downloadIndicatorsToExcel(lists.selectedValues.length > 0 ? lists.selectedValues : lists.list);
+        }
+    }
 
     let searchQuery = "";
     let lines = [];
@@ -45,7 +54,7 @@
         checkSelected();
     }
 
-    async function checkSelected() {
+    function checkSelected() {
         let count = 0;
         selectedLines = [];
 
@@ -169,6 +178,14 @@
                 Save
             </button>
         </div>
+        {#if filteredIndicators.length > 0}
+            <div>
+                <p style="font-size:14px; margin-bottom:5px;">Download selected indicators to an excel</p>
+                <button style="width:120px;" onclick={handleExcelDownload}>
+                    Download
+                </button>
+            </div>
+        {/if}    
     </div>
     {#key `${sortByValue}-${filteredIndicators}`}
         <ul>
@@ -186,6 +203,8 @@
                         end={line.end}
                         percent={line.percent}
                         unit={line.unit}
+                        deadline={line.deadline}
+                        responsibility={line.responsibility}
                         on:remove={(e) => removeLine(e.detail)}
                     />
                 </li>
@@ -213,20 +232,19 @@
     }
 
     .active-lines {
-        margin-top: 20px;
-        margin-left: 40px;
-        border-radius: 10px;
         min-width: 770px;
         min-height: 130px;
         padding-left: 5px;
         padding-right: 5px;
         border: 2px solid #b4b4b4;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
     }
 
     .toolbar {
         padding: 20px;
+        padding-bottom:10px;
         padding-top: 15px;
     }
 
@@ -265,7 +283,7 @@
 
     .selectList {
         width: 180px;
-        font-size: 12px;
+        font-size: 15px;
         padding: 2px 4px;
         height: 30px;
         margin-left: 10px;

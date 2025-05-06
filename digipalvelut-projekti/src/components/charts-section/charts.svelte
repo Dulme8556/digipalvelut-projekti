@@ -4,6 +4,7 @@
 
     import Chart from "./chart.svelte";
     import Line from "./chart-config/line.js";
+    import Pie from "./chart-config/pie-doughnut";
 
     let lists = getContext("list");
     let selected = lists.selectedValues;
@@ -134,7 +135,7 @@
         let datasetUnit = checkedItems.map((item) => item.unit);
 
         if (checkedItems.length === 0) {
-            alert('Error: No indicators selected. \nPressing the "Save" button may fix this issue.');
+            alert('Error: No indicators selected. \nIf otherwise pressing the "Save" button may fix this issue.');
             return;
         }
 
@@ -154,35 +155,18 @@
 
         // Create datasets based on chart type
         if (type === "doughnut" || type === "pie") {
-            chartData.datasets = [
-                {
-                    label: "Values",
-                    data: datasetDataEnd,
-                    unit: datasetUnit,
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#4BC0C0",
-                        "#9966FF",
-                    ],
-                },
-            ];
+            let pie = new Pie();
+            if (selected.length > 1) {
+                pie.defaultData(datasetDataEnd, datasetUnit);
+            } else {
+                pie.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, datasetUnit, labels);
+            }
+            chartData.datasets = pie.getData();
         } else if (type === "line") {
             let line = new Line();
-            line.changeData(
-                datasetDataStart,
-                datasetDataEnd,
-                datasetDataTarget,
-                datasetUnit,
-                labels,
-            );
-            chartData.datasets = JSON.parse(
-                JSON.stringify(line.getData()),
-            ).datasets;
-            chartData.labels = JSON.parse(
-                JSON.stringify(line.getData()),
-            ).labels;
+            line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, datasetUnit, labels);
+            chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
+            chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
             chartData.datasets = [
                 {
@@ -404,6 +388,7 @@
         let imageWidth = 400;
         let smallImageHeight = 200;
         let BigImageHeight = 400;
+        let marginOfError = 5;
 
         let leftSpacing = 60;
         let rightSpacing = 140;
@@ -433,27 +418,24 @@
 
             leftY = 0;
             rightY = 20;
-
-            for (let i = 0; i < chartSet.length; i++) {
-                const img = new Image();
-                const imgURL = chartSet[i].toDataURL("image/png");
-                img.src = imgURL;
-
-                let { width, height } = await new Promise((resolve) => {
-                    img.onload = () => {
-                        resolve({ width: img.width, height: img.height });
-                    };
-                });
-
+            
+            for (let j = 0; j < chartSet.length; j++) {
+                let canvas = chartSet[j];
+                let width = canvas.width;
+                let height = canvas.height;
+                let imgURL = canvas.toDataURL("image/png");
+                
                 // image size supposed to be 200x400 or 400x400
                 // make sure sizes are divisible by 200 and account for 600
                 if (height % 200 !== 0 || height % 300 === 0) {
-                    if (height === width / 2) {
+                    if (Math.abs(height - width / 2) <= marginOfError) {
                         width = imageWidth;
                         height = smallImageHeight;
-                    } else {
+                    } else  if (height === width) {
                         width = imageWidth;
                         height = BigImageHeight;
+                    } else {
+                        console.error("Error: Something went wrong while calculating charts sizes")
                     }
                 }
 
@@ -484,6 +466,43 @@
 
         const filename = "chart.pdf";
         doc.save(filename);
+    }
+
+    async function downloadIMG() {
+        downloadOptionsVisible = false;
+
+        await new Promise((resolve) => {
+            searchQuery = "";
+            resolve();
+        });
+
+        storeChartData();
+
+        if (storeCanvases.length === 0) {
+            alert("No charts selected");
+            return;
+        }
+
+        for (let i = 0; i < storeCanvases.length; i++) {
+            const canvas = storeCanvases[i];
+            const ctx = canvas.getContext("2d");
+
+            // Tekee temporary canvasin että ei joudu muokkaamaan alkuperästä
+            const tempCanvas = document.createElement("canvas");
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tempCtx = tempCanvas.getContext("2d");
+            tempCtx.fillStyle = "#FFFFFF";
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.drawImage(canvas, 0, 0);
+
+            const imageType = "image/jpeg";
+            const imgData = tempCanvas.toDataURL(imageType);
+            const link = document.createElement("a");
+            link.href = imgData;
+            link.download = `chart-${i + 1}.jpg`;
+            link.click();
+        }
     }
 
     async function download1PerPage() {
@@ -537,7 +556,16 @@
 
 <div class="chartsSection">
     <div class="toolbar">
-        <h2 class="title">Active charts</h2>
+        <div style="display:flex;">
+            <h2 class="title">Active charts</h2>
+            <div class="info__wrapper">
+                <img class="info__icon" alt="info_icon" src="./images/info.png">
+                <div class="info__content">
+                    Info Test
+                    Component info or a small tutorial will be placed here
+                </div>
+            </div>
+        </div>
         <div class="firstLine">
             <div class="chartName">
                 <input
@@ -570,6 +598,7 @@
                             <input
                                 type="checkbox"
                                 id="addInfo"
+                                class="addInfoCheckbox"
                                 bind:checked={addInfo}
                             />
                             Show exact values
@@ -617,10 +646,13 @@
                         : "hideOptions"}
                 >
                     <button onclick={downloadPDF} class="downloadButton">
-                        Download chosen charts
+                        Download chosen charts (pdf)
                     </button>
                     <button onclick={download1PerPage} class="downloadButton">
-                        Download 1 chart per page
+                        Download 1 chart per page (pdf)
+                    </button>
+                    <button onclick={downloadIMG} class="downloadButton">
+                        Download charts images
                     </button>
                 </span>
             </div>
@@ -642,6 +674,50 @@
 </div>
 
 <style>
+    .info__wrapper{
+        position:relative;
+        display:inline-block;
+    }
+    
+
+    .info__content{
+        visibility: hidden;
+        opacity: 0;
+        width: 220px;
+        background-color: #f9f9f9;
+        color: #000;
+        text-align: left;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        top: 35px;
+        left: 0;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease;
+    }
+
+    .info__icon{
+        width:28px;
+        height:28px;
+        padding-top:4px;
+        margin-left:10px;
+    }
+
+    .info__wrapper:hover .info__content {
+        visibility:visible;
+        opacity: 1;
+    }
+
+    .addInfoCheckbox {
+        cursor: pointer;
+    }
+
+    .chartsSection {
+        min-width: 470px;
+    }
+
     .extraOptionsToggle {
         cursor: pointer;
         font-size: 16px;
@@ -663,11 +739,6 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         z-index: 10;
         white-space: nowrap;
-    }
-    .chartsSection {
-        margin-top: 20px;
-        margin-left: 40px;
-        min-width: 470px;
     }
     
     .title {
@@ -691,6 +762,7 @@
         max-height: 21px;
         margin-top: 12px;
         margin-left: 10px;
+        cursor: pointer;
     }
 
     .chartName {
@@ -739,6 +811,7 @@
 
     .downloadButton {
         margin: 5px 5px;
+        font-size:12px;
         border: 1px solid #000000;
         border-radius: 5px;
         cursor: pointer;

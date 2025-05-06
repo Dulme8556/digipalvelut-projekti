@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import FileReader from "./file-reader.svelte";
+    import FileReader from "../header/file-reader.svelte";
 
     let lists = getContext("list");
 
@@ -11,6 +11,8 @@
     let newEnd = $state("");
     let newPercent;
     let newUnit = $state("");
+    let newDeadline = $state(new Date().toISOString().split('T')[0]);
+    let newResponsibility = $state("");
 
     function percentCalculation() {
         if (!newEnd || !newTarget) return;
@@ -54,6 +56,8 @@
                 end: newEnd,
                 percent: newPercent,
                 unit: newUnit,
+                deadline: newDeadline,
+                responsibility: newResponsibility,
             });
 
             lists.list = updatedList;
@@ -64,13 +68,29 @@
             newEnd = "";
             newPercent = "";
             newUnit = "";
+            newDeadline = "";
+            newResponsibility = "";
         }
     }
 </script>
 
-<div style="min-width:350px; max-width:350px;">
+<div class="add-new-section">
     <div class="create-dataset">
-        <h2 class="create-dataset__title">CREATE A NEW INDICATOR</h2>
+        <div style="display:flex; justify-content:center;">
+            <h2 class="create-dataset__title">CREATE NEW INDICATOR</h2>
+            <div class="createnew__info__wrapper">
+                <img class="createnew__info__icon" alt="info_icon" src="./images/info.png">
+                <div class="createnew__info__content">
+                    <p><strong>Name</strong>: Enter the name for the indicator.</p>
+                    <p><strong>Target Value</strong>: Set your target value for the indicator.</p>
+                    <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
+                    <p><strong>End Value</strong>: Enter the end value you want to measure against the target. This could be the final goal or current progress.</p>
+                    <p><strong>Unit</strong>: Define the unit for the indicator.</p>
+                    <p><strong>Deadline</strong>: Enter the deadline for your indicator. (optional)</p>
+                    <p><strong>Responsibility</strong>: Add the persons details (email?) who is responsible for this task. (optional)</p>
+                </div>
+            </div>
+        </div>
         <div class="input__container">
             <input
                 class="input"
@@ -102,18 +122,70 @@
                 placeholder="Unit"
                 bind:value={newUnit}
             />
+            <div class="subtitle">Deadline:</div>
+            <input
+                class="input input__date"
+                type="date"
+                placeholder="Deadline"
+                bind:value={newDeadline}
+            />
+            <input
+                class="input"
+                type="text"
+                placeholder="Responsibility"
+                bind:value={newResponsibility}
+            />
+
         </div>
         <div class="add-button">
-            <button class="add-button__button" onclick={addNew}
-                >Create indicator</button
-            >
+            <button class="add-button__button" onclick={addNew}>
+                Create indicator
+            </button>
         </div>
     </div>
 </div>
 
 <style>
+    .createnew__info__wrapper{
+        position:relative;
+        display:inline-block;
+    }
+
+    .createnew__info__content{
+        visibility: hidden;
+        opacity: 0;
+        width: 320px;
+        background-color: #f9f9f9;
+        color: #000;
+        text-align: left;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        top: 50px;
+        left: 0;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease;
+    }
+
+    .createnew__info__icon{
+        width:28px;
+        height:28px;
+        padding-top:19px;
+        margin-left:10px;
+    }
+
+    .createnew__info__wrapper:hover .createnew__info__content {
+        visibility:visible;
+        opacity: 1;
+    }
+
+    .add-new-section {
+        width: 370px;
+    }
     .create-dataset {
-        background-color: rgba(128, 128, 128, 0.289);
+        background-color: rgba(128, 128, 128, 0.17);
         border-radius: 12px;
     }
 
@@ -121,7 +193,7 @@
         display: flex;
         justify-content: center;
         padding-top: 15px;
-        margin-bottom: 0;
+        margin: 0;
     }
 
     .add-button {
@@ -154,7 +226,7 @@
         position: relative;
         overflow: hidden;
     }
-
+    
     .add-button__button:hover {
         cursor: pointer;
     }
@@ -163,7 +235,7 @@
         display: flex;
         flex-direction: column;
     }
-
+    
     .input::placeholder {
         padding-left: 2px;
     }
@@ -178,15 +250,24 @@
         color: black;
         max-width: 396px;
     }
-
+    
     .input:first-child {
         margin: 15px 15px;
         margin-top: 35px;
     }
-
+    
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         -moz-appearance: none;
+    }
+
+    .subtitle {
+        margin-left: 15px;
+        margin-bottom: 0;
+    }
+
+    .input__date {
+        margin-top: 5px;
     }
 </style>
