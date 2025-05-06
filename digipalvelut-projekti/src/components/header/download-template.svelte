@@ -1,12 +1,21 @@
 <script>
+    import * as XLSX from "xlsx";
+
+     function downloadTemplate() {
+        const headers = [{ Title: "", Target: "", Start: "", End: "", Unit: "" }];
+        const worksheet = XLSX.utils.json_to_sheet(headers, { skipHeader: false });
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Indicators Template");
+        XLSX.writeFile(workbook, "indicators-template.xlsx");
+};
 </script>
 
 <div class="container">
     <!-- <h3 class="title">Download the excel template:</h3> -->
     <div class="tooltip-container">
-        <a href="impact_tool.xlsx" class="link__container">
+        <button onclick={downloadTemplate} class="link__container">
             <img class="download" src="./images/download-icon.svg" alt="Download excel template" />
-        </a>
+        </button>
         <span class="tooltip-text">Download a premade<br>excel template</span>
     </div>
 </div>
