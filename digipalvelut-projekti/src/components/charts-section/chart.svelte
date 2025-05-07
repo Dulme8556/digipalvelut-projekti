@@ -28,7 +28,7 @@
         if (data.title) {
             chartName = data.title;
         } else {
-            chartName = "";
+            chartName = data.labels[0];
         }
 
         chartInstance = new Chart(canvas, {
