@@ -7,9 +7,9 @@
         id,
         check,
         name,
-        target,
+        expected,
         start,
-        end,
+        result,
         percent = "placeholder",
         unit,
         deadline,
@@ -39,11 +39,11 @@
     let reached = $state("");
 
     function calculateReached() {
-    if(end == target){
+    if(result == expected){
         reached = "Target reached"
-    } else if(end > target) {
+    } else if(result > expected) {
         reached = "Target exceeded"
-    } else if (end < target){
+    } else if (result < expected){
         reached = "Target not reached"
     }
     }
@@ -65,9 +65,9 @@
             id: id,
             check: check,
             name: name,
-            target: target,
+            target: expected,
             start: start,
-            end: end,
+            end: result,
             unit: unit,
         };
     }
@@ -85,9 +85,9 @@
     }
 
     function percentCalculation() {
-        if (!end || !target) return;
+        if (!result || !expected) return;
 
-        let rawValue = (end / target) * 100;
+        let rawValue = (result / expected) * 100;
         let roundedValue = rawValue.toFixed(0);
         let preciseValue = rawValue.toFixed(3);
 
@@ -114,9 +114,9 @@
             if (element.id === id) {
                 element.check = checked;
                 element.name = name;
-                element.target = target;
+                element.target = expected;
                 element.start = start;
-                element.end = end;
+                element.end = result;
                 element.percent = percent;
                 element.unit = unit;
                 element.deadline = deadline;
@@ -173,7 +173,7 @@
                 <div class="column">
                     <div class="component">
                         <h3>expected:</h3>
-                        <input class="input" type="text" bind:value={target} />
+                        <input class="input" type="text" bind:value={expected} />
                     </div>
                     <div class="component">
                         <h3>percent:</h3>
@@ -197,7 +197,7 @@
                         </div>
                         <div class="component">
                             <h3>result:</h3>
-                            <input class="input" type="text" bind:value={end} />
+                            <input class="input" type="text" bind:value={result} />
                         </div>
                     </div>
                     <div class="component">
@@ -239,7 +239,7 @@
                 <div class="column">
                     <div class="component">
                         <h3>expected:</h3>
-                        <div class="long">{target}</div>
+                        <div class="long">{expected}</div>
                     </div>
                     <div class="component">
                         <h3>percent:</h3>
@@ -262,7 +262,7 @@
                         </div>
                         <div class="component">
                             <h3>result:</h3>
-                            <div class="long">{end}</div>
+                            <div class="long">{result}</div>
                         </div>
                     </div>
                     <div class="start_end__group">

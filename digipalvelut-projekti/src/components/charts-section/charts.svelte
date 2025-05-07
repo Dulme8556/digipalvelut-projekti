@@ -72,8 +72,8 @@
 
     // all values to arrays
     selected.forEach((element) => {
-        datasetDataEnd = [...datasetDataEnd, element.end];
-        datasetDataTarget = [...datasetDataTarget, element.target];
+        datasetDataEnd = [...datasetDataEnd, element.result];
+        datasetDataTarget = [...datasetDataTarget, element.expected];
         datasetDataStart = [...datasetDataStart, element.start];
         labels = [...labels, element.name];
     });
@@ -128,8 +128,8 @@
 
     function createNewChart() {
         let checkedItems = selected;
-        let datasetDataEnd = checkedItems.map((item) => item.end);
-        let datasetDataTarget = checkedItems.map((item) => item.target);
+        let datasetDataResult = checkedItems.map((item) => item.result);
+        let datasetDataExpected = checkedItems.map((item) => item.expected);
         let datasetDataStart = checkedItems.map((item) => item.start);
         let labels = checkedItems.map((item) => item.name);
         let datasetUnit = checkedItems.map((item) => item.unit);
@@ -157,14 +157,14 @@
         if (type === "doughnut" || type === "pie") {
             let pie = new Pie();
             if (selected.length > 1) {
-                pie.defaultData(datasetDataEnd, datasetUnit);
+                pie.defaultData(datasetDataResult, datasetUnit);
             } else {
-                pie.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, datasetUnit, labels);
+                pie.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels);
             }
             chartData.datasets = pie.getData();
         } else if (type === "line") {
             let line = new Line();
-            line.changeData(datasetDataStart, datasetDataEnd, datasetDataTarget, datasetUnit, labels);
+            line.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels);
             chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
             chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
@@ -178,14 +178,14 @@
                 },
                 {
                     label: "end",
-                    data: datasetDataEnd,
+                    data: datasetDataResult,
                     backgroundColor: "blue",
                     unit: datasetUnit,
                     minBarLength: 4,
                 },
                 {
                     label: "target",
-                    data: datasetDataTarget,
+                    data: datasetDataExpected,
                     backgroundColor: "red",
                     unit: datasetUnit,
                     minBarLength: 4,

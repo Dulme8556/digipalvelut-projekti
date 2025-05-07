@@ -198,9 +198,9 @@
                         check={line.check}
                         id={line.id}
                         name={line.name}
-                        target={line.target}
+                        expected={line.expected}
                         start={line.start}
-                        end={line.end}
+                        result={line.result}
                         percent={line.percent}
                         unit={line.unit}
                         deadline={line.deadline}

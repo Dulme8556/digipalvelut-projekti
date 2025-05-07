@@ -6,18 +6,18 @@
 
     let newId = $state("");
     let newName = $state("");
-    let newTarget = $state("");
+    let newExpected = $state("");
     let newStart = $state("");
-    let newEnd = $state("");
+    let newResult = $state("");
     let newPercent;
     let newUnit = $state("");
     let newDeadline = $state(new Date().toISOString().split('T')[0]);
     let newResponsibility = $state("");
 
     function percentCalculation() {
-        if (!newEnd || !newTarget) return;
+        if (!newResult || !newExpected) return;
 
-        let rawValue = (newEnd / newTarget) * 100;
+        let rawValue = (newResult / newExpected) * 100;
         let roundedValue = rawValue.toFixed(0);
         let preciseValue = rawValue.toFixed(3);
 
@@ -37,9 +37,9 @@
 
         if (
             newName === "" &&
-            newTarget === "" &&
+            newExpected === "" &&
             newStart === 0 &&
-            newEnd === "" &&
+            newResult === "" &&
             newUnit === ""
         ) {
             alert("Can't add empty");
@@ -51,9 +51,9 @@
                 id: newId,
                 check: false,
                 name: newName,
-                target: newTarget,
+                expected: newExpected,
                 start: newStart,
-                end: newEnd,
+                result: newResult,
                 percent: newPercent,
                 unit: newUnit,
                 deadline: newDeadline,
@@ -63,9 +63,9 @@
             lists.list = updatedList;
 
             newName = "";
-            newTarget = "";
+            newExpected = "";
             newStart = "";
-            newEnd = "";
+            newResult = "";
             newPercent = "";
             newUnit = "";
             newDeadline = "";
@@ -102,7 +102,7 @@
                 class="input input__number"
                 type="number"
                 placeholder="Expected value"
-                bind:value={newTarget}
+                bind:value={newExpected}
             />
             <input
                 class="input input__number"
@@ -114,7 +114,7 @@
                 class="input input__number"
                 type="number"
                 placeholder="Result value"
-                bind:value={newEnd}
+                bind:value={newResult}
             />
             <input
                 class="input"
