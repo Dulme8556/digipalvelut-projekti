@@ -172,7 +172,7 @@
                 </div>
                 <div class="column">
                     <div class="component">
-                        <h3>target:</h3>
+                        <h3>expected:</h3>
                         <input class="input" type="text" bind:value={target} />
                     </div>
                     <div class="component">
@@ -180,7 +180,7 @@
                     </div>
                     {#if extraData}
                     <div class="component">
-                        <h3>Resp:</h3>
+                        <h3>resp:</h3>
                         <input class="input input__long-responsibility" type="text" bind:value={responsibility}/>
                     </div>
                     {/if}
@@ -196,7 +196,7 @@
                             />
                         </div>
                         <div class="component">
-                            <h3>end:</h3>
+                            <h3>result:</h3>
                             <input class="input" type="text" bind:value={end} />
                         </div>
                     </div>
@@ -238,7 +238,7 @@
                 </div>
                 <div class="column">
                     <div class="component">
-                        <h3>target:</h3>
+                        <h3>expected:</h3>
                         <div class="long">{target}</div>
                     </div>
                     <div class="component">
@@ -249,7 +249,7 @@
                     </div>
                     {#if extraData}
                     <div class="component">
-                        <h3>Responsibility:</h3>
+                        <h3>responsibility:</h3>
                         <div class="long long__responsibility">{responsibility}</div>
                     </div>
                     {/if}
@@ -261,7 +261,7 @@
                             <div class="long">{start}</div>
                         </div>
                         <div class="component">
-                            <h3>end:</h3>
+                            <h3>result:</h3>
                             <div class="long">{end}</div>
                         </div>
                     </div>
