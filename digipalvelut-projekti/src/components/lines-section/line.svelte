@@ -14,6 +14,8 @@
         unit,
         deadline,
         responsibility,
+        customFields = [],
+        onAddField,
     } = $props();
 
     let lists = getContext("list");
@@ -39,13 +41,13 @@
     let reached = $state("");
 
     function calculateReached() {
-    if(result == expected){
-        reached = "Target reached"
-    } else if(result > expected) {
-        reached = "Target exceeded"
-    } else if (result < expected){
-        reached = "Target not reached"
-    }
+        if(result == expected){
+            reached = "Target reached"
+        } else if(result > expected) {
+            reached = "Target exceeded"
+        } else if (result < expected){
+            reached = "Target not reached"
+        }
     }
 
     export function checkAll() {
@@ -169,6 +171,13 @@
                         />
                     </div>
                     {/if}
+                    {#each customFields as field}
+                        <div class="component">
+                            <h3>{field.title}:</h3>
+                            <input class="input" type="text" bind:value={field.value} />
+                        </div>
+                    {/each}
+
                 </div>
                 <div class="column">
                     <div class="component">
@@ -235,6 +244,12 @@
                         <div class="long">{formattedDeadline}</div>
                     </div>
                     {/if}
+                    {#each customFields as field}
+                        <div class="component">
+                            <h3>{field.title}:</h3>
+                            <div class="long">{field.value}</div>
+                        </div>
+                    {/each}
                 </div>
                 <div class="column">
                     <div class="component">
@@ -279,6 +294,7 @@
                 </div>
             </div>
             <div class="button__container">
+                <button class="button" onclick={onAddField}>+</button>
                 <button class="button button__edit" onclick={editThis}>
                     <img
                         src="./images/edit-icon.svg"

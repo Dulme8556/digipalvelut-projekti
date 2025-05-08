@@ -24,7 +24,7 @@
 
     function selectAll() {
         let filteredArray = lines.filter((item) => item !== null);
-
+        
         filteredArray.forEach((element) => {
             element.checkAll();
 
@@ -137,6 +137,21 @@
         });
         checkSelected();
     }
+
+    function addCustomField(index) {
+        let title = prompt("field name?");
+        let value = prompt("field value?");
+        if (title && value) {
+            if (!filteredIndicators[index].customFields) {
+                filteredIndicators[index].customFields = [];
+            }
+        
+            filteredIndicators[index].customFields = [
+                ...filteredIndicators[index].customFields,
+                { title, value }
+            ];
+        }
+    }
 </script>
 
 <div>
@@ -205,6 +220,8 @@
                         unit={line.unit}
                         deadline={line.deadline}
                         responsibility={line.responsibility}
+                        customFields={line.customFields}
+                        onAddField={() => addCustomField(i)}
                         on:remove={(e) => removeLine(e.detail)}
                     />
                 </li>

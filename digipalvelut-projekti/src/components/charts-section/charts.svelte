@@ -127,18 +127,20 @@
     }
 
     function createNewChart() {
-        let checkedItems = selected;
-        let datasetDataResult = checkedItems.map((item) => item.result);
-        let datasetDataExpected = checkedItems.map((item) => item.expected);
-        let datasetDataStart = checkedItems.map((item) => item.start);
-        let labels = checkedItems.map((item) => item.name);
-        let datasetUnit = checkedItems.map((item) => item.unit);
-
-        if (checkedItems.length === 0) {
+        if (selected.length === 0) {
             alert('Error: No indicators selected. \nIf otherwise pressing the "Save" button may fix this issue.');
             return;
         }
+        
+        let datasetDataResult = selected.map((item) => item.result);
+        let datasetDataExpected = selected.map((item) => item.expected);
+        let datasetDataStart = selected.map((item) => item.start);
+        let labels = selected.map((item) => item.name);
+        let datasetUnit = selected.map((item) => item.unit);
+        let datasetCustomFields = selected.map((item) => item.customFields)
 
+        let customFieldsDataset = [];
+        
         const { type, axis } = getTrimmedChartType();
 
         let chartData = {
@@ -168,7 +170,17 @@
             chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
             chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
-            chartData.datasets = [
+            for (let i = 0; i < datasetCustomFields[0].length; i++) {
+                customFieldsDataset.push({
+                    label: datasetCustomFields[0][i].title,
+                    data: [datasetCustomFields[0][i].value],
+                    backgroundColor: "pink",
+                    unit:datasetUnit,
+                    minBarLength: 4
+                })
+            }
+
+            chartData.datasets = [...chartData.datasets,
                 {
                     label: "start",
                     data: datasetDataStart,
@@ -176,6 +188,7 @@
                     unit: datasetUnit,
                     minBarLength: 4,
                 },
+                ...customFieldsDataset,
                 {
                     label: "end",
                     data: datasetDataResult,
