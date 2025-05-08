@@ -559,10 +559,16 @@
         <div style="display:flex;">
             <h2 class="title">Active charts</h2>
             <div class="info__wrapper">
-                <img class="info__icon" alt="info_icon" src="./images/info.png">
-                <div class="info__content">
-                    Info Test
-                    Component info or a small tutorial will be placed here
+                <div class="charts__info__wrapper">
+                    <img class="info__icon" alt="info_icon" src="./images/info.png">
+                    <div class="info__content">
+                        <p><strong>Making</strong>: Before making a chart you can give it a name, 
+                            choose the type of chart 
+                            and choose if you want to display the exact values on the chart.</p>
+                        <p><strong>Seaching</strong>: The charts can be search by their name. </p>
+                        <p><strong>Downloading</strong>: There are three download options, 
+                            two for pdf and one to download each chart as a separate JPG file.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -611,6 +617,19 @@
                     Create a chart
                 </button>
             </div>
+            <div class="info__wrapper">
+                <div class="charts__info__wrapper">
+                    <img class="createChart__info__icon" alt="info_icon" src="./images/info.png">
+                    <div class="createChart__info__content">
+                        <p><strong>Info about different types of charts.</strong></p>
+                        <p><strong>Pie</strong>: If pie chart receives multiple indicator
+                            it compares their end values. If single indicator is given
+                            it compare all of it's data (start, result, expected).</p>
+                        <p><strong>Line</strong>: Ability for adding more point was requested. In progress</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div class="secondLine">
             <input
@@ -678,12 +697,34 @@
         position:relative;
         display:inline-block;
     }
-    
 
-    .info__content{
+    .charts__info__wrapper{
+        position:relative;
+        display:inline-block;
+    }
+
+    .charts__info__wrapper:hover .info__content {
+        visibility:visible;
+        opacity: 1;
+    }
+
+    .info__icon{
+        width:28px;
+        height:28px;
+        padding-top:5px;
+        margin-left:10px;
+    }
+
+    .createChart__info__icon {
+        width:20px;
+        padding-top:12px;
+        margin-left:10px;
+    }
+
+    .info__content, .createChart__info__content {
         visibility: hidden;
         opacity: 0;
-        width: 220px;
+        width: 320px;
         background-color: #f9f9f9;
         color: #000;
         text-align: left;
@@ -692,20 +733,22 @@
         padding: 8px;
         position: absolute;
         z-index: 1;
-        top: 35px;
-        left: 0;
+        top: 50px;
+        left: -20px;
         box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
         transition: opacity 0.3s ease;
     }
 
-    .info__icon{
-        width:28px;
-        height:28px;
-        padding-top:4px;
-        margin-left:10px;
+    .createChart__info__content {
+        left: -300px;
     }
 
     .info__wrapper:hover .info__content {
+        visibility:visible;
+        opacity: 1;
+    }
+
+    .info__wrapper:hover .createChart__info__content {
         visibility:visible;
         opacity: 1;
     }
