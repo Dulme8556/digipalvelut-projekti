@@ -140,6 +140,10 @@
         let datasetCustomFields = selected.map((item) => item.customFields)
 
         let customFieldsDataset = [];
+        let customColors = [
+            "#FF9999", "#99CCFF", "#CCFF99", "#FFCC99", "#D9B3FF", "#B3FFFF"
+        ];
+
         
         const { type, axis } = getTrimmedChartType();
 
@@ -174,7 +178,7 @@
                 customFieldsDataset.push({
                     label: datasetCustomFields[0][i].title,
                     data: [datasetCustomFields[0][i].value],
-                    backgroundColor: "pink",
+                    backgroundColor: customColors[i % customColors.length],
                     unit:datasetUnit,
                     minBarLength: 4
                 })
