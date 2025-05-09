@@ -170,7 +170,7 @@
             chartData.datasets = pie.getData();
         } else if (type === "line") {
             let line = new Line();
-            line.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels);
+            line.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields);
             chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
             chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
