@@ -162,11 +162,7 @@
         // Create datasets based on chart type
         if (type === "doughnut" || type === "pie") {
             let pie = new Pie();
-            if (selected.length > 1) {
-                pie.defaultData(datasetDataResult, datasetUnit);
-            } else {
-                pie.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels);
-            }
+            pie.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields);
             chartData.datasets = pie.getData();
         } else if (type === "line") {
             let line = new Line();
@@ -174,16 +170,17 @@
             chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
             chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
-            for (let i = 0; i < datasetCustomFields[0].length; i++) {
-                customFieldsDataset.push({
-                    label: datasetCustomFields[0][i].title,
-                    data: [datasetCustomFields[0][i].value],
-                    backgroundColor: customColors[i % customColors.length],
-                    unit:datasetUnit,
-                    minBarLength: 4
-                })
+            if (!datasetCustomFields.some(item => item == null)) {
+                for (let i = 0; i < datasetCustomFields[0].length; i++) {
+                    customFieldsDataset.push({
+                        label: datasetCustomFields[0][i].title,
+                        data: [datasetCustomFields[0][i].value],
+                        backgroundColor: customColors[i % customColors.length],
+                        unit:datasetUnit,
+                        minBarLength: 4
+                    })
+                }
             }
-
             chartData.datasets = [...chartData.datasets,
                 {
                     label: "start",

@@ -8,12 +8,15 @@ class Line {
         let datasetList = [];
         let customFieldsDataset = [];
         let convertedCustomFields = JSON.parse(JSON.stringify(customFields))
+        let customFieldValues = [];
+        let customFieldLabels = [];
 
+        if (!convertedCustomFields.some(item => item == null)) {
+            customFieldValues = convertedCustomFields[0].map(item => Number(item.value));
+            customFieldLabels = convertedCustomFields[0].map(item => item.title);
+        }
         
-        let customFieldValues = convertedCustomFields[0].map((item) => Number(item.value))
-        let customFieldLabels = convertedCustomFields[0].map((item) => item.title)
-        
-        let labelList = ["start",...customFieldLabels, "end", "target"]
+        let labelList = ["start", ...customFieldLabels, "end", "target"]
         let storeData = { start: start, end: end, target: target }
 
         for (let i = 0; i < labels.length; i++) {
