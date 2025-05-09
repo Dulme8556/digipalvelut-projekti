@@ -85,7 +85,7 @@
                     <p><strong>Expected Value</strong>: Set your target value for the indicator.</p>
                     <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
                     <p><strong>Result Value</strong>: Enter the result value you want to measure against the target. This could be the final goal or current progress.</p>
-                    <p><strong>Unit</strong>: Define the unit for the indicator.</p>
+                    <p><strong>Unit</strong>: Define the unit for the indicator. (e.g. expect 200 participants)</p>
                     <p><strong>Deadline</strong>: Enter the deadline for your indicator. (optional)</p>
                     <p><strong>Responsibility</strong>: Add the persons details (email?) who is responsible for this task. (optional)</p>
                 </div>
@@ -119,7 +119,7 @@
             <input
                 class="input"
                 type="text"
-                placeholder="Unit"
+                placeholder="Unit (What is measured)"
                 bind:value={newUnit}
             />
             <div class="subtitle">Deadline:</div>
