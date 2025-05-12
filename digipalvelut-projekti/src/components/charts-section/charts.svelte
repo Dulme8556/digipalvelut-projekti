@@ -170,17 +170,31 @@
             chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
             chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
+
+            // for (let i = 0; i < convertedCustomFields.length; i++) {
+            //     for (let j = 0; j < convertedCustomFields[i].length; j++) { 
+            //         if (!customFieldsDataset[i]) customFieldsDataset[i] = []
+            //         customFieldValues = convertedCustomFields[i].map(item => Number(item.value));
+            //         customFieldLabels = convertedCustomFields[i].map(item => item.title);   
+            //     }
+            //     customFieldsDataset.push({values: customFieldValues, labels: customFieldLabels})
+            // }
+
+            // works with single indicator
             if (!datasetCustomFields.some(item => item == null)) {
-                for (let i = 0; i < datasetCustomFields[0].length; i++) {
-                    customFieldsDataset.push({
-                        label: datasetCustomFields[0][i].title,
-                        data: [datasetCustomFields[0][i].value],
-                        backgroundColor: customColors[i % customColors.length],
-                        unit:datasetUnit,
-                        minBarLength: 4
-                    })
+                for (let i = 0; i < datasetCustomFields.length; i++) {
+                    for (let j = 0; j < datasetCustomFields[i].length; j++) {
+                        customFieldsDataset.push({
+                            label: datasetCustomFields[i][j].title,
+                            data: [Number(datasetCustomFields[i][j].value)],
+                            backgroundColor: customColors[j % customColors.length],
+                            unit: datasetUnit,
+                            minBarLength: 4
+                        })
+                    }
                 }
             }
+            console.log(customFieldsDataset)
             chartData.datasets = [...chartData.datasets,
                 {
                     label: "start",
@@ -189,7 +203,7 @@
                     unit: datasetUnit,
                     minBarLength: 4,
                 },
-                ...customFieldsDataset,
+                ...customFieldsDataset[0],
                 {
                     label: "end",
                     data: datasetDataResult,
@@ -206,6 +220,7 @@
                 },
             ];
         }
+        customFieldsDataset.shift();
 
         listOfChartData = [chartData];
         listOfChartData.forEach((element) => generateCharts(element));
