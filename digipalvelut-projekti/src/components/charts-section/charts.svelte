@@ -639,7 +639,9 @@
                         <p><strong>Pie</strong>: If pie chart receives multiple indicator
                             it compares their end values. If single indicator is given
                             it compare all of it's data (start, result, expected).</p>
-                        <p><strong>Line</strong>: Ability for adding more point was requested. In progress</p>
+                        <p><strong>Line</strong>: If given multiple indicators with different extra point names
+                            (the bolded labels) only 1 of them is shown but all the values 
+                            are still being compared.</p>
                     </div>
                 </div>
             </div>
