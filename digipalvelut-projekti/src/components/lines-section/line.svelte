@@ -145,7 +145,7 @@
             <input
                 class="checkbox"
                 type="checkbox"
-                {checked}
+                checked={checked}
                 onclick={checkboxClick}
             />
             <div class="data__container">
@@ -219,7 +219,7 @@
             <input
                 class="checkbox"
                 type="checkbox"
-                {checked}
+                checked={checked}
                 onclick={checkboxClick}
             />
             <div class="data__container">
