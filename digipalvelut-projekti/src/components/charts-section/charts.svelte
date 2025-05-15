@@ -139,12 +139,13 @@
         let datasetUnit = selected.map((item) => item.unit);
         let datasetCustomFields = selected.map((item) => item.customFields)
 
+        let minBarLength = 4;
+
         let customFieldsDataset = [];
         let customColors = [
-            "#FF9999", "#99CCFF", "#CCFF99", "#FFCC99", "#D9B3FF", "#B3FFFF"
+            "#f4cb3d", "#c1241c", "#3b7b8a", "#224c56", "#508a4d", "#95c34f", "#ce703e", "#2b152b"
         ];
 
-        
         const { type, axis } = getTrimmedChartType();
 
         let chartData = {
@@ -162,11 +163,11 @@
         // Create datasets based on chart type
         if (type === "doughnut" || type === "pie") {
             let pie = new Pie();
-            pie.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields);
+            pie.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields, customColors);
             chartData.datasets = pie.getData();
         } else if (type === "line") {
             let line = new Line();
-            line.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields);
+            line.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields, customColors);
             chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
             chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
         } else {
@@ -181,42 +182,43 @@
             // }
 
             // works with single indicator
+            console.log(JSON.parse(JSON.stringify(datasetCustomFields)))
             if (!datasetCustomFields.some(item => item == null)) {
                 for (let i = 0; i < datasetCustomFields.length; i++) {
                     for (let j = 0; j < datasetCustomFields[i].length; j++) {
                         customFieldsDataset.push({
                             label: datasetCustomFields[i][j].title,
                             data: [Number(datasetCustomFields[i][j].value)],
-                            backgroundColor: customColors[j % customColors.length],
+                            // j+3 to account for already used colors
+                            backgroundColor: customColors[j+3 % customColors.length],
                             unit: datasetUnit,
-                            minBarLength: 4
+                            minBarLength: minBarLength
                         })
                     }
                 }
             }
-            console.log(customFieldsDataset)
             chartData.datasets = [...chartData.datasets,
                 {
                     label: "start",
                     data: datasetDataStart,
-                    backgroundColor: "#FFCE56",
+                    backgroundColor: customColors[0],
                     unit: datasetUnit,
-                    minBarLength: 4,
+                    minBarLength: minBarLength,
                 },
-                ...customFieldsDataset[0],
+                ...customFieldsDataset,
                 {
                     label: "end",
                     data: datasetDataResult,
-                    backgroundColor: "#36A2EB",
+                    backgroundColor: customColors[1],
                     unit: datasetUnit,
-                    minBarLength: 4,
+                    minBarLength: minBarLength,
                 },
                 {
                     label: "target",
                     data: datasetDataExpected,
-                    backgroundColor: "#FF6384",
+                    backgroundColor: customColors[2],
                     unit: datasetUnit,
-                    minBarLength: 4,
+                    minBarLength: minBarLength,
                 },
             ];
         }

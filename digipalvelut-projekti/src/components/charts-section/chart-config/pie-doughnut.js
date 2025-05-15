@@ -3,7 +3,7 @@ class Pie {
         this.returnDataset
     }
 
-    changeData(start, end, target, unit, labels, customFields) {
+    changeData(start, end, target, unit, labels, customFields, colors) {
         let dataset;
         
         if (start.length !== 1) {
@@ -12,13 +12,7 @@ class Pie {
                     label: "Values",
                     data: end,
                     unit: unit,
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#4BC0C0",
-                        "#9966FF",
-                    ],
+                    backgroundColor: colors,
                 },
             ];
         } else {            
@@ -42,13 +36,7 @@ class Pie {
                     label: dataLabel,
                     data: data,
                     unit: dataUnit,
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#4BC0C0",
-                        "#9966FF",
-                    ],
+                    backgroundColor: colors,
                 },
             ];
         }

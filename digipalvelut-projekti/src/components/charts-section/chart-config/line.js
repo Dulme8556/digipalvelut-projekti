@@ -3,17 +3,14 @@ class Line {
         this.dataset;
     }
 
-    changeData(start, end, target, unit, labels, customFields) {
-        let colorList = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"]
+    changeData(start, end, target, unit, labels, customFields, colors) {
+        let colorList = colors
         let datasetList = [];
         let convertedCustomFields = JSON.parse(JSON.stringify(customFields))
         let customFieldsDataset = [];
         let customFieldValues = [];
         let customFieldLabels = [];
 
-        // tämmöne tuli bar charttien muokkauksen jälkeen
-        // tän voi kopioida sinne toisen tilalle ja kattoo console.log() nii näkee miks ei oo enää
-        // convereteddCustomFields pitää vaihtaa eka
         if (!convertedCustomFields.some(item => item === null)) {    
             for (let i = 0; i < convertedCustomFields.length; i++) {
                 for (let j = 0; j < convertedCustomFields[i].length; j++) { 
