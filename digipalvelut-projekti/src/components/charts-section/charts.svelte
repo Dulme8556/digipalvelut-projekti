@@ -5,6 +5,7 @@
     import Chart from "./chart.svelte";
     import Line from "./chart-config/line.js";
     import Pie from "./chart-config/pie-doughnut";
+    import Bar from "./chart-config/bar";
 
     let lists = getContext("list");
     let selected = lists.selectedValues;
@@ -131,19 +132,27 @@
             alert('Error: No indicators selected. \nIf otherwise pressing the "Save" button may fix this issue.');
             return;
         }
-        
+
         let datasetDataResult = selected.map((item) => item.result);
         let datasetDataExpected = selected.map((item) => item.expected);
         let datasetDataStart = selected.map((item) => item.start);
         let labels = selected.map((item) => item.name);
         let datasetUnit = selected.map((item) => item.unit);
-        let datasetCustomFields = selected.map((item) => item.customFields)
-
-        let minBarLength = 4;
+        let rawDatasetCustomFields = selected.map((item) => item.customFields);
+        let datasetCustomFields = JSON.parse(
+            JSON.stringify(rawDatasetCustomFields),
+        );
 
         let customFieldsDataset = [];
         let customColors = [
-            "#f4cb3d", "#c1241c", "#3b7b8a", "#224c56", "#508a4d", "#95c34f", "#ce703e", "#2b152b"
+            "#f4cb3d",
+            "#c1241c",
+            "#3b7b8a",
+            "#224c56",
+            "#508a4d",
+            "#95c34f",
+            "#ce703e",
+            "#2b152b",
         ];
 
         const { type, axis } = getTrimmedChartType();
@@ -163,69 +172,52 @@
         // Create datasets based on chart type
         if (type === "doughnut" || type === "pie") {
             let pie = new Pie();
-            pie.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields, customColors);
+            pie.changeData(
+                datasetDataStart,
+                datasetDataResult,
+                datasetDataExpected,
+                datasetUnit,
+                labels,
+                datasetCustomFields,
+                customColors,
+            );
             chartData.datasets = pie.getData();
         } else if (type === "line") {
             let line = new Line();
-            line.changeData(datasetDataStart, datasetDataResult, datasetDataExpected, datasetUnit, labels, datasetCustomFields, customColors);
-            chartData.datasets = JSON.parse(JSON.stringify(line.getData())).datasets;
-            chartData.labels = JSON.parse(JSON.stringify(line.getData())).labels;
+            line.changeData(
+                datasetDataStart,
+                datasetDataResult,
+                datasetDataExpected,
+                datasetUnit,
+                labels,
+                datasetCustomFields,
+                customColors,
+            );
+            chartData.datasets = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).datasets;
+            chartData.labels = JSON.parse(
+                JSON.stringify(line.getData()),
+            ).labels;
         } else {
-
-            // for (let i = 0; i < convertedCustomFields.length; i++) {
-            //     for (let j = 0; j < convertedCustomFields[i].length; j++) { 
-            //         if (!customFieldsDataset[i]) customFieldsDataset[i] = []
-            //         customFieldValues = convertedCustomFields[i].map(item => Number(item.value));
-            //         customFieldLabels = convertedCustomFields[i].map(item => item.title);   
-            //     }
-            //     customFieldsDataset.push({values: customFieldValues, labels: customFieldLabels})
-            // }
-
-            // works with single indicator
-            console.log(JSON.parse(JSON.stringify(datasetCustomFields)))
-            if (!datasetCustomFields.some(item => item == null)) {
-                for (let i = 0; i < datasetCustomFields.length; i++) {
-                    for (let j = 0; j < datasetCustomFields[i].length; j++) {
-                        customFieldsDataset.push({
-                            label: datasetCustomFields[i][j].title,
-                            data: [Number(datasetCustomFields[i][j].value)],
-                            // j+3 to account for already used colors
-                            backgroundColor: customColors[j+3 % customColors.length],
-                            unit: datasetUnit,
-                            minBarLength: minBarLength
-                        })
-                    }
-                }
-            }
-            chartData.datasets = [...chartData.datasets,
-                {
-                    label: "start",
-                    data: datasetDataStart,
-                    backgroundColor: customColors[0],
-                    unit: datasetUnit,
-                    minBarLength: minBarLength,
-                },
-                ...customFieldsDataset,
-                {
-                    label: "end",
-                    data: datasetDataResult,
-                    backgroundColor: customColors[1],
-                    unit: datasetUnit,
-                    minBarLength: minBarLength,
-                },
-                {
-                    label: "target",
-                    data: datasetDataExpected,
-                    backgroundColor: customColors[2],
-                    unit: datasetUnit,
-                    minBarLength: minBarLength,
-                },
-            ];
+            let bar = new Bar();
+            bar.changeData(
+                datasetDataStart,
+                datasetDataResult,
+                datasetDataExpected,
+                datasetUnit,
+                labels,
+                datasetCustomFields,
+                customColors,
+            );
+            chartData.datasets = bar.getData();
         }
         customFieldsDataset.shift();
 
-        listOfChartData = [chartData];
-        listOfChartData.forEach((element) => generateCharts(element));
+        // poista listOfChartData ja forEach tilalle vaan functio(chartData)
+        // listOfChartData = [chartData];
+        // listOfChartData.forEach((element) => generateCharts(element));
+        generateCharts(chartData);
         lists.charts = [...lists.charts, chartData];
     }
 
@@ -449,24 +441,26 @@
 
             leftY = 0;
             rightY = 20;
-            
+
             for (let j = 0; j < chartSet.length; j++) {
                 let canvas = chartSet[j];
                 let width = canvas.width;
                 let height = canvas.height;
                 let imgURL = canvas.toDataURL("image/png");
-                
+
                 // image size supposed to be 200x400 or 400x400
                 // make sure sizes are divisible by 200 and account for 600
                 if (height % 200 !== 0 || height % 300 === 0) {
                     if (Math.abs(height - width / 2) <= marginOfError) {
                         width = imageWidth;
                         height = smallImageHeight;
-                    } else  if (height === width) {
+                    } else if (height === width) {
                         width = imageWidth;
                         height = BigImageHeight;
                     } else {
-                        console.error("Error: Something went wrong while calculating charts sizes")
+                        console.error(
+                            "Error: Something went wrong while calculating charts sizes",
+                        );
                     }
                 }
 
@@ -591,14 +585,27 @@
             <h2 class="title">Active charts</h2>
             <div class="info__wrapper">
                 <div class="charts__info__wrapper">
-                    <img class="info__icon" alt="info_icon" src="./images/info.png">
+                    <img
+                        class="info__icon"
+                        alt="info_icon"
+                        src="./images/info.png"
+                    />
                     <div class="info__content">
-                        <p><strong>Making</strong>: Before making a chart you can give it a name, 
-                            choose the type of chart 
-                            and choose if you want to display the exact values on the chart.</p>
-                        <p><strong>Seaching</strong>: The charts can be search by their name. </p>
-                        <p><strong>Downloading</strong>: There are three download options, 
-                            two for pdf and one to download each chart as a separate JPG file.</p>
+                        <p>
+                            <strong>Making</strong>: Before making a chart you
+                            can give it a name, choose the type of chart and
+                            choose if you want to display the exact values on
+                            the chart.
+                        </p>
+                        <p>
+                            <strong>Seaching</strong>: The charts can be search
+                            by their name.
+                        </p>
+                        <p>
+                            <strong>Downloading</strong>: There are three
+                            download options, two for pdf and one to download
+                            each chart as a separate JPG file.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -620,11 +627,17 @@
                 style="position:relative; display:flex; flex-direction:column; align-items:center;"
             >
                 {#if !showOptions}
-                    <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
+                    <div
+                        class="extraOptionsToggle"
+                        onclick={toggleExtraOptions}
+                    >
                         &#x25BC; <!-- Down arrow icon -->
                     </div>
                 {:else}
-                    <div class="extraOptionsToggle" onclick={toggleExtraOptions}>
+                    <div
+                        class="extraOptionsToggle"
+                        onclick={toggleExtraOptions}
+                    >
                         &#x25b2; <!-- Up arrow icon -->
                     </div>
                 {/if}
@@ -650,19 +663,32 @@
             </div>
             <div class="info__wrapper">
                 <div class="charts__info__wrapper">
-                    <img class="createChart__info__icon" alt="info_icon" src="./images/info.png">
+                    <img
+                        class="createChart__info__icon"
+                        alt="info_icon"
+                        src="./images/info.png"
+                    />
                     <div class="createChart__info__content">
-                        <p><strong>Info about different types of charts.</strong></p>
-                        <p><strong>Pie</strong>: If pie chart receives multiple indicator
-                            it compares their end values. If single indicator is given
-                            it compare all of it's data (start, result, expected).</p>
-                        <p><strong>Line</strong>: If given multiple indicators with different extra point names
-                            (the bolded labels) only 1 of them is shown but all the values 
-                            are still being compared.</p>
+                        <p>
+                            <strong
+                                >Info about different types of charts.</strong
+                            >
+                        </p>
+                        <p>
+                            <strong>Pie</strong>: If pie chart receives multiple
+                            indicator it compares their end values. If single
+                            indicator is given it compare all of it's data
+                            (start, result, expected).
+                        </p>
+                        <p>
+                            <strong>Line</strong>: If given multiple indicators
+                            with different extra point names (the bolded labels)
+                            only 1 of them is shown but all the values are still
+                            being compared.
+                        </p>
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="secondLine">
             <input
@@ -726,35 +752,36 @@
 </div>
 
 <style>
-    .info__wrapper{
-        position:relative;
-        display:inline-block;
+    .info__wrapper {
+        position: relative;
+        display: inline-block;
     }
 
-    .charts__info__wrapper{
-        position:relative;
-        display:inline-block;
+    .charts__info__wrapper {
+        position: relative;
+        display: inline-block;
     }
 
     .charts__info__wrapper:hover .info__content {
-        visibility:visible;
+        visibility: visible;
         opacity: 1;
     }
 
-    .info__icon{
-        width:28px;
-        height:28px;
-        padding-top:5px;
-        margin-left:10px;
+    .info__icon {
+        width: 28px;
+        height: 28px;
+        padding-top: 5px;
+        margin-left: 10px;
     }
 
     .createChart__info__icon {
-        width:20px;
-        padding-top:12px;
-        margin-left:10px;
+        width: 20px;
+        padding-top: 12px;
+        margin-left: 10px;
     }
 
-    .info__content, .createChart__info__content {
+    .info__content,
+    .createChart__info__content {
         visibility: hidden;
         opacity: 0;
         width: 320px;
@@ -777,12 +804,12 @@
     }
 
     .info__wrapper:hover .info__content {
-        visibility:visible;
+        visibility: visible;
         opacity: 1;
     }
 
     .info__wrapper:hover .createChart__info__content {
-        visibility:visible;
+        visibility: visible;
         opacity: 1;
     }
 
@@ -816,12 +843,12 @@
         z-index: 10;
         white-space: nowrap;
     }
-    
+
     .title {
         margin-bottom: 5px;
         margin: 0;
     }
-    
+
     .toolbar {
         border: 2px solid #b4b4b4;
         border-radius: 10px;
@@ -887,7 +914,7 @@
 
     .downloadButton {
         margin: 5px 5px;
-        font-size:12px;
+        font-size: 12px;
         border: 1px solid #000000;
         border-radius: 5px;
         cursor: pointer;
