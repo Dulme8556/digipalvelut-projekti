@@ -590,9 +590,10 @@
                     <div class="info__content">
                         <p>
                             <strong>Making</strong>: Before making a chart you
-                            can give it a name, choose the type of chart and
+                            can give it a name if name is left empty the indicator 
+                            name is chosen, choose the type of chart and
                             choose if you want to display the exact values on
-                            the chart.
+                            the chart (click the arrow).
                         </p>
                         <p>
                             <strong>Seaching</strong>: The charts can be search
@@ -683,10 +684,10 @@
                             being compared.
                         </p>
                         <p>
-                            <strong>Pie</strong>: If pie chart receives multiple
-                            indicator it compares their end values. If single
+                            <strong>Pie</strong>: Receiving multiple
+                            indicator it compares their target values. If single
                             indicator is given it compare all of it's data
-                            (start, result, expected).
+                            (start, result, expected, possible extra points).
                         </p>
                     </div>
                 </div>
