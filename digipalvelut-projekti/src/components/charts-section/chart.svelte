@@ -16,6 +16,7 @@
     let chartContainer;
 
     let checked = false;
+    $: editing = false;
 
     onMount(() => {
         if (!canvas) {
@@ -158,6 +159,16 @@
         checkSelected();
     }
 
+    function editThis() {
+        editing = true;
+    }
+
+    function saveThis() {
+        let chart = lists.charts.find((item) => item.id === id);
+        chart.title = chartName
+        editing = false;
+    }
+
     export function checkAll() {
         checked = true;
     }
@@ -189,15 +200,28 @@
                 onclick={checkboxClick}
                 {checked}
             />
-            {#if chartName == ""}
-                <div class="chartTitle">*UNNAMED CHART*</div>
+            {#if editing}
+                <input class="chartNameInput" type="text" bind:value={chartName} />
             {:else}
                 <div class="chartTitle">{chartName}</div>
             {/if}
         </div>
         <div class="buttonContainer">
+            {#if editing}
+                <button class="chart-button save-button" onclick={saveThis}>
+                    Save
+                </button>
+            {:else}
+                <button class="chart-button" onclick={editThis}>
+                    <img
+                    class="image image__edit"
+                    src="./images/edit-icon.svg"
+                    alt=""
+                    />
+                </button>
+            {/if}
             <button
-                class="chart-button pdf-download__button"
+                class="chart-button"
                 onclick={downloadPDF}
             >
                 <img
@@ -244,6 +268,14 @@
         font-weight: 700;
     }
 
+    .chartNameInput {
+        background-color: #ebeaea;
+        border: 1px solid black;
+        border-radius: 5px;
+        height: 24px;
+        margin: 2px 0;
+    }
+
     .CheckBox {
         width: 17px;
         margin-right: 5px;
@@ -267,15 +299,19 @@
         border: 1px solid black;
         border-radius: 3px;
         padding: 0;
-    }
-
-    .pdf-download__button {
         margin-left: 5px;
     }
 
-    .pdf-download__button:hover {
+    .chart-button:hover {
         background-color: darkgray;
         cursor: pointer;
+    }
+
+    .save-button {
+        width: 40px;
+        align-items: center;
+        justify-content: center;
+        color: #e1e1e0;
     }
 
     .pdf-download__image {
