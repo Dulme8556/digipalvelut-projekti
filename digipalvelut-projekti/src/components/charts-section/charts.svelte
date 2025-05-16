@@ -395,6 +395,14 @@
     }
 
     async function downloadPDF() {
+        storeChartData();
+        let sortedChartList = sortCanvases();
+
+        if (storeCanvases.length === 0) {
+            alert("No charts selected");
+            return;
+        }
+        
         downloadOptionsVisible = false;
 
         let x = 0;
@@ -420,14 +428,6 @@
             searchQuery = "";
             resolve();
         });
-
-        storeChartData();
-        let sortedChartList = sortCanvases();
-
-        if (storeCanvases.length === 0) {
-            alert("No charts selected");
-            return;
-        }
 
         doc = new jsPDF("p", "mm");
         let pageKeys = Object.keys(sortedChartList);
