@@ -3,7 +3,7 @@
 </div>
 
 <style>
-        .credit,
+    .credit,
     .credit * {
         box-sizing: border-box;
         display: flex;

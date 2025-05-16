@@ -23,12 +23,18 @@
     <TitleBar />
     <div class="content">
         <div class="main__functions">
-            <AddNew />
+            <div class="main__function">
+                <AddNew />
+            </div>
             {#key lists.list.length}
+            <div class="main__function">
                 <Lines />
+            </div>
             {/key}
             {#key `${lists.selectedValues.length}-${lists.charts.length}`}
+            <div class="main__function">
                 <Charts />
+            </div>    
             {/key}
         </div>
     </div>
@@ -40,7 +46,6 @@
     .website {
         display: flex;
         flex-direction: column;
-        height: 100vh;
     }
 
     .content {
