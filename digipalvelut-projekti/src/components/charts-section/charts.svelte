@@ -507,9 +507,11 @@
 
         for (let i = 0; i < storeCanvases.length; i++) {
             const canvas = storeCanvases[i];
+            const chartTitle = lists.charts[i].title;
+
             const ctx = canvas.getContext("2d");
 
-            // Tekee temporary canvasin että ei joudu muokkaamaan alkuperästä
+            // Make temporary canvas so the original is not modified
             const tempCanvas = document.createElement("canvas");
             tempCanvas.width = canvas.width;
             tempCanvas.height = canvas.height;
@@ -522,7 +524,7 @@
             const imgData = tempCanvas.toDataURL(imageType);
             const link = document.createElement("a");
             link.href = imgData;
-            link.download = `chart-${i + 1}.jpg`;
+            link.download = chartTitle ? chartTitle : `chart-${i + 1}.jpg`;
             link.click();
         }
     }
