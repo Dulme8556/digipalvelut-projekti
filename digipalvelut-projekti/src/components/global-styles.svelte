@@ -15,6 +15,8 @@
     @media (max-width: 768px) {
         :global(.website) {
             width: 800px;
+            transform: scale(0.8);
+            transform-origin: left top;
         }
 
         :global(.content) {

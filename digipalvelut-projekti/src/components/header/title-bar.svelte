@@ -50,4 +50,22 @@
         object-fit: cover;
         aspect-ratio: 220 / 100;
     }
+
+    @media (max-width: 768px) {
+        .titleBar {
+            flex-direction: column;
+            align-items: start;
+        }
+        
+        .title {
+            width: 100%;
+            padding-bottom: 10px;
+            border-bottom: 1px solid black;
+            margin-bottom: 10px;
+        }
+
+        .buttonGroup {
+            margin-left: 5px;
+        }
+    }
 </style>

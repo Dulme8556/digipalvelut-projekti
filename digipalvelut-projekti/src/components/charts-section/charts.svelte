@@ -937,4 +937,11 @@
         flex-direction: column;
         align-items: center;
     }
+
+    @media (max-width: 768px) {
+        .chartList {
+            margin-left: 20px;
+            align-items: start;
+        }        
+    }
 </style>
