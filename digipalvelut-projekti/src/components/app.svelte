@@ -1,5 +1,6 @@
 <script>
-    import { setContext } from "svelte";
+    import { setContext, onMount } from "svelte";
+    import { writable } from "svelte/store";
 
     import AddNew from "./add-new-section/add-new.svelte";
     import Lines from "./lines-section/lines.svelte";
@@ -16,9 +17,24 @@
 
     setContext("list", lists);
 
+    let scale = writable(1);
+
+    function calculateScale() {
+        let dpr = window.devicePixelRatio;
+
+        return dpr > 1.4 ? 0.7 : 1;
+    }
+
+    onMount(() => {
+        scale.set(calculateScale());
+
+        const update = () => scale.set(calculateScale());
+        window.addEventListener('resize', update);
+        return () => window.removeEventListener('resize', update);
+    });
 </script>
 
-<div class="website">
+<div class="website" style="transform: scale({$scale}); transform-origin: top left; width: calc(100% / {$scale});">
     <Credit />
     <TitleBar />
     <div class="content">

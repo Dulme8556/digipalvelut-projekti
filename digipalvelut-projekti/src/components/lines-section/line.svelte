@@ -222,8 +222,7 @@
 
             <button class="button button__save" onclick={onSave}>Save</button>
         </div>
-        <!-- editing off -->
-    {:else}
+        {:else} <!-- editing off -->
         <div class="line">
             <input
                 class="checkbox"

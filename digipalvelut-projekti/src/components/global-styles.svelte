@@ -31,5 +31,10 @@
         :global(.main__function) {
             margin: 10px 0;
         }
+
+        :global(.active-lines) {
+            transform-origin: left top;
+            transform: scale(0.8);
+        }
     }
 </style>

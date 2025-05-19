@@ -283,6 +283,8 @@
         padding: 5px 3px;
         font-size: 15px;
         margin-left: 20px;
+        border: 1px solid black;
+        border-radius: 3px;
     }
 
     .button-group {
