@@ -17,12 +17,14 @@
 
     setContext("list", lists);
 
-    let scale = writable(1);
+    let normal = 1;
+    let scaledDown = 0.7;
+    let scale = writable(normal);
 
     function calculateScale() {
         let dpr = window.devicePixelRatio;
 
-        return dpr > 1.4 ? 0.7 : 1;
+        return dpr > 1.4 ? scaledDown : normal;
     }
 
     onMount(() => {
