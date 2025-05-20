@@ -1,5 +1,5 @@
 <script>
-    import { getContext, onMount } from "svelte";
+    import { getContext, onMount, tick } from "svelte";
     import { jsPDF } from "jspdf";
 
     import Chart from "./chart.svelte";
@@ -395,6 +395,10 @@
     }
 
     async function downloadPDF() {
+        // wait that the searchQuery is cleared so all charts are shown
+        searchQuery = "";
+        await tick();
+
         storeChartData();
         let sortedChartList = sortCanvases();
 
@@ -422,12 +426,6 @@
         let rightSpacing = 140;
 
         let doc;
-
-        // wait that the searchQuery is cleared so all charts are shown
-        await new Promise((resolve) => {
-            searchQuery = "";
-            resolve();
-        });
 
         doc = new jsPDF("p", "mm");
         let pageKeys = Object.keys(sortedChartList);
@@ -471,14 +469,7 @@
                     leftY += leftSpacing;
                     rightY += rightSpacing;
                 }
-                doc.addImage(
-                    imgURL,
-                    "PNG",
-                    x,
-                    y,
-                    width * imgScaling,
-                    height * imgScaling,
-                );
+                doc.addImage(imgURL, "PNG", x, y, width * imgScaling, height * imgScaling);
             }
 
             if (i < pageKeys.length - 1) {
@@ -488,15 +479,15 @@
 
         const filename = "chart.pdf";
         doc.save(filename);
+        console.log("function done");
     }
 
     async function downloadIMG() {
         downloadOptionsVisible = false;
 
-        await new Promise((resolve) => {
-            searchQuery = "";
-            resolve();
-        });
+        // wait that the searchQuery is cleared so all charts are shown
+        searchQuery = "";
+        await tick();
 
         storeChartData();
 
@@ -527,16 +518,15 @@
             link.download = chartTitle ? chartTitle : `chart-${i + 1}.jpg`;
             link.click();
         }
+        console.log("function done");
     }
 
     async function download1PerPage() {
         downloadOptionsVisible = false;
 
         // wait that the searchQuery is cleared so all charts are shown
-        await new Promise((resolve) => {
-            searchQuery = "";
-            resolve();
-        });
+        searchQuery = "";
+        await tick();
 
         storeChartData();
 
@@ -561,6 +551,7 @@
         }
 
         doc.save("charts.pdf");
+        console.log("function done");
     }
 
     $: filteredCharts = JSON.parse(
