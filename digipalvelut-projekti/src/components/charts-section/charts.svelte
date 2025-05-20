@@ -478,8 +478,9 @@
         }
 
         const filename = "chart.pdf";
-        doc.save(filename);
-        console.log("function done");
+        setTimeout(() => {
+            doc.save(filename);
+        }, 0);
     }
 
     async function downloadIMG() {
@@ -518,7 +519,6 @@
             link.download = chartTitle ? chartTitle : `chart-${i + 1}.jpg`;
             link.click();
         }
-        console.log("function done");
     }
 
     async function download1PerPage() {
@@ -550,8 +550,9 @@
             doc.addImage(imgData, "PNG", 0, 0, width, height);
         }
 
-        doc.save("charts.pdf");
-        console.log("function done");
+        setTimeout(() => {
+            doc.save("charts.pdf");
+        }, 0);
     }
 
     $: filteredCharts = JSON.parse(
