@@ -133,6 +133,8 @@
             return;
         }
 
+        chartName = selected[0].name;
+
         let datasetDataResult = selected.map((item) => item.result);
         let datasetDataExpected = selected.map((item) => item.expected);
         let datasetDataStart = selected.map((item) => item.start);

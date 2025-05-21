@@ -1,6 +1,6 @@
 <script>
     import { getContext, onDestroy, onMount } from "svelte";
-    import Chart from "chart.js/auto";
+    import Chart, { scales } from "chart.js/auto";
     import { jsPDF } from "jspdf";
     import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -25,12 +25,7 @@
 
         Chart.register(ChartDataLabels);
         id = data.id;
-
-        if (data.title) {
-            chartName = data.title;
-        } else {
-            chartName = data.labels[0];
-        }
+        chartName = data.title;
 
         chartInstance = new Chart(canvas, {
             type: data.type,
@@ -94,6 +89,16 @@
                         },
                     },
                 },
+                scales: {
+                    y: {
+                        title: {
+                            // needs confirmation of how this would be done
+                            // display: true,
+                            align: 'start',
+                            text: data.unit[0],
+                        }
+                    }
+                }
             },
         });
 
