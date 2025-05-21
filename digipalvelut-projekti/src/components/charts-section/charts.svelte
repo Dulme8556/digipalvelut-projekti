@@ -133,7 +133,9 @@
             return;
         }
 
-        chartName = selected[0].name;
+        if (chartName === "") {
+            chartName = selected[0].name;
+        }
 
         let datasetDataResult = selected.map((item) => item.result);
         let datasetDataExpected = selected.map((item) => item.expected);
@@ -586,7 +588,7 @@
                     <div class="info__content">
                         <p>
                             <strong>Making</strong>: Before making a chart you
-                            can give it a name if name is left empty the indicator 
+                            can give it a name if name is left empty the first indicator 
                             name is chosen, choose the type of chart and
                             choose if you want to display the exact values on
                             the chart (click the arrow).
