@@ -1,4 +1,5 @@
 <script>
+    console.log("component loaded")
     import { getContext, onMount, tick } from "svelte";
     import { jsPDF } from "jspdf";
 
@@ -21,8 +22,8 @@
     let indexAxis = "";
     let chartUnit = "";
 
-    let datasetDataEnd = [];
-    let datasetDataTarget = [];
+    let datasetDataResult = [];
+    let datasetDataExpected = [];
     let datasetDataStart = [];
     let labels = [];
 
@@ -73,8 +74,8 @@
 
     // all values to arrays
     selected.forEach((element) => {
-        datasetDataEnd = [...datasetDataEnd, element.result];
-        datasetDataTarget = [...datasetDataTarget, element.expected];
+        datasetDataResult = [...datasetDataResult, element.result];
+        datasetDataExpected = [...datasetDataExpected, element.expected];
         datasetDataStart = [...datasetDataStart, element.start];
         labels = [...labels, element.name];
     });
@@ -97,13 +98,13 @@
                 },
                 {
                     label: "end",
-                    data: datasetDataEnd,
+                    data: datasetDataResult,
                     backgroundColor: "blue",
                     minBarLength: 4,
                 },
                 {
                     label: "target",
-                    data: datasetDataTarget,
+                    data: datasetDataExpected,
                     backgroundColor: "red",
                     minBarLength: 4,
                 },
@@ -399,6 +400,7 @@
     }
 
     async function downloadPDF() {
+        console.log("downloadPDF called");
         // wait that the searchQuery is cleared so all charts are shown
         searchQuery = "";
         await tick();
@@ -411,7 +413,7 @@
             return;
         }
         
-        downloadOptionsVisible = false;
+        hideDownloadOptions()
 
         let x = 0;
         let y = 0;
@@ -488,7 +490,8 @@
     }
 
     async function downloadIMG() {
-        downloadOptionsVisible = false;
+        console.log("downloadIMG called");
+        hideDownloadOptions()
 
         // wait that the searchQuery is cleared so all charts are shown
         searchQuery = "";
@@ -526,7 +529,8 @@
     }
 
     async function download1PerPage() {
-        downloadOptionsVisible = false;
+        console.log("download1PerPage called");
+        hideDownloadOptions()
 
         // wait that the searchQuery is cleared so all charts are shown
         searchQuery = "";
@@ -573,6 +577,8 @@
         showOptions = !showOptions;
     }
 </script>
+
+<button onclick={() => console.log('Test button clicked')}>Debug</button>
 
 <div class="chartsSection">
     <div class="toolbar">
@@ -724,7 +730,7 @@
                         ? "showOptions"
                         : "hideOptions"}
                 >
-                    <button onclick={downloadPDF} class="downloadButton">
+                    <button onclick={() => downloadPDF()} class="downloadButton">
                         Download chosen charts (pdf)
                     </button>
                     <button onclick={download1PerPage} class="downloadButton">
@@ -910,7 +916,10 @@
     }
 
     .hideOptions {
-        display: none;
+        visibility: hidden;
+        pointer-events: none;
+        width: 355px;
+        height: 50px;
     }
 
     .downloadButton {

@@ -2,7 +2,7 @@
     import * as XLSX from "xlsx";
 
      function downloadTemplate() {
-        const headers = [{ Title: "", Target: "", Start: "", End: "", Unit: "" }];
+        const headers = [{ Title: "", Expected: "", Start: "", Result: "", Unit: "" }];
         const worksheet = XLSX.utils.json_to_sheet(headers, { skipHeader: false });
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Indicators Template");
@@ -11,7 +11,6 @@
 </script>
 
 <div class="container">
-    <!-- <h3 class="title">Download the excel template:</h3> -->
     <div class="tooltip-container">
         <button onclick={downloadTemplate} class="link__container">
             <img class="download" src="./images/download-icon.svg" alt="Download excel template" />

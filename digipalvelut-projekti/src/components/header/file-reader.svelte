@@ -21,7 +21,7 @@
 
         readExcelData.forEach((element) => {
             let percent;
-            let rawValue = (element.End / element.Target) * 100;
+            let rawValue = (element.Result / element.Expected) * 100;
             let calculation = rawValue.toFixed(3);
 
             percent = rawValue.toFixed(0);
@@ -37,9 +37,9 @@
                     id: newId,
                     check: false,
                     name: element.Title,
-                    expected: element.Target,
+                    expected: element.Expected,
                     start: element.Start,
-                    result: element.End,
+                    result: element.Result,
                     percent: percent,
                     unit: element.Unit,
                 },

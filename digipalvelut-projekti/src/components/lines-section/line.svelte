@@ -116,9 +116,9 @@
             if (element.id === id) {
                 element.check = checked;
                 element.name = name;
-                element.target = expected;
+                element.expected = expected;
                 element.start = start;
-                element.end = result;
+                element.result = result;
                 element.percent = percent;
                 element.unit = unit;
                 element.deadline = deadline;

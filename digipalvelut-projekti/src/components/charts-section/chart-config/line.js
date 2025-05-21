@@ -3,7 +3,7 @@ class Line {
         this.dataset;
     }
 
-    changeData(start, end, target, unit, labels, customFields, colors) {
+    changeData(start, result, expected, unit, labels, customFields, colors) {
         let colorList = colors
         let datasetList = [];
         let convertedCustomFields = JSON.parse(JSON.stringify(customFields))
@@ -25,14 +25,14 @@ class Line {
         customFieldsDataset.shift();
                 
         let labelList = ["start", ...customFieldLabels, "result", "expected"]
-        let storeData = { start: start, end: end, target: target }
+        let storeData = { start: start, result: result, expected: expected }
 
         for (let i = 0; i < labels.length; i++) {
             let data = [
                 storeData.start[i],
                 ...(customFieldsDataset[i]?.values ?? []),
-                storeData.end[i],
-                storeData.target[i]
+                storeData.result[i],
+                storeData.expected[i]
             ];
             let dataset = { label: labels[i], data: data, backgroundColor: colorList[i], unit: unit[i]}
             datasetList.push(dataset)
