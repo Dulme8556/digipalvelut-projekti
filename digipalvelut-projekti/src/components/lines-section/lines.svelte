@@ -139,16 +139,20 @@
     }
 
     function addCustomField(index) {
+        
         let title = prompt("field name?");
         let value = prompt("field value?");
         if (title && value) {
             if (!filteredIndicators[index].customFields) {
                 filteredIndicators[index].customFields = [];
             }
-        
+            
+            let id = filteredIndicators[index].customFields.length
+            ? Math.max(...filteredIndicators[index].customFields.map((t) => t.id)) + 1 : 1;
+            
             filteredIndicators[index].customFields = [
                 ...filteredIndicators[index].customFields,
-                { title, value }
+                { id, title, value }
             ];
         }
     }
@@ -159,8 +163,36 @@
     <div class="toolbar">
         <div class="top">
             <div>
-            <h2>Indicators</h2>
-            <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
+                <div class="title__section">
+                    <h2>Indicators</h2>
+                    <div class="info__wrapper">
+                        <div class="lines__info__wrapper">
+                            <img
+                                class="info__icon"
+                                alt="info_icon"
+                                src="./images/info.png"
+                            />
+                            <div class="info__content">
+                                <p>
+                                    <strong>Searching and sorting</strong>: Indicator data can be search by
+                                    their name ("indicator" label) and can be sorted different ways using
+                                    the dropdown box below search bar.
+                                </p>
+                                <p>
+                                    <strong>Save button</strong>: If indicator data isn't updated correctly 
+                                    when trying to make charts pressing the button will fix this issue. 
+                                    The button isn't needed every time.
+                                </p>
+                                <p>
+                                    <strong>Adding extra points</strong>: Extra points can be added to 
+                                    indicators via "+" buttons on each line. The user must provide a label 
+                                    (e.g., "result") and a value.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
             </div>
             <input
                 id="searchbar"
@@ -274,6 +306,56 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .title__section {
+        display: flex;
+    }
+
+    .info__wrapper {
+        position: relative;
+        display: inline-block;
+        left: -80px;
+    }
+
+    .lines__info__wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .lines__info__wrapper:hover .info__content {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .info__icon {
+        width: 28px;
+        height: 28px;
+        padding-top: 5px;
+        margin-left: 10px;
+    }
+
+    .info__content {
+        visibility: hidden;
+        opacity: 0;
+        width: 320px;
+        background-color: #f9f9f9;
+        color: #000;
+        text-align: left;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        top: 50px;
+        left: -20px;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease;
+    }
+
+    .info__wrapper:hover .info__content {
+        visibility: visible;
+        opacity: 1;
     }
 
     .searchbar {
