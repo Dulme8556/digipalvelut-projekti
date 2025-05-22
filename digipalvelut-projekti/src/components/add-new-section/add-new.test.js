@@ -35,6 +35,8 @@ describe('Svelte Addnew Tests', () => {
     const button = screen.getByText(/Create indicator/i);
     await fireEvent.click(button);
 
+    //await to make sure the input action is done before continuing
+
     expect(nameInput.value).toBe('');
     expect(expectedInput.value).toBe('');
     expect(startInput.value).toBe('');
