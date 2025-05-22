@@ -723,7 +723,7 @@
                     Download
                 </button>
                 {#if downloadOptionsVisible}
-                    <span class={"showOptions"}>
+                    <span class="showOptions">
                         <button onclick={() => downloadPDF()} class="downloadButton">
                             Download chosen charts (pdf)
                         </button>
