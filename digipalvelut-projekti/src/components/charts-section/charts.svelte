@@ -1,5 +1,4 @@
 <script>
-    console.log("component loaded")
     import { getContext, onMount, tick } from "svelte";
     import { jsPDF } from "jspdf";
 
@@ -578,8 +577,6 @@
     }
 </script>
 
-<button onclick={() => console.log('Test button clicked')}>Debug</button>
-
 <div class="chartsSection">
     <div class="toolbar">
         <div style="display:flex;">
@@ -725,21 +722,19 @@
                 <button onclick={toggleDownloadOptions} class="showSpanButton">
                     Download
                 </button>
-                <span
-                    class={downloadOptionsVisible
-                        ? "showOptions"
-                        : "hideOptions"}
-                >
-                    <button onclick={() => downloadPDF()} class="downloadButton">
-                        Download chosen charts (pdf)
-                    </button>
-                    <button onclick={download1PerPage} class="downloadButton">
-                        Download 1 chart per page (pdf)
-                    </button>
-                    <button onclick={downloadIMG} class="downloadButton">
-                        Download charts images
-                    </button>
-                </span>
+                {#if downloadOptionsVisible}
+                    <span class={"showOptions"}>
+                        <button onclick={() => downloadPDF()} class="downloadButton">
+                            Download chosen charts (pdf)
+                        </button>
+                        <button onclick={download1PerPage} class="downloadButton">
+                            Download 1 chart per page (pdf)
+                        </button>
+                        <button onclick={downloadIMG} class="downloadButton">
+                            Download charts images
+                        </button>
+                    </span>
+                {/if}
             </div>
         </div>
     </div>
@@ -913,13 +908,6 @@
         border: 1px solid gray;
         margin: 5px 0;
         width: 355px;
-    }
-
-    .hideOptions {
-        visibility: hidden;
-        pointer-events: none;
-        width: 355px;
-        height: 50px;
     }
 
     .downloadButton {
