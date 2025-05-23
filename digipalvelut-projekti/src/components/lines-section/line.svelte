@@ -16,13 +16,13 @@
         responsibility,
         customFields = [],
         onAddField,
+        onDeleteField,
     } = $props();
 
     let lists = getContext("list");
 
     let editing = $state(false);
     let checked = $state(check);
-
     let extraData = $state(false);
 
     onMount(() => {
@@ -130,6 +130,25 @@
         updateEditedValues();
     }
 
+    function deleteCustomField(id) {
+        onDeleteField(id);
+    }
+
+    // Ep = extra point
+    export function returnLastEpId(temporary) {
+        let id = Math.max(...customFields.map((t) => t.id))
+        return id;
+    }
+
+    export function containsCustomFields() {
+        // check if customFields contains something and not just empty array
+        if (customFields[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     let formattedDeadline = $state(deadline
 		? new Date(deadline).toLocaleDateString('fi-FI')
 		: '');
@@ -171,13 +190,19 @@
                         />
                     </div>
                     {/if}
-                    {#each customFields as field}
-                        <div class="component">
-                            <h3>{field.title}:</h3>
-                            <input class="input" type="text" bind:value={field.value} />
-                        </div>
+                    {#each customFields as field, i}
+                    <div class="component">
+                        <h3>{field.title}:</h3>
+                        <input class="input" type="text" bind:value={field.value} />
+                        {#if i === customFields.length - 1}
+                            <button 
+                            class="delete__extraPoint-button" 
+                            onclick={() => deleteCustomField(field.id)}>
+                                X
+                            </button>
+                        {/if}
+                    </div>
                     {/each}
-
                 </div>
                 <div class="column">
                     <div class="component">
@@ -219,10 +244,9 @@
                     </div>
                 </div>
             </div>
-
             <button class="button button__save" onclick={onSave}>Save</button>
         </div>
-        {:else} <!-- editing off -->
+    {:else} <!-- editing off -->
         <div class="line">
             <input
                 class="checkbox"
@@ -354,6 +378,19 @@
         margin-right: 10px;
         padding: 5px 0;
         min-height: 24px;
+    }
+
+    .delete__extraPoint-button {
+        position: relative;
+        /* left: -170px; */
+        border: none;
+        background-color: white;
+        font-weight: 900;
+        color: #6e6e6e;
+    }
+
+    .delete__extraPoint-button:hover {
+        color: red;
     }
     
     .long {

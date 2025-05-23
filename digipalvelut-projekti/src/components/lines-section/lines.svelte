@@ -156,6 +156,17 @@
             ];
         }
     }
+
+    function deleteCustomField(index) {
+        let id = 0;
+        let test = JSON.parse(JSON.stringify(lists.list))
+
+        id = lines[index].returnLastEpId()
+        test[index].customFields = 
+        test[index].customFields.filter((item) => item.id !== id)
+
+        lists.list = test;
+    }
 </script>
 
 <div>
@@ -254,6 +265,7 @@
                         responsibility={line.responsibility}
                         customFields={line.customFields}
                         onAddField={() => addCustomField(i)}
+                        onDeleteField={() => deleteCustomField(i)}
                         on:remove={(e) => removeLine(e.detail)}
                     />
                 </li>
