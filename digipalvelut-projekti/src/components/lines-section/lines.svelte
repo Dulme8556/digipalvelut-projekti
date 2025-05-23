@@ -197,8 +197,8 @@
                                 <p>
                                     <strong>Adding extra points</strong>: Extra points can be added to 
                                     indicators via "+" buttons on each line. The user must provide a label 
-                                    (e.g., "result") and a value. If mistake is made extra points can be 
-                                    deleted when editing. Only the last given value can be deleted.
+                                    (e.g., "result") and a value. Extra points can be deleted when editing. 
+                                    Only the last given value can be deleted.
                                 </p>
                             </div>
                         </div>
