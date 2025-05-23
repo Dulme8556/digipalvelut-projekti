@@ -191,13 +191,14 @@
                                 </p>
                                 <p>
                                     <strong>Save button</strong>: If indicator data isn't updated correctly 
-                                    when trying to make charts pressing the button will fix this issue. 
+                                    when trying to make charts pressing the "Save" button will fix this issue. 
                                     The button isn't needed every time.
                                 </p>
                                 <p>
                                     <strong>Adding extra points</strong>: Extra points can be added to 
                                     indicators via "+" buttons on each line. The user must provide a label 
-                                    (e.g., "result") and a value.
+                                    (e.g., "result") and a value. If mistake is made extra points can be 
+                                    deleted when editing. Only the last given value can be deleted.
                                 </p>
                             </div>
                         </div>
