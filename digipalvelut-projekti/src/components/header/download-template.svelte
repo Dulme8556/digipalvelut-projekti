@@ -1,13 +1,13 @@
 <script>
     import * as XLSX from "xlsx";
 
-     function downloadTemplate() {
+    function downloadTemplate() {
         const headers = [{ Title: "", Expected: "", Start: "", Result: "", Unit: "" }];
         const worksheet = XLSX.utils.json_to_sheet(headers, { skipHeader: false });
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Indicators Template");
         XLSX.writeFile(workbook, "indicators-template.xlsx");
-};
+    };
 </script>
 
 <div class="container">

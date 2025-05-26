@@ -3,14 +3,14 @@ class Pie {
         this.returnDataset
     }
 
-    changeData(start, end, target, unit, labels, customFields, colors) {
+    changeData(start, result, expected, unit, labels, customFields, colors) {
         let dataset;
         
         if (start.length !== 1) {
             dataset = [
                 {
                     label: "Values",
-                    data: end,
+                    data: result,
                     unit: unit,
                     backgroundColor: colors,
                 },
@@ -28,8 +28,8 @@ class Pie {
                 customFieldLabels = convertedCustomFields[0].map(item => item.title);
             }
 
-            let data = [start,...customFieldValues, end, target];
-            let dataUnit = ["start", ...customFieldLabels, "end", "target"];
+            let data = [start,...customFieldValues, result, expected];
+            let dataUnit = ["start", ...customFieldLabels, "result", "expected"];
                 
             dataset = [
                 {

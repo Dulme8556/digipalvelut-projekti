@@ -2,7 +2,7 @@
     import { getContext, onMount } from "svelte";
 
     let {
-        function: parentFunction,
+        function: checkSelectedParent,
         update: updateEditedValues,
         id,
         check,
@@ -29,7 +29,7 @@
         let today = new Date().toISOString().split('T')[0]
         // to detect when excel is opened
         if (deadline && responsibility) {
-            // to detect when indicator made manually and if values are empty
+            // to detect when indicator made manually and if these values are empty
             if (deadline !== today && deadline !== "" && responsibility !== "") {
                 extraData = true
             } else {
@@ -41,7 +41,7 @@
     let reached = $state("");
 
     function calculateReached() {
-        if(result == expected){
+        if (result == expected){
             reached = "Target reached"
         } else if(result > expected) {
             reached = "Target exceeded"
@@ -67,9 +67,9 @@
             id: id,
             check: check,
             name: name,
-            target: expected,
+            expected: expected,
             start: start,
-            end: result,
+            result: result,
             unit: unit,
         };
     }
@@ -83,7 +83,7 @@
         }
 
         setTimeout(() => (event.target.checked = checked), 0);
-        parentFunction();
+        checkSelectedParent();
     }
 
     function percentCalculation() {
@@ -135,7 +135,7 @@
     }
 
     // Ep = extra point
-    export function returnLastEpId(temporary) {
+    export function returnLastEpId() {
         let id = Math.max(...customFields.map((t) => t.id))
         return id;
     }
@@ -156,6 +156,7 @@
     function updateFormattedDeadline() {
         formattedDeadline = new Date(deadline).toLocaleDateString('fi-FI')
     }
+    
     calculateReached();
 </script>
 

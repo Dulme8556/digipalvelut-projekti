@@ -77,7 +77,6 @@
                                     }
                                 }
                             },
-
                         },
                     },
                     datalabels: {
@@ -92,7 +91,7 @@
                 scales: {
                     y: {
                         title: {
-                            // needs confirmation of how this would be done
+                            // not sure if wanted
                             // display: true,
                             align: 'start',
                             text: data.unit[0],
@@ -130,7 +129,7 @@
         }
     }
 
-    function downloadPDF() {
+    function downloadJPG() {
         const ctx = canvas.getContext("2d");
 
         const tempCanvas = document.createElement("canvas");
@@ -227,7 +226,7 @@
             {/if}
             <button
                 class="chart-button"
-                onclick={downloadPDF}
+                onclick={downloadJPG}
             >
                 <img
                     class="pdf-download__image"

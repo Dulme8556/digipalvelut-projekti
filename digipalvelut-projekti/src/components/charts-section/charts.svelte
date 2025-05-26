@@ -35,6 +35,7 @@
         "doughnut",
     ];
 
+    // needed when checking if bar chart needs to be along x or y axis
     let subVertical = "(vertical)";
     let subHorizontal = "(horizontal)";
 
@@ -129,7 +130,7 @@
 
     function createNewChart() {
         if (selected.length === 0) {
-            alert('Error: No indicators selected. \nIf otherwise pressing the "Save" button may fix this issue.');
+            alert('Error: No indicators selected.\nIf otherwise pressing the "Save" button may fix this issue.');
             return;
         }
 
@@ -377,7 +378,7 @@
             if (
                 count === 5 ||
                 (pieCount === 2 && combined[i + 1].type === "pie") ||
-                [i + 1].type === "doughnut" // should be combined[i+1].type but for some reason it breaks
+                [i + 1].type === "doughnut"
             ) {
                 page++;
                 count = 0;
@@ -399,7 +400,7 @@
     }
 
     async function downloadPDF() {
-        console.log("downloadPDF called");
+        console.log("downloadPDF started");
         // wait that the searchQuery is cleared so all charts are shown
         searchQuery = "";
         await tick();
@@ -450,6 +451,7 @@
 
                 // image size supposed to be 200x400 or 400x400
                 // make sure sizes are divisible by 200 and account for 600
+                // firefox had some issues with values being 399 so added margin of error
                 if (height % 200 !== 0 || height % 300 === 0) {
                     if (Math.abs(height - width / 2) <= marginOfError) {
                         width = imageWidth;
@@ -482,14 +484,14 @@
             }
         }
 
-        const filename = "chart.pdf";
+        const filename = "charts.pdf";
         setTimeout(() => {
             doc.save(filename);
         }, 0);
     }
 
     async function downloadIMG() {
-        console.log("downloadIMG called");
+        console.log("downloadIMG started");
         hideDownloadOptions()
 
         // wait that the searchQuery is cleared so all charts are shown
@@ -528,7 +530,7 @@
     }
 
     async function download1PerPage() {
-        console.log("download1PerPage called");
+        console.log("download1PerPage started");
         hideDownloadOptions()
 
         // wait that the searchQuery is cleared so all charts are shown

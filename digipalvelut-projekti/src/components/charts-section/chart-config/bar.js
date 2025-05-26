@@ -7,7 +7,6 @@ class Bar {
         let colorList = colors;
         let datasetList = [];
         let minBarLength = 4;
-        let convertedCustomFields = JSON.parse(JSON.stringify(customFields))
 
         let customChunkList = [];
 

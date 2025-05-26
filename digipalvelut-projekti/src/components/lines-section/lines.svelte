@@ -9,7 +9,7 @@
         if (lists.selectedValues.length === 0) {
             alert("Error: Please select atleast one indicator to download")
         } else{
-        downloadIndicatorsToExcel(lists.selectedValues.length > 0 ? lists.selectedValues : lists.list);
+        downloadIndicatorsToExcel(lists.selectedValues);
         }
     }
 
@@ -159,13 +159,14 @@
 
     function deleteCustomField(index) {
         let id = 0;
-        let test = JSON.parse(JSON.stringify(lists.list))
+        let tempList = JSON.parse(JSON.stringify(lists.list))
 
+        // returnLastEpId defined in line.svelte
         id = lines[index].returnLastEpId()
-        test[index].customFields = 
-        test[index].customFields.filter((item) => item.id !== id)
+        tempList[index].customFields = 
+        tempList[index].customFields.filter((item) => item.id !== id)
 
-        lists.list = test;
+        lists.list = tempList;
     }
 </script>
 
