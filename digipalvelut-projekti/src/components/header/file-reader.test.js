@@ -4,7 +4,7 @@ import FileReader from './file-reader.svelte';
 
 describe('FileReader component', () => {
 
-  it('adds item to list after file is uploaded', async () => {
+  test('adds item to list after file is uploaded', async () => {
     const { container } = render(FileReader);
     const input = container.querySelector('input[type="file"]');
 
@@ -23,6 +23,7 @@ describe('FileReader component', () => {
     await waitFor(() => {
       expect(mockListContext.list.length).toBe(1);
       expect(mockListContext.list[0].name).toBe('Task A');
+
     });
   });
 });

@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import line from './line.svelte';
 
 describe('line component', () => {
-  it('correct props test n.1', () => {
+  test('correct props test n.1', () => {
     const { getByText } = render(line, {
       props: {
         name: 'Test line',
@@ -30,7 +30,7 @@ describe('line component', () => {
     expect(getByText('%')).toBeTruthy();
   });
 
-  it('correct props test n.2', () => {
+  test('correct props test n.2', () => {
     const { getByText } = render(line, {
       props: {
         name: 'Test line',
@@ -56,7 +56,7 @@ describe('line component', () => {
     expect(getByText('People')).toBeTruthy();
   });
   
-  it('negative results test', () => {
+  test('negative results test', () => {
     const { getByText } = render(line, {
       props: {
         name: 'Negative test',
@@ -83,7 +83,7 @@ describe('line component', () => {
   });
 
   
-  it('deadline test', () => {
+  test('deadline test', () => {
     const { getByText } = render(line, {
       props: {
         name: 'Deadline line',
@@ -99,7 +99,7 @@ describe('line component', () => {
         id: 4
       },
       context: new Map([
-        ['list', { list: [], selectedValues: [] }]
+         ['list', { list: [], selectedValues: [] }]
       ])
     });
 

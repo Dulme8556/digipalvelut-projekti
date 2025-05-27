@@ -5,7 +5,7 @@ import Lines from './lines.svelte';
 
 describe('Lines', () => {
 
-  it('should update searchquery when typing in the searchbar', async () => {
+  test('should update searchquery when typing in the searchbar', async () => {
     render(Lines, {
       props: {
         lists: {
@@ -23,7 +23,7 @@ describe('Lines', () => {
 
 
 
-  it('should call selectAll function when selectall button is clicked', async () => {
+  test('should call selectAll function when selectall button is clicked', async () => {
     const selectAll = vi.fn();
 
     render(Lines, {
