@@ -62,16 +62,8 @@
         return checked;
     }
 
-    export function values() {
-        return {
-            id: id,
-            check: check,
-            name: name,
-            expected: expected,
-            start: start,
-            result: result,
-            unit: unit,
-        };
+    export function returnID() {
+        return id;
     }
 
     function checkboxClick(event) {

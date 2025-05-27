@@ -29,7 +29,7 @@
             element.checkAll();
 
             let currentLine = lists.list.find(
-                (x) => x.id === element.values().id,
+                (x) => x.id === element.returnID()
             );
             if (currentLine) currentLine.check = true;
             lists.list = [...lists.list];
@@ -45,7 +45,7 @@
             element.uncheckAll();
 
             let currentLine = lists.list.find(
-                (x) => x.id === element.values().id,
+                (x) => x.id === element.returnID()
             );
             if (currentLine) currentLine.check = false;
             lists.list = [...lists.list];
