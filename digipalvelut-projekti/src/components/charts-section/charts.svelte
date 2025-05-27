@@ -393,11 +393,18 @@
         downloadOptionsVisible = !downloadOptionsVisible;
     }
 
-    function hideDownloadOptions() {
-        setTimeout(() => {
+  function hideDownloadOptions(event) {
+    try {
+        const newFocus = event.relatedTarget;
+        const container = event.currentTarget;
+
+        if (!container.contains(newFocus)) {
             downloadOptionsVisible = false;
-        }, 100);
+        }
+    } catch {
+        downloadOptionsVisible = false;
     }
+  }
 
     async function downloadPDF() {
         console.log("downloadPDF started");
@@ -910,6 +917,7 @@
         border: 1px solid gray;
         margin: 5px 0;
         width: 355px;
+        pointer-events: auto !important;
     }
 
     .downloadButton {
