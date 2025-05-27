@@ -407,7 +407,6 @@
   }
 
     async function downloadPDF() {
-        console.log("downloadPDF started");
         // wait that the searchQuery is cleared so all charts are shown
         searchQuery = "";
         await tick();
@@ -498,7 +497,6 @@
     }
 
     async function downloadIMG() {
-        console.log("downloadIMG started");
         hideDownloadOptions()
 
         // wait that the searchQuery is cleared so all charts are shown
@@ -537,7 +535,6 @@
     }
 
     async function download1PerPage() {
-        console.log("download1PerPage started");
         hideDownloadOptions()
 
         // wait that the searchQuery is cleared so all charts are shown
