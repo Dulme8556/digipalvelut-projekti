@@ -14,7 +14,10 @@
         const data = await file.arrayBuffer();
         const workbook = XLSX.read(data, { type: "array" });
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+            raw: false,
+            dateNF: "dd-mm-yyyy",
+        });
         previewStore.set(JSON.stringify(jsonData, null, 2));
 
         readExcelData = jsonData;
@@ -30,6 +33,8 @@
                 percent = "~" + percent;
             }
 
+            console.log("Deadline field raw value:", element.Deadline);
+
             let newId = lists.list.length? Math.max(...lists.list.map((t) => t.id)) + 1 : 1;
             lists.list = [
                 ...lists.list,
@@ -42,6 +47,7 @@
                     result: element.Result,
                     percent: percent,
                     unit: element.Unit,
+                    deadline: element.Deadline,
                 },
             ];
         });

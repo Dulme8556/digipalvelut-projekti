@@ -23,7 +23,7 @@
 
     let editing = $state(false);
     let checked = $state(check);
-    let extraData = $state(false);
+    let extraData = $state(true);
 
     onMount(() => {
         let today = new Date().toISOString().split('T')[0]
@@ -150,6 +150,47 @@
     }
     
     calculateReached();
+
+    function downloadICS() {
+    if (!checked || !name || !deadline) {
+        alert("Only selected indicators with a deadline can be added to the calendar.");
+        return;
+    }
+
+    const startDate = new Date(deadline);
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + 1);
+
+    const formatDate = (date) =>
+        date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+    const icsContent = `BEGIN:VCALENDAR
+                        VERSION:2.0
+                        PRODID:-//Your App//Indicator Calendar//EN
+                        BEGIN:VEVENT
+                        UID:${id}@yourapp.com
+                        DTSTAMP:${formatDate(new Date())}
+                        DTSTART:${formatDate(startDate)}
+                        DTEND:${formatDate(endDate)}
+                        SUMMARY:Indicator - ${name}
+                        DESCRIPTION:Expected: ${expected}, Result: ${result}, Responsibility: ${responsibility}
+                        END:VEVENT
+                        END:VCALENDAR`;
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${name.replace(/\s+/g, "_") || "reminder"}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+
+
+
 </script>
 
 <div>
@@ -324,6 +365,9 @@
                         class="image image__delete"
                         alt=""
                     />
+                </button>
+                <button class="button" onclick={downloadICS} title="Download calendar reminder">
+                    📅
                 </button>
             </div>
         </div>

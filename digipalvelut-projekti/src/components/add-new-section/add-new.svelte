@@ -72,6 +72,54 @@
             newResponsibility = "";
         }
     }
+
+    function downloadICS() {
+    if (!newName || !newDeadline) {
+        alert("Please provide at least a name and deadline.");
+        return;
+    }
+
+    const formatDate = (dateStr, hour = 9) => {
+        const date = new Date(`${dateStr}T${hour.toString().padStart(2, '0')}:00:00Z`);
+        return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+
+    const title = `Reminder: ${newName}`;
+    const description = [
+        `Indicator: ${newName}`,
+        `Expected: ${newExpected}`,
+        `Result: ${newResult}`,
+        `Unit: ${newUnit}`,
+        `Responsible: ${newResponsibility}`
+    ].join('\\n');
+
+    const ics =    `BEGIN:VCALENDAR
+                    VERSION:2.0
+                    PRODID:-//Reminder App//EN
+                    BEGIN:VEVENT
+                    UID:${Date.now()}@app
+                    DTSTAMP:${formatDate(new Date().toISOString().split('T')[0])}
+                    SUMMARY:${title}
+                    DESCRIPTION:${description}
+                    LOCATION:N/A
+                    DTSTART:${formatDate(newDeadline, 9)}
+                    DTEND:${formatDate(newDeadline, 10)}
+                    END:VEVENT
+                    END:VCALENDAR`.trim();
+
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${newName.replace(/\s+/g, '_')}_reminder.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+
+
 </script>
 
 <div class="add-new-section">
@@ -86,7 +134,7 @@
                     <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
                     <p><strong>Result Value</strong>: Enter the result value you want to measure against the expected value. This could be the final goal or current progress.</p>
                     <p><strong>Unit</strong>: Define the unit for the indicator. (e.g. expect 200 participants)</p>
-                    <p><strong>Deadline</strong>: Enter the deadline for your indicator. (optional)</p>
+                    <p><strong>Reminder</strong>: Enter the reminder date for your indicator. (optional)</p>
                     <p><strong>Responsibility</strong>: Add the persons details (email?) who is responsible for this task. (optional)</p>
                 </div>
             </div>
@@ -122,7 +170,7 @@
                 placeholder="Unit (What is measured)"
                 bind:value={newUnit}
             />
-            <div class="subtitle">Deadline:</div>
+            <div class="subtitle">Reminder:</div>
             <input
                 class="input input__date"
                 type="date"
@@ -141,6 +189,11 @@
             <button class="add-button__button" onclick={addNew}>
                 Create indicator
             </button>
+
+            <button class="add-button__button" onclick={downloadICS}>
+                Download Calendar Reminder
+            </button>
+
         </div>
     </div>
 </div>
@@ -221,7 +274,7 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        width: 220px;
+        width: 170px;
         height: 45px;
         position: relative;
         overflow: hidden;

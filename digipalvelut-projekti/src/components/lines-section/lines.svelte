@@ -168,6 +168,53 @@
 
         lists.list = tempList;
     }
+
+function downloadAllICS() {
+    const selectedIndicators = lists.list.filter(
+        (item) => item.check && item.deadline && item.name
+    );
+
+    if (selectedIndicators.length === 0) {
+        alert("No valid selected indicators with deadlines found.");
+        return;
+    }
+
+    selectedIndicators.forEach((item) => {
+        const startDate = new Date(item.deadline);
+        const endDate = new Date(startDate);
+        endDate.setHours(endDate.getHours() + 1);
+
+        const formatDate = (date) =>
+            date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+        const icsContent = `BEGIN:VCALENDAR
+                            VERSION:2.0
+                            PRODID:-//Your App//Indicator Calendar//EN
+                            BEGIN:VEVENT
+                            UID:${item.id}@yourapp.com
+                            DTSTAMP:${formatDate(new Date())}
+                            DTSTART:${formatDate(startDate)}
+                            DTEND:${formatDate(endDate)}
+                            SUMMARY:Indicator - ${item.name}
+                            DESCRIPTION:Expected: ${item.target}, Result: ${item.end}, Responsibility: ${item.responsibility}
+                            END:VEVENT
+                            END:VCALENDAR`;
+
+        const blob = new Blob([icsContent], {
+            type: "text/calendar;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${item.name.replace(/\s+/g, "_") || "reminder"}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    });
+}
+
+
 </script>
 
 <div>
@@ -237,6 +284,9 @@
             <button onclick={saveSelectedLines} class="saveButton">
                 Save
             </button>
+            <button class="button" onclick={downloadAllICS} title="Download all selected reminders">
+            📥
+            </button> 
         </div>
         {#if filteredIndicators.length > 0}
             <div>
@@ -408,6 +458,11 @@
 
     .saveButton {
         height: 30px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+    .button {
         margin-left: 10px;
         cursor: pointer;
     }
