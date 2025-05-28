@@ -1,21 +1,23 @@
 <script>
     import { getContext } from "svelte";
-    import FileReader from "./file-reader.svelte";
+    import FileReader from "../header/file-reader.svelte";
 
     let lists = getContext("list");
 
     let newId = $state("");
     let newName = $state("");
-    let newTarget = $state("");
+    let newExpected = $state("");
     let newStart = $state("");
-    let newEnd = $state("");
+    let newResult = $state("");
     let newPercent;
     let newUnit = $state("");
+    let newDeadline = $state(new Date().toISOString().split('T')[0]);
+    let newResponsibility = $state("");
 
     function percentCalculation() {
-        if (!newEnd || !newTarget) return;
+        if (!newResult || !newExpected) return;
 
-        let rawValue = (newEnd / newTarget) * 100;
+        let rawValue = (newResult / newExpected) * 100;
         let roundedValue = rawValue.toFixed(0);
         let preciseValue = rawValue.toFixed(3);
 
@@ -35,9 +37,9 @@
 
         if (
             newName === "" &&
-            newTarget === "" &&
+            newExpected === "" &&
             newStart === 0 &&
-            newEnd === "" &&
+            newResult === "" &&
             newUnit === ""
         ) {
             alert("Can't add empty");
@@ -49,21 +51,25 @@
                 id: newId,
                 check: false,
                 name: newName,
-                target: newTarget,
+                expected: newExpected,
                 start: newStart,
-                end: newEnd,
+                result: newResult,
                 percent: newPercent,
                 unit: newUnit,
+                deadline: newDeadline,
+                responsibility: newResponsibility,
             });
 
             lists.list = updatedList;
 
             newName = "";
-            newTarget = "";
+            newExpected = "";
             newStart = "";
-            newEnd = "";
+            newResult = "";
             newPercent = "";
             newUnit = "";
+            newDeadline = "";
+            newResponsibility = "";
         }
     }
 </script>
@@ -76,10 +82,12 @@
                 <img class="createnew__info__icon" alt="info_icon" src="./images/info.png">
                 <div class="createnew__info__content">
                     <p><strong>Name</strong>: Enter the name for the indicator.</p>
-                    <p><strong>Target Value</strong>: Set your target value for the indicator.</p>
+                    <p><strong>Expected Value</strong>: Set the value you expect to get.</p>
                     <p><strong>Start Value</strong>: Enter the starting value for the indicator.</p>
-                    <p><strong>End Value</strong>: Enter the end value you want to measure against the target. This could be the final goal or current progress.</p>
-                    <p><strong>Unit</strong>: Define the unit for the indicator.</p>
+                    <p><strong>Result Value</strong>: Enter the result value you want to measure against the expected value. This could be the final goal or current progress.</p>
+                    <p><strong>Unit</strong>: Define the unit for the indicator. (e.g. expect 200 participants)</p>
+                    <p><strong>Deadline</strong>: Enter the deadline for your indicator. (optional)</p>
+                    <p><strong>Responsibility</strong>: Add the persons details (email?) who is responsible for this task. (optional)</p>
                 </div>
             </div>
         </div>
@@ -93,8 +101,8 @@
             <input
                 class="input input__number"
                 type="number"
-                placeholder="Target value"
-                bind:value={newTarget}
+                placeholder="Expected value"
+                bind:value={newExpected}
             />
             <input
                 class="input input__number"
@@ -105,31 +113,43 @@
             <input
                 class="input input__number"
                 type="number"
-                placeholder="End value"
-                bind:value={newEnd}
+                placeholder="Result value"
+                bind:value={newResult}
             />
             <input
                 class="input"
                 type="text"
-                placeholder="Unit"
+                placeholder="Unit (What is measured)"
                 bind:value={newUnit}
             />
+            <div class="subtitle">Deadline:</div>
+            <input
+                class="input input__date"
+                type="date"
+                placeholder="Deadline"
+                bind:value={newDeadline}
+            />
+            <input
+                class="input"
+                type="text"
+                placeholder="Responsibility"
+                bind:value={newResponsibility}
+            />
+
         </div>
         <div class="add-button">
-            <button class="add-button__button" onclick={addNew}
-                >Create indicator</button
-            >
+            <button class="add-button__button" onclick={addNew}>
+                Create indicator
+            </button>
         </div>
     </div>
 </div>
 
 <style>
-    
     .createnew__info__wrapper{
         position:relative;
         display:inline-block;
     }
-    
 
     .createnew__info__content{
         visibility: hidden;
@@ -206,7 +226,7 @@
         position: relative;
         overflow: hidden;
     }
-
+    
     .add-button__button:hover {
         cursor: pointer;
     }
@@ -215,7 +235,7 @@
         display: flex;
         flex-direction: column;
     }
-
+    
     .input::placeholder {
         padding-left: 2px;
     }
@@ -230,15 +250,24 @@
         color: black;
         max-width: 396px;
     }
-
+    
     .input:first-child {
         margin: 15px 15px;
         margin-top: 35px;
     }
-
+    
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         -moz-appearance: none;
+    }
+
+    .subtitle {
+        margin-left: 15px;
+        margin-bottom: 0;
+    }
+
+    .input__date {
+        margin-top: 5px;
     }
 </style>

@@ -1,23 +1,54 @@
 <script>
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
 
     let {
-        function: parentFunction,
+        function: checkSelectedParent,
         update: updateEditedValues,
         id,
         check,
         name,
-        target,
+        expected,
         start,
-        end,
+        result,
         percent = "placeholder",
         unit,
+        deadline,
+        responsibility,
+        customFields = [],
+        onAddField,
+        onDeleteField,
     } = $props();
 
     let lists = getContext("list");
 
     let editing = $state(false);
     let checked = $state(check);
+    let extraData = $state(false);
+
+    onMount(() => {
+        let today = new Date().toISOString().split('T')[0]
+        // to detect when excel is opened
+        if (deadline && responsibility) {
+            // to detect when indicator made manually and if these values are empty
+            if (deadline !== today && deadline !== "" && responsibility !== "") {
+                extraData = true
+            } else {
+                extraData = false
+            }
+        }
+    });
+
+    let reached = $state("");
+
+    function calculateReached() {
+        if (result == expected){
+            reached = "Target reached"
+        } else if(result > expected) {
+            reached = "Target exceeded"
+        } else if (result < expected){
+            reached = "Target not reached"
+        }
+    }
 
     export function checkAll() {
         checked = true;
@@ -31,16 +62,8 @@
         return checked;
     }
 
-    export function values() {
-        return {
-            id: id,
-            check: check,
-            name: name,
-            target: target,
-            start: start,
-            end: end,
-            unit: unit,
-        };
+    export function returnID() {
+        return id;
     }
 
     function checkboxClick(event) {
@@ -52,13 +75,13 @@
         }
 
         setTimeout(() => (event.target.checked = checked), 0);
-        parentFunction();
+        checkSelectedParent();
     }
 
     function percentCalculation() {
-        if (!end || !target) return;
+        if (!result || !expected) return;
 
-        let rawValue = (end / target) * 100;
+        let rawValue = (result / expected) * 100;
         let roundedValue = rawValue.toFixed(0);
         let preciseValue = rawValue.toFixed(3);
 
@@ -85,15 +108,48 @@
             if (element.id === id) {
                 element.check = checked;
                 element.name = name;
-                element.target = target;
+                element.expected = expected;
                 element.start = start;
-                element.end = end;
+                element.result = result;
                 element.percent = percent;
                 element.unit = unit;
+                element.deadline = deadline;
+                element.responsibility = responsibility;
             }
         });
+        calculateReached();
+        updateFormattedDeadline();
         updateEditedValues();
     }
+
+    function deleteCustomField(id) {
+        onDeleteField(id);
+    }
+
+    // Ep = extra point
+    export function returnLastEpId() {
+        let id = Math.max(...customFields.map((t) => t.id))
+        return id;
+    }
+
+    export function containsCustomFields() {
+        // check if customFields contains something and not just empty array
+        if (customFields[0]) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    let formattedDeadline = $state(deadline
+		? new Date(deadline).toLocaleDateString('fi-FI')
+		: '');
+    
+    function updateFormattedDeadline() {
+        formattedDeadline = new Date(deadline).toLocaleDateString('fi-FI')
+    }
+    
+    calculateReached();
 </script>
 
 <div>
@@ -107,22 +163,54 @@
                 onclick={checkboxClick}
             />
             <div class="data__container">
-                <div class="component">
-                    <h3>indicator:</h3>
-                    <input
+                <div class="column">
+                    <div class="component">
+                        <h3>indicator:</h3>
+                        <input
                         class="input input__long long"
                         type="text"
                         bind:value={name}
-                    />
+                        />
+                    </div>
+                    <div class="component"></div>
+                    {#if extraData}
+                    <div class="component">
+                        <h3>deadline:</h3>
+                        <input
+                        class="input input__long long"
+                        type="date"
+                        bind:value={deadline}
+                        />
+                    </div>
+                    {/if}
+                    {#each customFields as field, i}
+                    <div class="component">
+                        <h3>{field.title}:</h3>
+                        <input class="input" type="text" bind:value={field.value} />
+                        {#if i === customFields.length - 1}
+                            <button 
+                            class="delete__extraPoint-button" 
+                            onclick={() => deleteCustomField(field.id)}>
+                                X
+                            </button>
+                        {/if}
+                    </div>
+                    {/each}
                 </div>
                 <div class="column">
                     <div class="component">
-                        <h3>target:</h3>
-                        <input class="input" type="text" bind:value={target} />
+                        <h3>expected:</h3>
+                        <input class="input" type="text" bind:value={expected} />
                     </div>
                     <div class="component">
                         <h3>percent:</h3>
                     </div>
+                    {#if extraData}
+                    <div class="component">
+                        <h3>resp:</h3>
+                        <input class="input input__long-responsibility" type="text" bind:value={responsibility}/>
+                    </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="start_end__group">
@@ -135,8 +223,8 @@
                             />
                         </div>
                         <div class="component">
-                            <h3>end:</h3>
-                            <input class="input" type="text" bind:value={end} />
+                            <h3>result:</h3>
+                            <input class="input" type="text" bind:value={result} />
                         </div>
                     </div>
                     <div class="component">
@@ -149,11 +237,9 @@
                     </div>
                 </div>
             </div>
-
             <button class="button button__save" onclick={onSave}>Save</button>
         </div>
-        <!-- editing off -->
-    {:else}
+    {:else} <!-- editing off -->
         <div class="line">
             <input
                 class="checkbox"
@@ -162,14 +248,29 @@
                 onclick={checkboxClick}
             />
             <div class="data__container">
-                <div class="component">
-                    <h3>indicator:</h3>
-                    <div class="long1" title={name}>{name}</div>
+                <div class="column">
+                    <div class="component">
+                        <h3>indicator:</h3>
+                        <div class="long1" title={name}>{name}</div>
+                    </div>
+                    {#if extraData}
+                    <div class="component"></div>
+                    <div class="component">
+                        <h3>deadline:</h3>
+                        <div class="long">{formattedDeadline}</div>
+                    </div>
+                    {/if}
+                    {#each customFields as field}
+                        <div class="component">
+                            <h3>{field.title}:</h3>
+                            <div class="long">{field.value}</div>
+                        </div>
+                    {/each}
                 </div>
                 <div class="column">
                     <div class="component">
-                        <h3>target:</h3>
-                        <div class="long">{target}</div>
+                        <h3>expected:</h3>
+                        <div class="long">{expected}</div>
                     </div>
                     <div class="component">
                         <h3>percent:</h3>
@@ -177,6 +278,12 @@
                             <div class="long">{percent}%</div>
                         {/if}
                     </div>
+                    {#if extraData}
+                    <div class="component">
+                        <h3>responsibility:</h3>
+                        <div class="long long__responsibility">{responsibility}</div>
+                    </div>
+                    {/if}
                 </div>
                 <div class="column">
                     <div class="start_end__group">
@@ -184,18 +291,26 @@
                             <h3>start:</h3>
                             <div class="long">{start}</div>
                         </div>
-                        <div class="component component__last">
-                            <h3>end:</h3>
-                            <div class="long">{end}</div>
+                        <div class="component">
+                            <h3>result:</h3>
+                            <div class="long">{result}</div>
                         </div>
                     </div>
-                    <div class="component">
-                        <h3>unit:</h3>
-                        <div class="long1" title={unit}>{unit}</div>
+                    <div class="start_end__group">
+                        <div class="component">
+                            <h3>unit:</h3>
+                            <div class="long" title={unit}>{unit}</div>
+                        </div>
+                        <div style="padding-left:6px;" class="component">
+                            <!-- temp padding -->
+                            <h3>status:</h3>
+                            <div style="display:flex; flex-direction:row; width:120px;">{reached}</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="button__container">
+                <button class="button" onclick={onAddField}>+</button>
                 <button class="button button__edit" onclick={editThis}>
                     <img
                         src="./images/edit-icon.svg"
@@ -225,7 +340,6 @@
         max-height: 16px;
     }
 
-    
     .line {
         display: flex;
         justify-content: space-between;
@@ -256,21 +370,36 @@
         flex-direction: row;
         margin-right: 10px;
         padding: 5px 0;
+        min-height: 24px;
     }
-    
-    .component__last {
-        flex: 0.5;
+
+    .delete__extraPoint-button {
+        position: relative;
+        /* left: -170px; */
+        border: none;
+        background-color: white;
+        font-weight: 900;
+        color: #6e6e6e;
+    }
+
+    .delete__extraPoint-button:hover {
+        color: red;
     }
     
     .long {
-        padding-top:2.5px;
+        padding-top: 2.5px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         width: 80px;
     }
 
+    .long__responsibility {
+        overflow: visible;
+    }
+
     .long1{
+        padding-top: 2.5px;
         max-width: 120px;
         overflow-wrap: break-word;
         word-break: normal;
@@ -344,6 +473,10 @@
 
     .input__long {
         width: 100px;
+    }
+
+    .input__long-responsibility {
+        width: 200px;
     }
 
     .button__save {

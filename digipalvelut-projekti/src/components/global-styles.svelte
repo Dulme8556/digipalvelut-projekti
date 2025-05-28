@@ -13,19 +13,28 @@
     }
 
     @media (max-width: 768px) {
+        :global(.website) {
+            width: 800px;
+            transform: scale(0.8);
+            transform-origin: left top;
+        }
+
         :global(.content) {
             flex-direction: column;
         }
 
-        :global(.sidebar) {
-            width: 100%;
-            height: 200px;
-            border-left: none;
-            border-top: 1px solid gray;
-        }
-
         :global(.main__functions) {
             flex:1;
+            flex-direction: column;
+        }
+
+        :global(.main__function) {
+            margin: 10px 0;
+        }
+
+        :global(.active-lines) {
+            transform-origin: left top;
+            transform: scale(0.8);
         }
     }
 </style>

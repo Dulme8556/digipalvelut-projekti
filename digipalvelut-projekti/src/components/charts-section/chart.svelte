@@ -1,6 +1,6 @@
 <script>
     import { getContext, onDestroy, onMount } from "svelte";
-    import Chart from "chart.js/auto";
+    import Chart, { scales } from "chart.js/auto";
     import { jsPDF } from "jspdf";
     import ChartDataLabels from "chartjs-plugin-datalabels";
 
@@ -16,6 +16,7 @@
     let chartContainer;
 
     let checked = false;
+    $: editing = false;
 
     onMount(() => {
         if (!canvas) {
@@ -24,12 +25,7 @@
 
         Chart.register(ChartDataLabels);
         id = data.id;
-
-        if (data.title) {
-            chartName = data.title;
-        } else {
-            chartName = "";
-        }
+        chartName = data.title;
 
         chartInstance = new Chart(canvas, {
             type: data.type,
@@ -47,16 +43,38 @@
                                 if (data.type === "line") {
                                     for (let i = 0; i < data.datasets.length; i++) {
                                         if (context[0].dataset.label === data.datasets[i].label) {
-                                            return data.unit[i];
+                                            return data.datasets[i].label;
+                                        }
+                                    }
+                                } else {
+                                    return context[0].label;
+                                }
+                            },
+                            label: function (context) {
+                                if (data.type === "line") {
+                                    for (let i = 0; i < data.datasets.length; i++) {
+                                        let dataIndex = context.dataIndex;
+                                        let dataArray = context.dataset.data;
+                                        let values = dataArray[dataIndex];
+
+                                        if (context.dataset.label === data.datasets[i].label) {
+                                            return `${data.unit[i]}: ${values}`;
                                         }
                                     }
                                     return "Unit not found";
                                 } else {
-                                    let dataIndex = context[0].dataIndex;
-                                    let unitArray = context[0].dataset.unit;
+                                    let dataIndex = context.dataIndex;
+                                    let unitArray = context.dataset.unit;
                                     let unit = unitArray[dataIndex];
 
-                                    return unit;
+                                    let dataArray = context.dataset.data;
+                                    let values = dataArray[dataIndex];
+
+                                    for (let i = 0; i < data.datasets.length; i++) {
+                                        if (context.dataset.label === data.datasets[i].label) {
+                                            return `${unit}: ${values}`;
+                                        }
+                                    }
                                 }
                             },
                         },
@@ -70,6 +88,16 @@
                         },
                     },
                 },
+                scales: {
+                    y: {
+                        title: {
+                            // not sure if wanted
+                            // display: true,
+                            align: 'start',
+                            text: data.unit[0],
+                        }
+                    }
+                }
             },
         });
 
@@ -101,25 +129,28 @@
         }
     }
 
-    function downloadPDF() {
-        if (!canvas) {
-            console.error("No chart available for download");
-            return;
-        }
+    function downloadJPG() {
+        const ctx = canvas.getContext("2d");
 
-        const chartWidth = canvas.width;
-        const chartHeight = canvas.height;
-        const doc = new jsPDF("l", "mm", [chartWidth, chartHeight]);
-        const imgData = canvas.toDataURL("image/png");
-
-        doc.addImage(imgData, "PNG", 0, 0, chartWidth, chartHeight);
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext("2d");
+        tempCtx.fillStyle = "#FFFFFF";
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(canvas, 0, 0);
+        const imageType = "image/jpeg";
+        const imgData = tempCanvas.toDataURL(imageType);
+        const link = document.createElement("a");
 
         const filename =
             chartName && chartName.trim() !== ""
-                ? `${chartName}.pdf`
-                : "chart.pdf";
+                ? `${chartName}.jpg`
+                : "chart.jpg";
 
-        doc.save(filename);
+        link.href = imgData;
+        link.download = filename;
+        link.click();
     }
 
     function checkboxClick() {
@@ -130,6 +161,16 @@
             currentChart.check = checked;
         }
         checkSelected();
+    }
+
+    function editThis() {
+        editing = true;
+    }
+
+    function saveThis() {
+        let chart = lists.charts.find((item) => item.id === id);
+        chart.title = chartName
+        editing = false;
     }
 
     export function checkAll() {
@@ -163,16 +204,29 @@
                 onclick={checkboxClick}
                 {checked}
             />
-            {#if chartName == ""}
-                <div class="chartTitle">*UNNAMED CHART*</div>
+            {#if editing}
+                <input class="chartNameInput" type="text" bind:value={chartName} />
             {:else}
                 <div class="chartTitle">{chartName}</div>
             {/if}
         </div>
         <div class="buttonContainer">
+            {#if editing}
+                <button class="chart-button save-button" onclick={saveThis}>
+                    Save
+                </button>
+            {:else}
+                <button class="chart-button" onclick={editThis}>
+                    <img
+                    class="image image__edit"
+                    src="./images/edit-icon.svg"
+                    alt=""
+                    />
+                </button>
+            {/if}
             <button
-                class="chart-button pdf-download__button"
-                onclick={downloadPDF}
+                class="chart-button"
+                onclick={downloadJPG}
             >
                 <img
                     class="pdf-download__image"
@@ -218,6 +272,14 @@
         font-weight: 700;
     }
 
+    .chartNameInput {
+        background-color: #ebeaea;
+        border: 1px solid black;
+        border-radius: 5px;
+        height: 24px;
+        margin: 2px 0;
+    }
+
     .CheckBox {
         width: 17px;
         margin-right: 5px;
@@ -241,15 +303,19 @@
         border: 1px solid black;
         border-radius: 3px;
         padding: 0;
-    }
-
-    .pdf-download__button {
         margin-left: 5px;
     }
 
-    .pdf-download__button:hover {
+    .chart-button:hover {
         background-color: darkgray;
         cursor: pointer;
+    }
+
+    .save-button {
+        width: 40px;
+        align-items: center;
+        justify-content: center;
+        color: #e1e1e0;
     }
 
     .pdf-download__image {

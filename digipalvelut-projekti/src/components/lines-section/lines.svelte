@@ -9,7 +9,7 @@
         if (lists.selectedValues.length === 0) {
             alert("Error: Please select atleast one indicator to download")
         } else{
-        downloadIndicatorsToExcel(lists.selectedValues.length > 0 ? lists.selectedValues : lists.list);
+        downloadIndicatorsToExcel(lists.selectedValues);
         }
     }
 
@@ -24,12 +24,12 @@
 
     function selectAll() {
         let filteredArray = lines.filter((item) => item !== null);
-
+        
         filteredArray.forEach((element) => {
             element.checkAll();
 
             let currentLine = lists.list.find(
-                (x) => x.id === element.values().id,
+                (x) => x.id === element.returnID()
             );
             if (currentLine) currentLine.check = true;
             lists.list = [...lists.list];
@@ -45,7 +45,7 @@
             element.uncheckAll();
 
             let currentLine = lists.list.find(
-                (x) => x.id === element.values().id,
+                (x) => x.id === element.returnID()
             );
             if (currentLine) currentLine.check = false;
             lists.list = [...lists.list];
@@ -54,7 +54,7 @@
         checkSelected();
     }
 
-    async function checkSelected() {
+    function checkSelected() {
         let count = 0;
         selectedLines = [];
 
@@ -137,6 +137,37 @@
         });
         checkSelected();
     }
+
+    function addCustomField(index) {
+        
+        let title = prompt("field name?");
+        let value = prompt("field value?");
+        if (title && value) {
+            if (!filteredIndicators[index].customFields) {
+                filteredIndicators[index].customFields = [];
+            }
+            
+            let id = filteredIndicators[index].customFields.length
+            ? Math.max(...filteredIndicators[index].customFields.map((t) => t.id)) + 1 : 1;
+            
+            filteredIndicators[index].customFields = [
+                ...filteredIndicators[index].customFields,
+                { id, title, value }
+            ];
+        }
+    }
+
+    function deleteCustomField(index) {
+        let id = 0;
+        let tempList = JSON.parse(JSON.stringify(lists.list))
+
+        // returnLastEpId defined in line.svelte
+        id = lines[index].returnLastEpId()
+        tempList[index].customFields = 
+        tempList[index].customFields.filter((item) => item.id !== id)
+
+        lists.list = tempList;
+    }
 </script>
 
 <div>
@@ -144,8 +175,37 @@
     <div class="toolbar">
         <div class="top">
             <div>
-            <h2>Indicators</h2>
-            <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
+                <div class="title__section">
+                    <h2>Indicators</h2>
+                    <div class="info__wrapper">
+                        <div class="lines__info__wrapper">
+                            <img
+                                class="info__icon"
+                                alt="info_icon"
+                                src="./images/info.png"
+                            />
+                            <div class="info__content">
+                                <p>
+                                    <strong>Searching and sorting</strong>: Indicator data can be search by
+                                    their name ("indicator" label) and can be sorted different ways using
+                                    the dropdown box below search bar.
+                                </p>
+                                <p>
+                                    <strong>Save button</strong>: If indicator data isn't updated correctly 
+                                    when trying to make charts pressing the "Save" button will fix this issue. 
+                                    The button isn't needed every time.
+                                </p>
+                                <p>
+                                    <strong>Adding extra points</strong>: Extra points can be added to 
+                                    indicators via "+" buttons on each line. The user must provide a label 
+                                    (e.g., "result") and a value. Extra points can be deleted when editing. 
+                                    Only the last given value can be deleted.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style='margin-top: 5px; font-size:14px;'>Create and display indicators</p>
             </div>
             <input
                 id="searchbar"
@@ -198,11 +258,16 @@
                         check={line.check}
                         id={line.id}
                         name={line.name}
-                        target={line.target}
+                        expected={line.expected}
                         start={line.start}
-                        end={line.end}
+                        result={line.result}
                         percent={line.percent}
                         unit={line.unit}
+                        deadline={line.deadline}
+                        responsibility={line.responsibility}
+                        customFields={line.customFields}
+                        onAddField={() => addCustomField(i)}
+                        onDeleteField={() => deleteCustomField(i)}
                         on:remove={(e) => removeLine(e.detail)}
                     />
                 </li>
@@ -257,6 +322,56 @@
         align-items: center;
     }
 
+    .title__section {
+        display: flex;
+    }
+
+    .info__wrapper {
+        position: relative;
+        display: inline-block;
+        left: -80px;
+    }
+
+    .lines__info__wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .lines__info__wrapper:hover .info__content {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .info__icon {
+        width: 28px;
+        height: 28px;
+        padding-top: 5px;
+        margin-left: 10px;
+    }
+
+    .info__content {
+        visibility: hidden;
+        opacity: 0;
+        width: 320px;
+        background-color: #f9f9f9;
+        color: #000;
+        text-align: left;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        top: 50px;
+        left: -20px;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease;
+    }
+
+    .info__wrapper:hover .info__content {
+        visibility: visible;
+        opacity: 1;
+    }
+
     .searchbar {
         display: flex;
         width: 250px;
@@ -264,6 +379,8 @@
         padding: 5px 3px;
         font-size: 15px;
         margin-left: 20px;
+        border: 1px solid black;
+        border-radius: 3px;
     }
 
     .button-group {
@@ -281,7 +398,7 @@
 
     .selectList {
         width: 180px;
-        font-size: 12px;
+        font-size: 15px;
         padding: 2px 4px;
         height: 30px;
         margin-left: 10px;
